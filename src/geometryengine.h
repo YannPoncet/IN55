@@ -7,6 +7,8 @@
 #include <QVector2D>
 #include <QVector3D>
 
+#include <QDebug>
+
 #include "tools/structs.h"
 #include "generation/morel.h"
 
@@ -24,6 +26,8 @@ private:
 
     QOpenGLBuffer arrayBuf;
     QOpenGLBuffer indexBuf;
+
+
 };
 
 #endif // GEOMETRYENGINE_H

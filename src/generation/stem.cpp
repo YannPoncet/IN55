@@ -2,7 +2,7 @@
 
 Stem::Stem() {
     this->color = QVector3D(0.87f, 0.60f, 0.38f);
-    this->generateBaseCylinder(5, 0.5);
+    this->generateBaseCylinder(3, 0.3);
 }
 
 QVector<VertexData> Stem::getVertices() {
@@ -35,7 +35,7 @@ void Stem::generateBaseCylinder(double height, double radius) {
             angle = (2*M_PI/n)*j;
             x = static_cast<float>(radius*qCos(angle));
             y = static_cast<float>(radius*qSin(angle));
-            z = static_cast<float>(p*i);
+            z = static_cast<float>(-p*i);
             this->vertices.append({QVector3D(x, y, z), this->color});
         }
     }

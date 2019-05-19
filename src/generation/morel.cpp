@@ -32,8 +32,9 @@ void Morel::updateIndices() {
         if(v.bottom != nullptr && v.bottom->right != nullptr && v.right != nullptr) {
             //qDebug() << "-";
             //qDebug() << v.id << ", bot=" << v.bottom->id << ", bottomright =" << v.bottom->right->id;
-            this->indices.append({v.id, v.bottom->id, v.bottom->right->id});
             //qDebug() << v.id << ", bottomright=" << v.bottom->right->id << ", right =" <<  v.right->id;
+
+            this->indices.append({v.id, v.bottom->id, v.bottom->right->id});
             this->indices.append({v.id, v.bottom->right->id, v.right->id});
         }
     }

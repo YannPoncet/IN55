@@ -51,7 +51,10 @@ void GeometryEngine::drawGeometry(QOpenGLShaderProgram *program) {
     program->enableAttributeArray(colorLocation);
     program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
 
+    //qDebug() << indexBuf.size();
+    //qDebug() << (arrayBuf.size()/sizeof(VertexData));
+
     // Draw cube geometry using indices from VBO 1
-    glDrawElements(GL_TRIANGLES, indexBuf.size()/3, GL_UNSIGNED_SHORT, 0);
-    glDrawElements(GL_POINTS, arrayBuf.size()/sizeof(VertexData), GL_UNSIGNED_SHORT, 0);
+    glDrawElements(GL_TRIANGLES, indexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
+    //glDrawElements(GL_POINTS, (arrayBuf.size()/sizeof(VertexData)), GL_UNSIGNED_SHORT, nullptr);
 }

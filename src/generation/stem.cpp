@@ -2,7 +2,7 @@
 
 Stem::Stem() {
     this->color = QVector3D(0.87f, 0.60f, 0.38f);
-    this->generateBaseCylinder(3, 0.3);
+    this->generateBaseCylinder(1, 0.2);
 }
 
 QVector<MeshVertex> Stem::getVertices() {
@@ -28,12 +28,11 @@ void Stem::generateBaseCylinder(double height, double radius) {
         };
     */
 
-    GLushort n = 4;
-    GLushort k = 3;
+    GLushort n = 20;
+    GLushort k = 20;
     double p = height/k;
     double angle = 0;
     float x = 0, y = 0, z = 0;
-
     // Creation of the vertices
     for (GLushort i=0; i<k; i++) {
         for (GLushort j=0; j<n; j++) {
@@ -45,7 +44,7 @@ void Stem::generateBaseCylinder(double height, double radius) {
             MeshVertex v;
             v.id = i*n+j;
             v.position = QVector3D(x, y, z);
-            v.color = this->color;
+            v.color = QVector3D(0.2f, 0.6f, -z);
             this->vertices.append(v);
         }
     }

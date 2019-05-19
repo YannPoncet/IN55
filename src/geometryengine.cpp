@@ -1,47 +1,6 @@
 #include "geometryengine.h"
 
-struct VertexData
-{
-    QVector3D position;
-    QVector3D color;
-};
-
-// Vertices of a cube 1X1
-const int nbrVertices = 8;
-VertexData vertices[] = {
-    {QVector3D(-0.5f, -0.5f, -0.5f), QVector3D(1.0f, 0.0f,0.0f)},
-    {QVector3D(0.5f, -0.5f, -0.5f), QVector3D(0.0f, 1.0f,0.0f)},
-    {QVector3D(-0.5f, 0.5f, -0.5f), QVector3D(0.0f, 0.0f,1.0f)},
-    {QVector3D(-0.5f, -0.5f, 0.5f), QVector3D(1.0f, 1.0f,0.0f)},
-    {QVector3D(0.5f, 0.5f, -0.5f), QVector3D(0.0f, 1.0f,1.0f)},
-    {QVector3D(-0.5f, 0.5f, 0.5f), QVector3D(1.0f, 0.0f,1.0f)},
-    {QVector3D(0.5f, -0.5f, 0.5f), QVector3D(1.0f, 1.0f,1.0f)},
-    {QVector3D(0.5f, 0.5f, 0.5f), QVector3D(1.0f, 1.0f,1.0f)},
-};
-
-
-
-// Faces of the cube
-const int nbrIndices = 36;
-GLushort indices[] = {
-    3,6,7,
-    7,5,3,
-    2,7,4,
-    5,7,2,
-    6,1,7,
-    1,4,7,
-    2,4,0,
-    4,1,0,
-    5,2,0,
-    0,3,5,
-    0,1,6,
-    6,3,0
-};
-
-
-GeometryEngine::GeometryEngine()
-    : indexBuf(QOpenGLBuffer::IndexBuffer)
-{
+GeometryEngine::GeometryEngine() : indexBuf(QOpenGLBuffer::IndexBuffer) {
     initializeOpenGLFunctions();
 
     // Generate 2 VBOs
@@ -52,29 +11,29 @@ GeometryEngine::GeometryEngine()
     initGeometry();
 }
 
-GeometryEngine::~GeometryEngine()
-{
+GeometryEngine::~GeometryEngine() {
     arrayBuf.destroy();
     indexBuf.destroy();
 }
 
-void GeometryEngine::initGeometry()
-{
+void GeometryEngine::initGeometry() {
+    Morel morel1;
+    IndicesStruct indicesStruct = morel1.getConvertedIndices();
+    VerticesStruct verticesStruct = morel1.getConvertedVertices();
+
     // Transfer vertex data to VBO 0
     arrayBuf.bind();
-    arrayBuf.allocate(vertices, nbrVertices * sizeof(VertexData));
+    arrayBuf.allocate(verticesStruct.vertices, verticesStruct.nbrVertices * static_cast<int>(sizeof(VertexData)));
 
     // Transfer index data to VBO 1
     indexBuf.bind();
-    indexBuf.allocate(indices, nbrIndices * sizeof(GLushort));
+    indexBuf.allocate(indicesStruct.indices, indicesStruct.nbrIndices * static_cast<int>(sizeof(GLushort)));
 }
 
-void GeometryEngine::drawGeometry(QOpenGLShaderProgram *program)
-{
+void GeometryEngine::drawGeometry(QOpenGLShaderProgram *program) {
     // Tell OpenGL which VBOs to use
     arrayBuf.bind();
     indexBuf.bind();
-
 
     // Offset for position
     quintptr offset = 0;

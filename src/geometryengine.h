@@ -7,6 +7,9 @@
 #include <QVector2D>
 #include <QVector3D>
 
+#include "tools/structs.h"
+#include "generation/morel.h"
+
 class GeometryEngine : protected QOpenGLFunctions
 {
 public:

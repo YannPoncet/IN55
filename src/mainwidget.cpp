@@ -62,7 +62,7 @@ void MainWidget::initializeGL()
 {
     initializeOpenGLFunctions();
 
-    glClearColor(0, 0, 0, 1);
+    glClearColor(1, 1, 1, 1);
 
     initShaders();
 
@@ -70,7 +70,7 @@ void MainWidget::initializeGL()
     glEnable(GL_DEPTH_TEST);
 
     // Enable back face culling
-    glEnable(GL_CULL_FACE);
+    //glEnable(GL_CULL_FACE);
 
     // Enable point size manipulation
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);

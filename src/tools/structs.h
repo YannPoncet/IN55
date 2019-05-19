@@ -10,6 +10,17 @@ struct VertexData
     QVector3D color;
 };
 
+struct MeshVertex
+{
+    GLushort id;
+    QVector3D position;
+    QVector3D color;
+    struct MeshVertex* top;
+    struct MeshVertex* bottom;
+    struct MeshVertex* right;
+    struct MeshVertex* left;
+};
+
 struct VerticesStruct
 {
     VertexData* vertices;

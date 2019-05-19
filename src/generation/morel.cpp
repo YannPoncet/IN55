@@ -3,13 +3,18 @@
 Morel::Morel()
 {
     this->vertices = this->stem.getVertices();
-    this->indices = this->stem.getIndices();
+    this->updateIndices();
 }
 
 VerticesStruct Morel::getConvertedVertices() {
+    QVector<VertexData> convertedVertices;
+    for(auto&& v: this->vertices) {
+        convertedVertices.append({v.position, v.color});
+    }
+
     VerticesStruct vStruct;
-    vStruct.vertices = this->vertices.data();
-    vStruct.nbrVertices = this->vertices.size();
+    vStruct.vertices = convertedVertices.data();
+    vStruct.nbrVertices = convertedVertices.size();
 
     return vStruct;
 }
@@ -22,3 +27,14 @@ IndicesStruct Morel::getConvertedIndices() {
     return iStruct;
 }
 
+void Morel::updateIndices() {
+    for(auto&& v: this->vertices) {
+        if(v.bottom != nullptr && v.bottom->right != nullptr && v.right != nullptr) {
+            //qDebug() << "-";
+            //qDebug() << v.id << ", bot=" << v.bottom->id << ", bottomright =" << v.bottom->right->id;
+            this->indices.append({v.id, v.bottom->id, v.bottom->right->id});
+            //qDebug() << v.id << ", bottomright=" << v.bottom->right->id << ", right =" <<  v.right->id;
+            this->indices.append({v.id, v.bottom->right->id, v.right->id});
+        }
+    }
+}

@@ -4,10 +4,6 @@ Cap::Cap() {
 
 }
 
-QVector<VertexData> Cap::getVertices() {
+QVector<MeshVertex> Cap::getVertices() {
     return this->vertices;
-}
-
-QVector<GLushort> Cap::getIndices() {
-    return this->indices;
 }

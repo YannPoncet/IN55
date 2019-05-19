@@ -13,11 +13,9 @@ class Stem
 {
 public:
     Stem();
-    QVector<VertexData> getVertices();
-    QVector<GLushort> getIndices();
+    QVector<MeshVertex> getVertices();
 private:
-    QVector<VertexData> vertices;
-    QVector<GLushort> indices;
+    QVector<MeshVertex> vertices;
     QVector3D color;
 
     void generateBaseCylinder(double height, double radius);

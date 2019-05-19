@@ -5,6 +5,8 @@
 #include <QVector>
 #include <QtMath>
 
+#include <QDebug>
+
 #include "../tools/structs.h"
 #include "cap.h"
 #include "stem.h"
@@ -15,9 +17,10 @@ public:
     Morel();
     VerticesStruct getConvertedVertices();
     IndicesStruct getConvertedIndices();
+    void updateIndices();
 
 private:
-    QVector<VertexData> vertices;
+    QVector<MeshVertex> vertices;
     QVector<GLushort> indices;
 
     Cap cap;

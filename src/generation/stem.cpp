@@ -5,15 +5,9 @@ Stem::Stem() {
     this->generateBaseCylinder(3, 0.3);
 }
 
-QVector<VertexData> Stem::getVertices() {
+QVector<MeshVertex> Stem::getVertices() {
     return this->vertices;
 }
-
-
-QVector<GLushort> Stem::getIndices() {
-    return this->indices;
-}
-
 
 /*
 * This function is used to generate the base cylinder.
@@ -21,35 +15,86 @@ QVector<GLushort> Stem::getIndices() {
 * @param radius radius of the cylinder
 */
 void Stem::generateBaseCylinder(double height, double radius) {
-    this->vertices.append({QVector3D(0.0f, 0.0f, 0.0f), this->color});
+    /*
+        struct MeshVertex
+        {
+            GLushort id;
+            QVector3D position;
+            QVector3D color;
+            struct MeshVertex* top;
+            struct MeshVertex* bottom;
+            struct MeshVertex* right;
+            struct MeshVertex* left;
+        };
+    */
 
-    int n = 10;
-    int k = 10;
+    GLushort n = 4;
+    GLushort k = 3;
     double p = height/k;
     double angle = 0;
     float x = 0, y = 0, z = 0;
 
     // Creation of the vertices
-    for (int i=0; i<k; i++) {
-        for (int j=0; j<n; j++) {
+    for (GLushort i=0; i<k; i++) {
+        for (GLushort j=0; j<n; j++) {
             angle = (2*M_PI/n)*j;
             x = static_cast<float>(radius*qCos(angle));
             y = static_cast<float>(radius*qSin(angle));
             z = static_cast<float>(-p*i);
-            this->vertices.append({QVector3D(x, y, z), this->color});
+
+            MeshVertex v;
+            v.id = i*n+j;
+            v.position = QVector3D(x, y, z);
+            v.color = this->color;
+            this->vertices.append(v);
         }
     }
 
-    ushort a = 0, b = 0, c = 0, d = 0;
-    // Creation of the indices array
-    for (int i=0; i<k-1; i++) {
-        for (int j=0; j<n; j++) {
-            a = static_cast<ushort>(i*n+j+1);
-            b = static_cast<ushort>(i*n+j+1+n);
-            c = static_cast<ushort>(i*n+j+2+n);
-            d = static_cast<ushort>(i*n+j+2);
-            this->indices.append({a,b,c});
-            this->indices.append({a,c,d});
+    // Linking the different vertices
+    for(auto&& v: this->vertices) {
+        int i = v.id/n;
+
+        if(i==0) {
+            v.top = nullptr;
+        } else {
+            v.top = &this->vertices[v.id-n];
+        }
+
+        if(i>=k-1) {
+            v.bottom = nullptr;
+        } else {
+            v.bottom = &this->vertices[v.id+n];
+        }
+
+        if(i!=(v.id+1)/n) {
+            v.right = &this->vertices[v.id-n+1];
+        } else {
+            v.right = &this->vertices[v.id+1];
+        }
+
+
+        if(v.id==0 || i!=(v.id-1)/n) {
+            v.left = &this->vertices[v.id+n-1];
+        } else {
+            v.left = &this->vertices[v.id-1];
         }
     }
+
+    /*
+    //used to print the mesh
+    for(auto&& v: this->vertices) {
+        qDebug() << "-- id=" << v.id;
+        if(v.top != nullptr)
+            qDebug() << "top=" << v.top->id;
+
+        if(v.bottom != nullptr)
+            qDebug() << "bottom=" << v.bottom->id;
+
+        if(v.right != nullptr)
+            qDebug() << "right=" << v.right->id;
+
+        if(v.left != nullptr)
+            qDebug() << "left=" << v.left->id;
+    }
+    */
 }

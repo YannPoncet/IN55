@@ -11,11 +11,9 @@ class Cap
 {
 public:
     Cap();
-    QVector<VertexData> getVertices();
-    QVector<GLushort> getIndices();
+    QVector<MeshVertex> getVertices();
 private:
-    QVector<VertexData> vertices;
-    QVector<GLushort> indices;
+    QVector<MeshVertex> vertices;
 };
 
 #endif // CAP_H

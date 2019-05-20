@@ -8,6 +8,7 @@
 #include<QDebug>
 
 #include "../tools/structs.h"
+#include "../tools/meshvertex.h"
 
 class Stem
 {

@@ -3,6 +3,12 @@
 Morel::Morel()
 {
     this->vertices = this->stem.getVertices();
+    QVector<MeshVertex> capVertices = this->cap.getVertices();
+    for(auto&& cV: capVertices) {
+        cV.id += this->vertices.size();
+    }
+    this->vertices.append(capVertices);
+
     this->updateIndices();
 }
 
@@ -29,13 +35,11 @@ IndicesStruct Morel::getConvertedIndices() {
 
 void Morel::updateIndices() {
     for(auto&& v: this->vertices) {
-        if(v.bottom != nullptr && v.bottom->right != nullptr && v.right != nullptr) {
-            //qDebug() << "-";
-            //qDebug() << v.id << ", bot=" << v.bottom->id << ", bottomright =" << v.bottom->right->id;
-            //qDebug() << v.id << ", bottomright=" << v.bottom->right->id << ", right =" <<  v.right->id;
-
-            this->indices.append({v.id, v.bottom->id, v.bottom->right->id});
-            this->indices.append({v.id, v.bottom->right->id, v.right->id});
+        if(v.right != nullptr && v.bottom != nullptr) {
+            this->indices.append({v.id, v.right->id, v.bottom->id});
+        }
+        if(v.top != nullptr && v.left != nullptr) {
+            this->indices.append({v.id, v.top->id, v.left->id});
         }
     }
 }

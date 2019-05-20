@@ -2,13 +2,15 @@
 
 Morel::Morel()
 {
-    this->vertices = this->stem.getVertices();
+    for(auto&& cV: *(this->stem.getVertices())) {
+        this->vertices.append(cV);
+    }
     for(auto&& v: this->vertices) {
         qDebug() << "id:" << v.id << " add:" <<  &v << " top:" << v.top << " bottom:" << v.bottom << " left:" << v.left << "right:" << v.right;
     }
+
     int size = this->vertices.size();
-    QVector<MeshVertex> capVertices = this->cap.getVertices();
-    for(auto&& cV: capVertices) {
+    for(auto&& cV: this->cap.getVertices()) {
         cV.id += size;
         this->vertices.append(cV);
     }

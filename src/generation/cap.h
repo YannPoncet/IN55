@@ -14,6 +14,9 @@ public:
     QVector<MeshVertex> getVertices();
 private:
     QVector<MeshVertex> vertices;
+    QVector3D color;
+
+    void generateBaseEllipsoid(double height, double radius, double maxRadius);
 };
 
 #endif // CAP_H

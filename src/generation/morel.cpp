@@ -2,23 +2,17 @@
 
 Morel::Morel()
 {
-    for(auto&& cV: *(this->stem.getVertices())) {
-        this->vertices.append(cV);
-    }
-    for(auto&& v: this->vertices) {
-        qDebug() << "id:" << v.id << " add:" <<  &v << " top:" << v.top << " bottom:" << v.bottom << " left:" << v.left << "right:" << v.right;
+    for(auto&& v: *(this->stem.getVertices())) {
+        this->vertices.append(v);
     }
 
     int size = this->vertices.size();
-    for(auto&& cV: this->cap.getVertices()) {
-        cV.id += size;
-        this->vertices.append(cV);
+    for(auto&& v: *(this->cap.getVertices())) {
+        v.id += size;
+        this->vertices.append(v);
     }
 
     this->updateIndices();
-    /*for(auto&& v: this->vertices) {
-        qDebug() << "id:" << v.id << " add:" <<  &v << " top:" << v.top << " bottom:" << v.bottom << " left:" << v.left << "right:" << v.right;
-    }*/
 }
 
 VerticesStruct Morel::getConvertedVertices() {

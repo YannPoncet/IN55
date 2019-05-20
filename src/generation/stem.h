@@ -14,7 +14,7 @@ class Stem
 {
 public:
     Stem();
-    QVector<MeshVertex> * getVertices();
+    QVector<MeshVertex>* getVertices();
 private:
     QVector<MeshVertex> vertices;
     QVector3D color;

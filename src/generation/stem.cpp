@@ -5,10 +5,7 @@ Stem::Stem() {
     this->generateBaseCylinder(1, 0.2);
 }
 
-QVector<MeshVertex> * Stem::getVertices() {
-    for(auto&& v: this->vertices) {
-        qDebug() << "id:" << v.id << " add:" <<  &v << " top:" << v.top << " bottom:" << v.bottom << " left:" << v.left << "right:" << v.right;
-    }
+QVector<MeshVertex>* Stem::getVertices() {
     return &(this->vertices);
 }
 

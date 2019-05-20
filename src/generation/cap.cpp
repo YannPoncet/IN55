@@ -5,8 +5,8 @@ Cap::Cap() {
     this->generateBaseEllipsoid(1, 0.2, 0.3);
 }
 
-QVector<MeshVertex> Cap::getVertices() {
-    return this->vertices;
+QVector<MeshVertex>* Cap::getVertices() {
+    return &(this->vertices);
 }
 
 void Cap::generateBaseEllipsoid(double height, double radius, double radiusDeformation) {

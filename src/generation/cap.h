@@ -5,6 +5,8 @@
 #include <QVector>
 #include <QtMath>
 
+#include<QDebug>
+
 #include "../tools/structs.h"
 #include "../tools/meshvertex.h"
 

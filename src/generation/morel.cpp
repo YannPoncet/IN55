@@ -3,13 +3,20 @@
 Morel::Morel()
 {
     this->vertices = this->stem.getVertices();
+    for(auto&& v: this->vertices) {
+        qDebug() << "id:" << v.id << " add:" <<  &v << " top:" << v.top << " bottom:" << v.bottom << " left:" << v.left << "right:" << v.right;
+    }
+    int size = this->vertices.size();
     QVector<MeshVertex> capVertices = this->cap.getVertices();
     for(auto&& cV: capVertices) {
-        cV.id += this->vertices.size();
+        cV.id += size;
+        this->vertices.append(cV);
     }
-    this->vertices.append(capVertices);
 
     this->updateIndices();
+    /*for(auto&& v: this->vertices) {
+        qDebug() << "id:" << v.id << " add:" <<  &v << " top:" << v.top << " bottom:" << v.bottom << " left:" << v.left << "right:" << v.right;
+    }*/
 }
 
 VerticesStruct Morel::getConvertedVertices() {

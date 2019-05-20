@@ -28,8 +28,8 @@ void Stem::generateBaseCylinder(double height, double radius) {
         };
     */
 
-    GLushort n = 25;
-    GLushort k = 25;
+    GLushort n = 10;
+    GLushort k = 10;
     double p = height/k;
     double angle = 0;
     float x = 0, y = 0, z = 0;

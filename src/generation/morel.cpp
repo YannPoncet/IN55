@@ -3,8 +3,11 @@
 Morel::Morel()
 {
     this->vertices = this->stem.getVertices();
-
-
+    QVector<MeshVertex> capVertices = this->cap.getVertices();
+    for(auto&& cV: capVertices) {
+        cV.id += this->vertices.size();
+    }
+    this->vertices.append(capVertices);
 
     this->updateIndices();
 }

@@ -7,9 +7,10 @@
 
 #include <QDebug>
 
-#include "../tools/structs.h"
 #include "cap.h"
 #include "stem.h"
+#include "../tools/structs.h"
+#include "../tools/meshvertex.h"
 
 class Morel
 {

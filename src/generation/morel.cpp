@@ -1,6 +1,6 @@
 #include "morel.h"
 
-Morel::Morel() : cap(this->params), stem(this->params)
+Morel::Morel() : cap(this->params, this->bezier), stem(this->params, this->bezier)
 {
     this->params.height = 3;
     for(auto&& v: *(this->stem.getVertices())) {

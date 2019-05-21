@@ -41,12 +41,15 @@ struct Parameters
     double capMiddleRadius;
     double capMiddleRadiusVariance;
 
-
     //Meshing parameters
     GLushort stemNumberOfHorizontalDivisions;
     GLushort stemNumberOfVerticalDivisions;
     GLushort capNumberOfHorizontalDivisions;
     GLushort capNumberOfVerticalDivisions;
+
+    //Morel curvature parameters (Bezier)
+    double curvatureVariance;
+    double anglePosVariance;
 };
 
 #endif // STRUCT_H

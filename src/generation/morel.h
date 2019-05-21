@@ -9,9 +9,10 @@
 
 #include "cap.h"
 #include "stem.h"
-#include "../tools/structs.h"
+#include "../tools/bezier.h"
 #include "../tools/meshvertex.h"
 #include "../tools/normaldistribution.h"
+#include "../tools/structs.h"
 
 class Morel
 {
@@ -41,9 +42,13 @@ private:
         50,     // GLushort stemNumberOfHorizontalDivisions
         50,     // GLushort stemNumberOfVerticalDivisions
         200,    // GLushort capNumberOfHorizontalDivisions
-        200     // GLushort capNumberOfVerticalDivisions
+        200,    // GLushort capNumberOfVerticalDivisions
+
+        0.0,    // double curvatureVariance
+        0.0     // double anglePosVariance;
     };
 
+    Bezier bezier = Bezier(params.height, params.stemHeightPart, params.curvatureVariance, params.anglePosVariance);
     Cap cap;
     Stem stem;
 };

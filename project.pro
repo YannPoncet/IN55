@@ -12,7 +12,7 @@ SOURCES += \
     src/generation/cap.cpp \
     src/generation/morel.cpp \
     src/tools/meshvertex.cpp \
-    src/tools/normaldistribution.cpp
+    src/tools/bezier.cpp
 
 HEADERS += \
     src/mainwidget.h \
@@ -22,7 +22,8 @@ HEADERS += \
     src/generation/morel.h \
     src/tools/normaldistribution.h \
     src/tools/structs.h \
-    src/tools/meshvertex.h
+    src/tools/meshvertex.h \
+    src/tools/bezier.h
 
 RESOURCES += \
     ressources/shaders.qrc \

@@ -7,18 +7,20 @@
 
 #include<QDebug>
 
+#include "../tools/bezier.h"
 #include "../tools/structs.h"
 #include "../tools/meshvertex.h"
 
 class Stem
 {
 public:
-    Stem(Parameters& p);
+    Stem(Parameters& p, Bezier& bezier);
     QVector<MeshVertex>* getVertices();
 private:
     QVector<MeshVertex> vertices;
     QVector3D color;
     Parameters& params;
+    Bezier& bezier;
 
     void generateBaseCylinder();
 };

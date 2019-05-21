@@ -1,6 +1,6 @@
 #include "stem.h"
 
-Stem::Stem(Parameters& p) : params(p) {
+Stem::Stem(Parameters& p, Bezier& b) : params(p), bezier(b) {
     this->color = QVector3D(0.87f, 0.60f, 0.38f);
     this->generateBaseCylinder();
 }
@@ -69,6 +69,10 @@ void Stem::generateBaseCylinder() {
         } else {
             v.left = &this->vertices[v.id-1];
         }
+
+        //TODO to remove
+        QQuaternion rotationQuat = this->bezier.getRotationQuaternion(v.position.z(), this->params.height);
+        v.rotate(rotationQuat);
     }
 
     /*

@@ -25,6 +25,9 @@ public:
     void rescale(QVector3D scale);
     void rescale(float scale);
     void translate(QVector3D axis);
+    void rotate(QQuaternion rotationQuat);
+    void rotate(QQuaternion rotationQuat, QVector3D point);
+    void rotate(float angle, QVector3D axis);
     void rotate(float angle, QVector3D axis, QVector3D point);
 };
 

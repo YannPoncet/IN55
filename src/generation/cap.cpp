@@ -1,6 +1,6 @@
 #include "cap.h"
 
-Cap::Cap(Parameters& p) : params(p) {
+Cap::Cap(Parameters& p, Bezier& b) : params(p), bezier(b) {
     this->color = QVector3D(0.87f, 0.60f, 0.38f);
     this->generateBaseEllipsoid();
     this->applyTransformations();
@@ -17,7 +17,9 @@ void Cap::applyTransformations() {
     // applying some transformations to the cap (to every vertex but the ones forming the base)
     for(auto&& v: this->vertices) {
         int i = v.id/n;
-
+        QQuaternion rotationQuat = this->bezier.getRotationQuaternion(v.position.z(), this->params.height);
+        v.rotate(rotationQuat);
+/*
         if(i!=0 && i<k/5) {
             QVector3D translation = QVector3D(0, 0, -0.1f);
             QVector3D scaleVector = QVector3D(2.3f, 2.3f, 2.3f);
@@ -31,7 +33,7 @@ void Cap::applyTransformations() {
             v.translate(translation);
             v.rescale(scaleVector);
             v.rotate(M_PI/10,rotationAxis,rotationPoint);
-        }
+        }*/
     }
 }
 

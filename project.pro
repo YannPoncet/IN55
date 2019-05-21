@@ -11,7 +11,8 @@ SOURCES += \
     src/generation/stem.cpp \
     src/generation/cap.cpp \
     src/generation/morel.cpp \
-    src/tools/meshvertex.cpp
+    src/tools/meshvertex.cpp \
+    src/tools/normaldistribution.cpp
 
 HEADERS += \
     src/mainwidget.h \
@@ -19,6 +20,7 @@ HEADERS += \
     src/generation/stem.h \
     src/generation/cap.h \
     src/generation/morel.h \
+    src/tools/normaldistribution.h \
     src/tools/structs.h \
     src/tools/meshvertex.h
 

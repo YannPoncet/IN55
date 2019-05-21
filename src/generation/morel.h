@@ -11,6 +11,7 @@
 #include "stem.h"
 #include "../tools/structs.h"
 #include "../tools/meshvertex.h"
+#include "../tools/normaldistribution.h"
 
 class Morel
 {

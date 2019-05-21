@@ -16,14 +16,17 @@ Morel::Morel()
 }
 
 VerticesStruct Morel::getConvertedVertices() {
-    QVector<VertexData> convertedVertices;
-    for(auto&& v: this->vertices) {
-        convertedVertices.append({v.position, v.color});
+    int size = this->vertices.size();
+    VertexData* newArray = new VertexData[size];
+
+    for(int i=0; i<size; i++) {
+        VertexData vData = {this->vertices[i].position, this->vertices[i].color};
+        newArray[i] = vData;
     }
 
     VerticesStruct vStruct;
-    vStruct.vertices = convertedVertices.data();
-    vStruct.nbrVertices = convertedVertices.size();
+    vStruct.vertices = newArray;
+    vStruct.nbrVertices = size;
 
     return vStruct;
 }

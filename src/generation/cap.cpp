@@ -18,9 +18,9 @@ void Cap::applyTransformations(GLushort numberOfVerticesByFloor, GLushort number
 
     // applying some transformations to the cap (to every vertex but the ones forming the base)
     for(auto&& v: this->vertices) {
-        int i = v.id/numberOfVerticesByFloor;
+        int i = v.id/n;
 
-        if(i!=0 && i<numberOfFloors/5) {
+        if(i!=0 && i<k/5) {
             QVector3D translation = QVector3D(0, 0, -0.1f);
             QVector3D deformationAxis = QVector3D(2.3f, 2.3f, 2.3f);
             v.translate(translation);

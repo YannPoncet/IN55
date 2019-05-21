@@ -13,13 +13,14 @@
 class Stem
 {
 public:
-    Stem();
+    Stem(Parameters& p);
     QVector<MeshVertex>* getVertices();
 private:
     QVector<MeshVertex> vertices;
     QVector3D color;
+    Parameters& params;
 
-    void generateBaseCylinder(double height, double radius);
+    void generateBaseCylinder();
 };
 
 #endif // STEM_H

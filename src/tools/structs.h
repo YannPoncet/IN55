@@ -24,29 +24,29 @@ struct IndicesStruct
 };
 
 
-struct parameters
+struct Parameters
 {
     //Global Size
-    float globalSizeFactor; //Will multiply the whole morel by that factor
-    float globalSizeVariance;
+    double globalSizeFactor; //Will multiply the whole morel by that factor
+    double globalSizeVariance;
 
     //Height parameters
-    float height; //Height of the morel if it is 100% vertical
-    float stemHeightPart; //Part of the stem in the morel's height, in percentage (0 to 100)
-    float heightVariance;
+    double height; //Height of the morel if it is 100% vertical
+    double stemHeightPart; //Part of the stem in the morel's height, in percentage (0 to 100)
+    double heightVariance;
 
     //Radius parameters
-    float junctionRadius; //Radius at the junction between the cap and the stem
-    float junctionRadiusVariance;
-    float capMiddleRadius;
-    float capMiddleRadiusVariance;
+    double junctionRadius; //Radius at the junction between the cap and the stem
+    double junctionRadiusVariance;
+    double capMiddleRadius;
+    double capMiddleRadiusVariance;
 
 
     //Meshing parameters
-    int stemNumberOfHorizontalDivisions;
-    int stemNumberOfVerticalDivisions;
-    int capNumberOfHorizontalDivisions;
-    int capNumberOfVerticalDivisions;
+    GLushort stemNumberOfHorizontalDivisions;
+    GLushort stemNumberOfVerticalDivisions;
+    GLushort capNumberOfHorizontalDivisions;
+    GLushort capNumberOfVerticalDivisions;
 };
 
 #endif // STRUCT_H

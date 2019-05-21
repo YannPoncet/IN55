@@ -1,7 +1,8 @@
 #include "morel.h"
 
-Morel::Morel()
+Morel::Morel() : cap(this->params), stem(this->params)
 {
+    this->params.height = 3;
     for(auto&& v: *(this->stem.getVertices())) {
         this->vertices.append(v);
     }

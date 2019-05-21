@@ -55,6 +55,6 @@ void GeometryEngine::drawGeometry(QOpenGLShaderProgram *program) {
     //qDebug() << (arrayBuf.size()/sizeof(VertexData));
 
     // Draw cube geometry using indices from VBO 1
-    glDrawElements(GL_TRIANGLES, indexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
+    //glDrawElements(GL_TRIANGLES, indexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
     glDrawElements(GL_POINTS, indexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
 }

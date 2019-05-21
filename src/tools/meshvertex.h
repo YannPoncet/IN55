@@ -22,7 +22,8 @@ public:
     MeshVertex* left;
 
     void computeNormalVector();
-    void axisDeform(QVector3D axis);
+    void rescale(QVector3D scale);
+    void rescale(float scale);
     void translate(QVector3D axis);
     void rotate(float angle, QVector3D axis, QVector3D point);
 };

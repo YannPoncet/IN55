@@ -14,13 +14,15 @@ class Cap
 {
 public:
     Cap();
+    Cap(Parameters& p);
     QVector<MeshVertex>* getVertices();
 private:
     QVector<MeshVertex> vertices;
     QVector3D color;
+    Parameters& params;
 
-    void generateBaseEllipsoid(double height, double radius, double maxRadius, GLushort numberOfVerticesByFloor, GLushort numberOfFloors);
-    void applyTransformations(GLushort numberOfVerticesByFloor, GLushort numberOfFloors);
+    void generateBaseEllipsoid();
+    void applyTransformations();
 };
 
 #endif // CAP_H

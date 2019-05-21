@@ -1,20 +1,18 @@
 #include "cap.h"
 
-Cap::Cap() {
+Cap::Cap(Parameters& p) : params(p) {
     this->color = QVector3D(0.87f, 0.60f, 0.38f);
-    this->generateBaseEllipsoid(1, 0.2, 0.3, 15, 15);
-    this->applyTransformations(15,15);
+    this->generateBaseEllipsoid();
+    this->applyTransformations();
 }
 
 QVector<MeshVertex>* Cap::getVertices() {
     return &(this->vertices);
 }
 
-void Cap::applyTransformations(GLushort numberOfVerticalDivisions, GLushort numberOfHorizontalDivisions) {
-    // number of horizontal divisions
-    GLushort n = numberOfVerticalDivisions;
-    // number of vertical divisions
-    GLushort k = numberOfHorizontalDivisions;
+void Cap::applyTransformations() {
+    GLushort n = this->params.capNumberOfVerticalDivisions;
+    GLushort k = this->params.capNumberOfHorizontalDivisions;
 
     // applying some transformations to the cap (to every vertex but the ones forming the base)
     for(auto&& v: this->vertices) {
@@ -22,48 +20,38 @@ void Cap::applyTransformations(GLushort numberOfVerticalDivisions, GLushort numb
 
         if(i!=0 && i<k/5) {
             QVector3D translation = QVector3D(0, 0, -0.1f);
-            QVector3D deformationAxis = QVector3D(2.3f, 2.3f, 2.3f);
+            QVector3D scaleVector = QVector3D(2.3f, 2.3f, 2.3f);
             v.translate(translation);
-            v.axisDeform(deformationAxis);
+            v.rescale(scaleVector);
         } else if(i!=0) {
             QVector3D translation = QVector3D(0, 0.1f, 0);
-            QVector3D deformationAxis = QVector3D(2.1f, 2.1f, 2.1f);
+            QVector3D scaleVector = QVector3D(2.1f, 2.1f, 2.1f);
             QVector3D rotationAxis = QVector3D(1, 0, 0);
             QVector3D rotationPoint = QVector3D(0, 0, 0);
             v.translate(translation);
-            v.axisDeform(deformationAxis);
+            v.rescale(scaleVector);
             v.rotate(M_PI/10,rotationAxis,rotationPoint);
         }
     }
 }
 
-void Cap::generateBaseEllipsoid(double height, double radius, double radiusDeformation, GLushort numberOfVerticalDivisions, GLushort numberOfHorizontalDivisions) {
-    /*
-        struct MeshVertex
-        {
-            GLushort id;
-            QVector3D position;
-            QVector3D color;
-            struct MeshVertex* top;
-            struct MeshVertex* bottom;
-            struct MeshVertex* right;
-            struct MeshVertex* left;
-        };
-    */
+void Cap::generateBaseEllipsoid() {
+    GLushort n = this->params.capNumberOfVerticalDivisions;
+    GLushort k = this->params.capNumberOfHorizontalDivisions;
+    double height = this->params.height*(1-(this->params.stemHeightPart)/100);
+    double radius = this->params.junctionRadius;
+    double capMiddleRadius = this->params.capMiddleRadius;
+    double globalSizeFactor = this->params.globalSizeFactor;
 
-    // number of horizontal divisions
-    GLushort n = numberOfVerticalDivisions;
-    // number of vertical divisions
-    GLushort k = numberOfHorizontalDivisions;
     // height of a division
     double p = height/k;
     double angle = 0;
     float x = 0, y = 0, z = 0;
     // Creation of the vertices
     for (GLushort i=0; i<k; i++) {
-        // function ax^2+bx+c going from f(x=0)=radius to f(x=k)=0, with f(x=k/2)=radiusDeformation
-        double a = (1/pow(k,2))*(2*radius-4*radiusDeformation);
-        double b = (1/double(k))*(4*radiusDeformation-3*radius);
+        // function ax^2+bx+c going from f(x=0)=radius to f(x=k)=0, with f(x=k/2)=capMiddleRadius
+        double a = (1/pow(k,2))*(2*radius-4*capMiddleRadius);
+        double b = (1/double(k))*(4*capMiddleRadius-3*radius);
         double newRadius = a*pow(i,2) + b*i + radius;
         for (GLushort j=0; j<n; j++) {
             angle = (2*M_PI/n)*j;
@@ -75,6 +63,8 @@ void Cap::generateBaseEllipsoid(double height, double radius, double radiusDefor
             v.id = i*n+j;
             v.position = QVector3D(x, y, z);
             v.color = QVector3D(0.6f, 0.2f, z/height);
+
+            v.rescale(static_cast<float>(globalSizeFactor));
             this->vertices.append(v);
         }
     }

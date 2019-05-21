@@ -1,8 +1,8 @@
 #include "stem.h"
 
-Stem::Stem() {
+Stem::Stem(Parameters& p) : params(p) {
     this->color = QVector3D(0.87f, 0.60f, 0.38f);
-    this->generateBaseCylinder(1, 0.2);
+    this->generateBaseCylinder();
 }
 
 QVector<MeshVertex>* Stem::getVertices() {
@@ -14,22 +14,13 @@ QVector<MeshVertex>* Stem::getVertices() {
 * @param height height of the cylinder
 * @param radius radius of the cylinder
 */
-void Stem::generateBaseCylinder(double height, double radius) {
-    /*
-        struct MeshVertex
-        {
-            GLushort id;
-            QVector3D position;
-            QVector3D color;
-            struct MeshVertex* top;
-            struct MeshVertex* bottom;
-            struct MeshVertex* right;
-            struct MeshVertex* left;
-        };
-    */
+void Stem::generateBaseCylinder() {
+    GLushort n = this->params.stemNumberOfVerticalDivisions;
+    GLushort k = this->params.stemNumberOfHorizontalDivisions;
+    double height = this->params.height*(this->params.stemHeightPart/100);
+    double radius = this->params.junctionRadius;
+    double globalSizeFactor = this->params.globalSizeFactor;
 
-    GLushort n = 30;
-    GLushort k = 30;
     double p = height/k;
     double angle = 0;
     float x = 0, y = 0, z = 0;
@@ -45,6 +36,7 @@ void Stem::generateBaseCylinder(double height, double radius) {
             v.id = i*n+j;
             v.position = QVector3D(x, y, z);
             v.color = QVector3D(0.2f, 0.6f, -z);
+            v.rescale(static_cast<float>(globalSizeFactor));
             this->vertices.append(v);
         }
     }

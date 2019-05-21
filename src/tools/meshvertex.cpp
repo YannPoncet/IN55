@@ -9,12 +9,20 @@ void MeshVertex::computeNormalVector() {
 
 }
 
-void MeshVertex::axisDeform(QVector3D axis) {
-    QMatrix4x4 deformation = QMatrix4x4(axis.x(),   0,          0,          0,
-                                        0,          axis.y(),   0,          0,
-                                        0,          0,          axis.z(),   0,
-                                        0,          0,          0,          1);
-    this->position = deformation*this->position;
+void MeshVertex::rescale(QVector3D scale) {
+    QMatrix4x4 rescaleMatrix = QMatrix4x4(  scale.x(),   0,           0,           0,
+                                            0,           scale.y(),   0,           0,
+                                            0,           0,           scale.z(),   0,
+                                            0,           0,           0,           1);
+    this->position = rescaleMatrix*this->position;
+}
+
+void MeshVertex::rescale(float scale) {
+    QMatrix4x4 rescaleMatrix = QMatrix4x4(  scale,   0,       0,       0,
+                                            0,       scale,   0,       0,
+                                            0,       0,       scale,   0,
+                                            0,       0,       0,       1);
+    this->position = rescaleMatrix*this->position;
 }
 
 void MeshVertex::translate(QVector3D axis) {

@@ -22,9 +22,9 @@ public:
     MeshVertex* left;
 
     void computeNormalVector();
-    void axisDeformation(QVector3D axis);
-    void translation(QVector3D axis);
-    void rotation(double angle, QVector3D axis, QVector3D point);
+    void axisDeform(QVector3D axis);
+    void translate(QVector3D axis);
+    void rotate(float angle, QVector3D axis, QVector3D point);
 };
 
 #endif // MESHVERTEX_H

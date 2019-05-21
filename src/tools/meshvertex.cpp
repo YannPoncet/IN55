@@ -23,7 +23,8 @@ void MeshVertex::translate(QVector3D axis) {
 
 // rotation of angle degrees with an axis and going through a point
 void MeshVertex::rotate(float angle, QVector3D axis, QVector3D point) {
-    QQuaternion rotationQuat = QQuaternion::fromAxisAndAngle(axis,angle);
+    float radianToDegrees = 180/M_PI;
+    QQuaternion rotationQuat = QQuaternion::fromAxisAndAngle(axis, angle*radianToDegrees);
 
     this->position -= point;
     this->position = rotationQuat*this->position;

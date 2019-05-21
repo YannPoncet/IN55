@@ -24,9 +24,9 @@ void Cap::generateBaseEllipsoid(double height, double radius, double radiusDefor
     */
 
     // number of horizontal divisions
-    GLushort n = 10;
+    GLushort n = 30;
     // number of vertical divisions
-    GLushort k = 10;
+    GLushort k = 30;
     // height of a division
     double p = height/k;
     double angle = 0;

@@ -24,7 +24,7 @@ public:
     void computeNormalVector();
     void axisDeformation(QVector3D axis);
     void translation(QVector3D axis);
-    void rotation(double angle, QVector3D axis, QVector3D point);
+    void rotation(float angle, QVector3D axis, QVector3D point);
 };
 
 #endif // MESHVERTEX_H

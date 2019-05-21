@@ -22,8 +22,8 @@ void MeshVertex::translation(QVector3D axis) {
 }
 
 // rotation of angle degrees with an axis and going through a point
-void MeshVertex::rotation(double angle, QVector3D axis, QVector3D point) {
-    QQuaternion rotationQuat = QQuaternion(cos(angle),axis*sin(angle));
+void MeshVertex::rotation(float angle, QVector3D axis, QVector3D point) {
+    QQuaternion rotationQuat = QQuaternion::fromAxisAndAngle(axis,angle);
 
     this->position -= point;
     this->position = rotationQuat*this->position;

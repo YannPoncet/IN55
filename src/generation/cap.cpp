@@ -2,14 +2,42 @@
 
 Cap::Cap() {
     this->color = QVector3D(0.87f, 0.60f, 0.38f);
-    this->generateBaseEllipsoid(1, 0.2, 0.3);
+    this->generateBaseEllipsoid(1, 0.2, 0.3, 15, 15);
+    this->applyTransformations(15,15);
 }
 
 QVector<MeshVertex>* Cap::getVertices() {
     return &(this->vertices);
 }
 
-void Cap::generateBaseEllipsoid(double height, double radius, double radiusDeformation) {
+void Cap::applyTransformations(GLushort numberOfVerticesByFloor, GLushort numberOfFloors) {
+    // number of horizontal divisions
+    GLushort n = numberOfVerticesByFloor;
+    // number of vertical divisions
+    GLushort k = numberOfFloors;
+
+    // applying some transformations to the cap (to every vertex but the ones forming the base)
+    for(auto&& v: this->vertices) {
+        int i = v.id/numberOfVerticesByFloor;
+
+        if(i!=0 && i<numberOfFloors/5) {
+            QVector3D translation = QVector3D(0, 0, -0.1f);
+            QVector3D deformationAxis = QVector3D(2.3f, 2.3f, 2.3f);
+            v.translate(translation);
+            v.axisDeform(deformationAxis);
+        } else if(i!=0) {
+            QVector3D translation = QVector3D(0, 0.1f, 0);
+            QVector3D deformationAxis = QVector3D(2.1f, 2.1f, 2.1f);
+            QVector3D rotationAxis = QVector3D(1, 0, 0);
+            QVector3D rotationPoint = QVector3D(0, 0, 0);
+            v.translate(translation);
+            v.axisDeform(deformationAxis);
+            v.rotate(M_PI/10,rotationAxis,rotationPoint);
+        }
+    }
+}
+
+void Cap::generateBaseEllipsoid(double height, double radius, double radiusDeformation, GLushort numberOfVerticesByFloor, GLushort numberOfFloors) {
     /*
         struct MeshVertex
         {
@@ -24,9 +52,9 @@ void Cap::generateBaseEllipsoid(double height, double radius, double radiusDefor
     */
 
     // number of horizontal divisions
-    GLushort n = 10;
+    GLushort n = numberOfVerticesByFloor;
     // number of vertical divisions
-    GLushort k = 10;
+    GLushort k = numberOfFloors;
     // height of a division
     double p = height/k;
     double angle = 0;

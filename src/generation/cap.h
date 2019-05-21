@@ -19,7 +19,8 @@ private:
     QVector<MeshVertex> vertices;
     QVector3D color;
 
-    void generateBaseEllipsoid(double height, double radius, double maxRadius);
+    void generateBaseEllipsoid(double height, double radius, double maxRadius, GLushort numberOfVerticesByFloor, GLushort numberOfFloors);
+    void applyTransformations(GLushort numberOfVerticesByFloor, GLushort numberOfFloors);
 };
 
 #endif // CAP_H

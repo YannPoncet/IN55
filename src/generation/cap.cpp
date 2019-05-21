@@ -10,11 +10,11 @@ QVector<MeshVertex>* Cap::getVertices() {
     return &(this->vertices);
 }
 
-void Cap::applyTransformations(GLushort numberOfVerticesByFloor, GLushort numberOfFloors) {
+void Cap::applyTransformations(GLushort numberOfVerticalDivisions, GLushort numberOfHorizontalDivisions) {
     // number of horizontal divisions
-    GLushort n = numberOfVerticesByFloor;
+    GLushort n = numberOfVerticalDivisions;
     // number of vertical divisions
-    GLushort k = numberOfFloors;
+    GLushort k = numberOfHorizontalDivisions;
 
     // applying some transformations to the cap (to every vertex but the ones forming the base)
     for(auto&& v: this->vertices) {
@@ -37,7 +37,7 @@ void Cap::applyTransformations(GLushort numberOfVerticesByFloor, GLushort number
     }
 }
 
-void Cap::generateBaseEllipsoid(double height, double radius, double radiusDeformation, GLushort numberOfVerticesByFloor, GLushort numberOfFloors) {
+void Cap::generateBaseEllipsoid(double height, double radius, double radiusDeformation, GLushort numberOfVerticalDivisions, GLushort numberOfHorizontalDivisions) {
     /*
         struct MeshVertex
         {
@@ -52,9 +52,9 @@ void Cap::generateBaseEllipsoid(double height, double radius, double radiusDefor
     */
 
     // number of horizontal divisions
-    GLushort n = numberOfVerticesByFloor;
+    GLushort n = numberOfVerticalDivisions;
     // number of vertical divisions
-    GLushort k = numberOfFloors;
+    GLushort k = numberOfHorizontalDivisions;
     // height of a division
     double p = height/k;
     double angle = 0;

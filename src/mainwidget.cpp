@@ -70,7 +70,8 @@ void MainWidget::initializeGL()
     glEnable(GL_DEPTH_TEST);
 
     // Enable back face culling
-    //glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
+    // glCullFace(GL_FRONT);
 
     // Enable point size manipulation
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);

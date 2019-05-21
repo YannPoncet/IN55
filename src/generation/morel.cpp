@@ -39,7 +39,7 @@ IndicesStruct Morel::getConvertedIndices() {
 void Morel::updateIndices() {
     for(auto&& v: this->vertices) {
         if(v.right != nullptr && v.bottom != nullptr) {
-            this->indices.append({v.id, v.right->id, v.bottom->id});
+            this->indices.append({v.id, v.bottom->id, v.right->id});
         }
         if(v.top != nullptr && v.left != nullptr) {
             this->indices.append({v.id, v.top->id, v.left->id});

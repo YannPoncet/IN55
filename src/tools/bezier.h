@@ -11,6 +11,8 @@ class Bezier
 public:
     Bezier(double height, double stemHeightPart, double curvatureVariance, double anglePosVariance, GLushort stemNumberOfHorizontalDivisions);
     QQuaternion getRotationQuaternion(float t);
+    QVector3D getBezierPoint(float t);
+
 private:
     QVector3D P0;
     QVector3D P1;
@@ -19,7 +21,6 @@ private:
     NormalDistribution normalDistribution;
 
     void constructPoints(double height, double stemHeightPart, double curvatureVariance, double anglePosVariance);
-    QVector3D getBezierPoint(float t);
     float getRotationAngleStemBase(float t);
 };
 

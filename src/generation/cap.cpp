@@ -49,7 +49,6 @@ void Cap::generateBaseEllipsoid() {
     double height = this->params.height*(1-this->params.stemHeightPart);
     double radius = this->params.junctionRadius;
     double capMiddleRadius = this->params.capMiddleRadius;
-    double globalSizeFactor = this->params.globalSizeFactor;
 
     // height of a division
     double p = height/k;
@@ -71,8 +70,6 @@ void Cap::generateBaseEllipsoid() {
             v.id = i*n+j;
             v.position = QVector3D(x, y, z);
             v.color = QVector3D(0.6f, 0.2f, z/height);
-
-            v.rescale(static_cast<float>(globalSizeFactor));
             this->vertices.append(v);
         }
     }
@@ -81,7 +78,6 @@ void Cap::generateBaseEllipsoid() {
     v.id = n*k;
     v.position = QVector3D(0.0f, 0.0f, height);
     v.color = QVector3D(0.6f, 0.2f, 1.0f);
-    v.rescale(static_cast<float>(globalSizeFactor));
     this->vertices.append(v);
 
     // Linking the different vertices

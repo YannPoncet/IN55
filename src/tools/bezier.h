@@ -11,7 +11,6 @@ class Bezier
 public:
     Bezier(double height, double stemHeightPart, double curvatureVariance, double anglePosVariance, GLushort stemNumberOfHorizontalDivisions);
     QQuaternion getRotationQuaternion(float t);
-    QVector3D getBezierPoint(float t);
 
 private:
     QVector3D P0;

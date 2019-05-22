@@ -1,12 +1,12 @@
 #include "geometryengine.h"
 
 VertexData systemVertices[] = {
-    {QVector3D(0.0f, 0.0f, 0.0f), QVector3D(1.0f, 0.0f,0.0f)}, // x is red
-    {QVector3D(5.0f, 0.0f, 0.0f), QVector3D(1.0f, 0.0f,0.0f)},
-    {QVector3D(0.0f, 0.0f, 0.0f), QVector3D(0.0f, 1.0f,0.0f)}, // y is green
-    {QVector3D(0.0f, 5.0f, 0.0f), QVector3D(0.0f, 1.0f,0.0f)},
-    {QVector3D(0.0f, 0.0f, 0.0f), QVector3D(0.0f, 0.0f,1.0f)}, // z is blue
-    {QVector3D(0.0f, 0.0f, 5.0f), QVector3D(0.0f, 0.0f,1.0f)},
+    {QVector3D(0.0f, 0.0f, 0.0f), QVector3D(1.0f, 0.0f, 0.0f)}, // x is red
+    {QVector3D(5.0f, 0.0f, 0.0f), QVector3D(1.0f, 0.0f, 0.0f)},
+    {QVector3D(0.0f, 0.0f, 0.0f), QVector3D(0.0f, 1.0f, 0.0f)}, // y is green
+    {QVector3D(0.0f, 5.0f, 0.0f), QVector3D(0.0f, 1.0f, 0.0f)},
+    {QVector3D(0.0f, 0.0f, -5.0f), QVector3D(0.0f, 0.0f, 1.0f)}, // z is blue
+    {QVector3D(0.0f, 0.0f, 5.0f), QVector3D(0.0f, 0.0f, 1.0f)},
 };
 
 const int nbrSystemVertices = 6;

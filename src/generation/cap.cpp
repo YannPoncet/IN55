@@ -4,7 +4,7 @@ Cap::Cap(Parameters& p, Bezier& b) : params(p), bezier(b) {
     this->color = QVector3D(0.87f, 0.60f, 0.38f);
     this->generateBaseEllipsoid();
     this->applyBezierCurve();
-    this->applyTransformations();
+    //this->applyTransformations();
 }
 
 QVector<MeshVertex>* Cap::getVertices() {
@@ -117,9 +117,22 @@ void Cap::generateBaseEllipsoid() {
 }
 
 void Cap::applyBezierCurve() {
+    float zeroAngle = this->bezier.getZeroAngle();
+    QVector3D rotationPoint(0, 0, -this->params.height*this->params.stemHeightPart);
+
     for(auto&& v: this->vertices) {
         float t = this->params.stemHeightPart+(v.position.z()/this->params.height);
         QQuaternion rotationQuat = this->bezier.getRotationQuaternion(t);
+
+        QVector3D axis;
+        float useless;
+        rotationQuat.getAxisAndAngle(&axis, &useless);
+        QQuaternion rotateBack = QQuaternion::fromAxisAndAngle(axis, -zeroAngle*180/M_PI);
+
         v.rotate(rotationQuat);
+        v.translate(-rotationPoint);
+        v.rotate(rotateBack);
+        v.translate(rotationPoint);
     }
+
 }

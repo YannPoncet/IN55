@@ -23,6 +23,9 @@ public:
     void updateIndices();
     void rescaleWithGlobalFactor();
 
+    VerticesStruct getBezierVertices();
+    IndicesStruct getBezierIndices();
+
 private:
     QVector<MeshVertex> vertices;
     QVector<GLushort> indices;
@@ -42,13 +45,13 @@ private:
         2,      // double radiusAtBaseFactor;
         0,      // double radiusAtBaseVariance;
 
-        50,     // GLushort stemNumberOfHorizontalDivisions
-        50,     // GLushort stemNumberOfVerticalDivisions
-        200,    // GLushort capNumberOfHorizontalDivisions
-        200,    // GLushort capNumberOfVerticalDivisions
+        20,     // GLushort stemNumberOfHorizontalDivisions
+        20,     // GLushort stemNumberOfVerticalDivisions
+        30,    // GLushort capNumberOfHorizontalDivisions
+        30,    // GLushort capNumberOfVerticalDivisions
 
-        500,    // double curvatureVariance
-        50     // double anglePosVariance;
+        0.7,    // double curvatureVariance
+        0.2     // double anglePosVariance;
     };
 
     Bezier bezier = Bezier(params.height, params.stemHeightPart, params.curvatureVariance, params.anglePosVariance, params.stemNumberOfHorizontalDivisions);

@@ -60,16 +60,16 @@ QQuaternion Bezier::getRotationQuaternion(float t) {
 }
 
 void Bezier::constructPoints(double height, double stemHeightPart, double curvatureVariance, double anglePosVariance) {
-    float xValue = NormalDistribution::getNormalNumber<float>(0, curvatureVariance);
-    float yValue = NormalDistribution::getNormalNumber<float>(0, curvatureVariance);
-    float zValue = NormalDistribution::getNormalNumber<float>(height*stemHeightPart, anglePosVariance);
+    float xValue = this->normalDistribution.getNormalNumber<float>(0, curvatureVariance);
+    float yValue = this->normalDistribution.getNormalNumber<float>(0, curvatureVariance);
+    float zValue = this->normalDistribution.getNormalNumber<float>(height*stemHeightPart, anglePosVariance);
 
     this->P1 = QVector3D(xValue, yValue, zValue);
     qDebug() << "P1=" << P1;
 
-    xValue = NormalDistribution::getNormalNumber<float>(0, curvatureVariance);
-    yValue = NormalDistribution::getNormalNumber<float>(0, curvatureVariance);
-    zValue = NormalDistribution::getNormalNumber<float>(height, anglePosVariance);
+    xValue = this->normalDistribution.getNormalNumber<float>(0, curvatureVariance);
+    yValue = this->normalDistribution.getNormalNumber<float>(0, curvatureVariance);
+    zValue = this->normalDistribution.getNormalNumber<float>(height, anglePosVariance);
 
     this->P2 = QVector3D(xValue, yValue, zValue);
     qDebug() << "P2=" << P2;

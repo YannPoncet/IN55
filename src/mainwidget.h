@@ -34,7 +34,6 @@ protected:
     void initShaders();
     void initTextures();
 
-    void drawMan();
     void drawCube();
 
 private:

@@ -3,6 +3,7 @@
 Cap::Cap(Parameters& p, Bezier& b) : params(p), bezier(b) {
     this->color = QVector3D(0.87f, 0.60f, 0.38f);
     this->generateBaseEllipsoid();
+    this->applyBezierCurve();
     this->applyTransformations();
 }
 
@@ -17,10 +18,13 @@ void Cap::applyTransformations() {
     // applying some transformations to the cap (to every vertex but the ones forming the base)
     for(auto&& v: this->vertices) {
         int i = v.id/n;
-        float t = (this->params.stemHeightPart/100)+(v.position.z()/this->params.height);
-        QQuaternion rotationQuat = this->bezier.getRotationQuaternion(t);
-        v.rotate(rotationQuat);
-/*
+
+        if(i!=0) {
+            QVector3D scaleVector = QVector3D(2.3f, 2.3f, 2.3f);
+            v.rescale(scaleVector);
+        }
+
+        /*
         if(i!=0 && i<k/5) {
             QVector3D translation = QVector3D(0, 0, -0.1f);
             QVector3D scaleVector = QVector3D(2.3f, 2.3f, 2.3f);
@@ -34,14 +38,15 @@ void Cap::applyTransformations() {
             v.translate(translation);
             v.rescale(scaleVector);
             v.rotate(M_PI/10,rotationAxis,rotationPoint);
-        }*/
+        }
+        */
     }
 }
 
 void Cap::generateBaseEllipsoid() {
     GLushort n = this->params.capNumberOfVerticalDivisions;
     GLushort k = this->params.capNumberOfHorizontalDivisions;
-    double height = this->params.height*(1-(this->params.stemHeightPart)/100);
+    double height = this->params.height*(1-this->params.stemHeightPart);
     double radius = this->params.junctionRadius;
     double capMiddleRadius = this->params.capMiddleRadius;
     double globalSizeFactor = this->params.globalSizeFactor;
@@ -76,6 +81,7 @@ void Cap::generateBaseEllipsoid() {
     v.id = n*k;
     v.position = QVector3D(0.0f, 0.0f, height);
     v.color = QVector3D(0.6f, 0.2f, 1.0f);
+    v.rescale(static_cast<float>(globalSizeFactor));
     this->vertices.append(v);
 
     // Linking the different vertices
@@ -112,22 +118,12 @@ void Cap::generateBaseEllipsoid() {
             }
         }
     }
+}
 
-    /*
-    //used to print the mesh
+void Cap::applyBezierCurve() {
     for(auto&& v: this->vertices) {
-        qDebug() << "-- id=" << v.id;
-        if(v.top != nullptr)
-            qDebug() << "top=" << v.top->id;
-
-        if(v.bottom != nullptr)
-            qDebug() << "bottom=" << v.bottom->id;
-
-        if(v.right != nullptr)
-            qDebug() << "right=" << v.right->id;
-
-        if(v.left != nullptr)
-            qDebug() << "left=" << v.left->id;
+        float t = this->params.stemHeightPart+(v.position.z()/this->params.height);
+        QQuaternion rotationQuat = this->bezier.getRotationQuaternion(t);
+        v.rotate(rotationQuat);
     }
-    */
 }

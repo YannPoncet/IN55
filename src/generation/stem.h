@@ -23,6 +23,8 @@ private:
     Bezier& bezier;
 
     void generateBaseCylinder();
+    void applyBezierCurve();
+    void widenStemBase();
 };
 
 #endif // STEM_H

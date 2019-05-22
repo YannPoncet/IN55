@@ -3,6 +3,8 @@
 Stem::Stem(Parameters& p, Bezier& b) : params(p), bezier(b) {
     this->color = QVector3D(0.87f, 0.60f, 0.38f);
     this->generateBaseCylinder();
+    this->widenStemBase();
+    this->applyBezierCurve();
 }
 
 QVector<MeshVertex>* Stem::getVertices() {
@@ -17,7 +19,7 @@ QVector<MeshVertex>* Stem::getVertices() {
 void Stem::generateBaseCylinder() {
     GLushort n = this->params.stemNumberOfVerticalDivisions;
     GLushort k = this->params.stemNumberOfHorizontalDivisions;
-    double height = this->params.height*(this->params.stemHeightPart/100);
+    double height = this->params.height*this->params.stemHeightPart;
     double radius = this->params.junctionRadius;
     double globalSizeFactor = this->params.globalSizeFactor;
 
@@ -69,28 +71,26 @@ void Stem::generateBaseCylinder() {
         } else {
             v.left = &this->vertices[v.id-1];
         }
+    }
+}
 
-        //TODO to remove
-        float t = (((this->params.stemHeightPart/100)*this->params.height)+v.position.z())/this->params.height;
+void Stem::applyBezierCurve() {
+    for(auto&& v: this->vertices) {
+        float t = ((this->params.stemHeightPart*this->params.height)+v.position.z())/this->params.height;
         QQuaternion rotationQuat = this->bezier.getRotationQuaternion(t);
         v.rotate(rotationQuat);
     }
-
-    /*
-    //used to print the mesh
-    for(auto&& v: this->vertices) {
-        qDebug() << "-- id=" << v.id;
-        if(v.top != nullptr)
-            qDebug() << "top=" << v.top->id;
-
-        if(v.bottom != nullptr)
-            qDebug() << "bottom=" << v.bottom->id;
-
-        if(v.right != nullptr)
-            qDebug() << "right=" << v.right->id;
-
-        if(v.left != nullptr)
-            qDebug() << "left=" << v.left->id;
-    }
-    */
 }
+
+void Stem::widenStemBase() {
+    float h = this->params.stemHeightPart*this->params.height;
+    float b = this->params.radiusAtBaseFactor;
+    float factor = 1;
+
+    for(auto&& v: this->vertices) {
+        float tmpPos = (h+v.position.z());
+        factor = b - b/(qPow(h,-1.0/3.0))*qPow(tmpPos,1.0/3.0);
+        v.position = QVector3D(factor*v.position.x()+v.position.x(), factor*v.position.y()+v.position.y(), v.position.z());
+    }
+}
+

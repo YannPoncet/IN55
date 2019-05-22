@@ -23,6 +23,7 @@ private:
     Bezier& bezier;
 
     void generateBaseEllipsoid();
+    void applyBezierCurve();
     void applyTransformations();
 };
 

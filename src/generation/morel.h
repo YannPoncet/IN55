@@ -50,7 +50,7 @@ private:
         1     // double anglePosVariance;
     };
 
-    Bezier bezier = Bezier(params.height, params.stemHeightPart, params.curvatureVariance, params.anglePosVariance);
+    Bezier bezier = Bezier(params.height, params.stemHeightPart, params.curvatureVariance, params.anglePosVariance, params.stemNumberOfHorizontalDivisions);
     Cap cap;
     Stem stem;
 };

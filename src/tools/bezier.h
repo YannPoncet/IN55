@@ -18,6 +18,7 @@ private:
     float zeroAngle;
 
     void constructPoints(double height, double stemHeightPart, double curvatureVariance, double anglePosVariance);
+    QVector3D getBezierPoint(float t);
     float getRotationAngleStemBase(float t);
 };
 

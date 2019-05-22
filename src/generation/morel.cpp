@@ -13,6 +13,7 @@ Morel::Morel() : cap(this->params, this->bezier), stem(this->params, this->bezie
         this->vertices.append(v);
     }
 
+    this->rescaleWithGlobalFactor();
     this->updateIndices();
 }
 
@@ -48,5 +49,12 @@ void Morel::updateIndices() {
         if(v.top != nullptr && v.left != nullptr) {
             this->indices.append({v.id, v.top->id, v.left->id});
         }
+    }
+}
+
+void Morel::rescaleWithGlobalFactor() {
+    for(auto&& v: this->vertices) {
+        float normalized = NormalDistribution::getNormalNumber<float>(this->params.globalSizeFactor, this->params.globalSizeVariance);
+        v.rescale(static_cast<float>(normalized));
     }
 }

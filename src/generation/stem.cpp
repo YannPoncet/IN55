@@ -21,7 +21,6 @@ void Stem::generateBaseCylinder() {
     GLushort k = this->params.stemNumberOfHorizontalDivisions;
     double height = this->params.height*this->params.stemHeightPart;
     double radius = this->params.junctionRadius;
-    double globalSizeFactor = this->params.globalSizeFactor;
 
     double p = height/k;
     double angle = 0;
@@ -38,7 +37,6 @@ void Stem::generateBaseCylinder() {
             v.id = i*n+j;
             v.position = QVector3D(x, y, z);
             v.color = QVector3D(0.2f, 0.6f, -z);
-            v.rescale(static_cast<float>(globalSizeFactor));
             this->vertices.append(v);
         }
     }
@@ -75,6 +73,7 @@ void Stem::generateBaseCylinder() {
 }
 
 void Stem::applyBezierCurve() {
+    QQuaternion firstAngle = this->bezier.getRotationQuaternion(0);
     for(auto&& v: this->vertices) {
         float t = ((this->params.stemHeightPart*this->params.height)+v.position.z())/this->params.height;
         QQuaternion rotationQuat = this->bezier.getRotationQuaternion(t);

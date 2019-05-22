@@ -21,14 +21,15 @@ public:
     VerticesStruct getConvertedVertices();
     IndicesStruct getConvertedIndices();
     void updateIndices();
+    void rescaleWithGlobalFactor();
 
 private:
     QVector<MeshVertex> vertices;
     QVector<GLushort> indices;
 
     Parameters params = {
-        0.8,      // double globalSizeFactor
-        0,      // double globalSizeVariance
+        0.65,      // double globalSizeFactor
+        0.1,      // double globalSizeVariance
 
         2,      // double height
         0.5,     // double stemHeightPart

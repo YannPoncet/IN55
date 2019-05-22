@@ -24,8 +24,12 @@ public:
 private:
     void initGeometry();
 
+    QOpenGLBuffer systemArrayBuf;
+    QOpenGLBuffer systemIndexBuf;
+
     QOpenGLBuffer arrayBuf;
     QOpenGLBuffer indexBuf;
+
 
 
 };

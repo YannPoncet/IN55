@@ -29,7 +29,7 @@ private:
 
     Parameters params = {
         0.65,      // double globalSizeFactor
-        0.1,      // double globalSizeVariance
+        0.05,      // double globalSizeVariance
 
         2,      // double height
         0.5,     // double stemHeightPart
@@ -47,13 +47,14 @@ private:
         200,    // GLushort capNumberOfHorizontalDivisions
         200,    // GLushort capNumberOfVerticalDivisions
 
-        0.6,    // double curvatureVariance
-        1     // double anglePosVariance;
+        500,    // double curvatureVariance
+        50     // double anglePosVariance;
     };
 
     Bezier bezier = Bezier(params.height, params.stemHeightPart, params.curvatureVariance, params.anglePosVariance, params.stemNumberOfHorizontalDivisions);
     Cap cap;
     Stem stem;
+    NormalDistribution normalDistribution;
 };
 
 #endif // MOREL_H

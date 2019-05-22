@@ -16,6 +16,7 @@ private:
     QVector3D P1;
     QVector3D P2;
     float zeroAngle;
+    NormalDistribution normalDistribution;
 
     void constructPoints(double height, double stemHeightPart, double curvatureVariance, double anglePosVariance);
     float getRotationAngleStemBase(float t);

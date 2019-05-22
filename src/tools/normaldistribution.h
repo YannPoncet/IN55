@@ -9,13 +9,19 @@
 class NormalDistribution
 {
 public:
+    NormalDistribution() {
+        std::random_device rd;  //Will be used to obtain a seed for the random number engine
+        this->generator = std::default_random_engine(rd());
+    }
+
     // Templated function that returns a number following a normal distribution function
     template <typename T>
-    static T getNormalNumber(T expectation, T variance) {
-        std::default_random_engine generator(static_cast<uint>(time(nullptr)));
+    T getNormalNumber(T expectation, T variance) {
         std::normal_distribution<T> distribution(expectation, sqrt(variance));
-        return distribution(generator);
+        return distribution(this->generator);
     }
+private:
+    std::default_random_engine generator;
 };
 
 #endif // NORMALDISTRIBUTION_H

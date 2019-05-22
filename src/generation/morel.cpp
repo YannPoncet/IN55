@@ -53,8 +53,8 @@ void Morel::updateIndices() {
 }
 
 void Morel::rescaleWithGlobalFactor() {
+    float normalized = this->normalDistribution.getNormalNumber<float>(this->params.globalSizeFactor, this->params.globalSizeVariance);
     for(auto&& v: this->vertices) {
-        float normalized = NormalDistribution::getNormalNumber<float>(this->params.globalSizeFactor, this->params.globalSizeVariance);
         v.rescale(static_cast<float>(normalized));
     }
 }

@@ -17,7 +17,8 @@ void Cap::applyTransformations() {
     // applying some transformations to the cap (to every vertex but the ones forming the base)
     for(auto&& v: this->vertices) {
         int i = v.id/n;
-        QQuaternion rotationQuat = this->bezier.getRotationQuaternion(v.position.z(), this->params.height);
+        float t = (this->params.stemHeightPart/100)+(v.position.z()/this->params.height);
+        QQuaternion rotationQuat = this->bezier.getRotationQuaternion(t);
         v.rotate(rotationQuat);
 /*
         if(i!=0 && i<k/5) {

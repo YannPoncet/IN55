@@ -71,7 +71,8 @@ void Stem::generateBaseCylinder() {
         }
 
         //TODO to remove
-        QQuaternion rotationQuat = this->bezier.getRotationQuaternion(v.position.z(), this->params.height);
+        float t = (((this->params.stemHeightPart/100)*this->params.height)+v.position.z())/this->params.height;
+        QQuaternion rotationQuat = this->bezier.getRotationQuaternion(t);
         v.rotate(rotationQuat);
     }
 

@@ -9,7 +9,7 @@ class Bezier
 {
 public:
     Bezier(double height, double stemHeightPart, double curvatureVariance, double anglePosVariance);
-    QQuaternion getRotationQuaternion(double horizontalDivisionHeight, double height);
+    QQuaternion getRotationQuaternion(float t);
 private:
     QVector3D P0;
     QVector3D P1;

@@ -40,6 +40,8 @@ struct Parameters
     double junctionRadiusVariance;
     double capMiddleRadius;
     double capMiddleRadiusVariance;
+    double radiusAtBaseFactor;
+    double radiusAtBaseVariance;
 
     //Meshing parameters
     GLushort stemNumberOfHorizontalDivisions;

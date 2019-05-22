@@ -3,7 +3,7 @@
 Bezier::Bezier(double height, double stemHeightPart, double curvatureVariance, double anglePosVariance)
 {
     this->P0 = QVector3D(0.0f, 0.0f, 0.0f);
-    this->P1 = QVector3D(0.0f, 0.0f, height*stemHeightPart/100);
+    this->P1 = QVector3D(0.0f, 0.0f, height*stemHeightPart);
     this->P2 = QVector3D(0.0f, 0.0f, height);
 
     this->constructPoints(height, stemHeightPart, curvatureVariance, anglePosVariance);
@@ -34,7 +34,7 @@ QQuaternion Bezier::getRotationQuaternion(float t) {
 void Bezier::constructPoints(double height, double stemHeightPart, double curvatureVariance, double anglePosVariance) {
     float xValue = NormalDistribution::getNormalNumber<float>(0, curvatureVariance);
     float yValue = NormalDistribution::getNormalNumber<float>(0, curvatureVariance);
-    float zValue = NormalDistribution::getNormalNumber<float>(height*stemHeightPart/100, anglePosVariance);
+    float zValue = NormalDistribution::getNormalNumber<float>(height*stemHeightPart, anglePosVariance);
 
     this->P1 = QVector3D(xValue, yValue, zValue);
     qDebug() << "P1=" << P1;

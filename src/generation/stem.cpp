@@ -73,11 +73,11 @@ void Stem::generateBaseCylinder() {
 }
 
 void Stem::applyBezierCurve() {
-    QQuaternion firstAngle = this->bezier.getRotationQuaternion(0);
+    float baseHeight = this->params.height*this->params.stemHeightPart;
+
     for(auto&& v: this->vertices) {
         float t = ((this->params.stemHeightPart*this->params.height)+v.position.z())/this->params.height;
-        QQuaternion rotationQuat = this->bezier.getRotationQuaternion(t);
-        v.rotate(rotationQuat);
+        this->bezier.applyFullBezierTransformationToVertex(v, t, baseHeight);
     }
 }
 

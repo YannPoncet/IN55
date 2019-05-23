@@ -3,8 +3,8 @@
 Cap::Cap(Parameters& p, Bezier& b) : params(p), bezier(b) {
     this->color = QVector3D(0.87f, 0.60f, 0.38f);
     this->generateBaseEllipsoid();
-    this->applyBezierCurve();
     this->applyTransformations();
+    this->applyBezierCurve();
 }
 
 QVector<MeshVertex>* Cap::getVertices() {
@@ -20,7 +20,7 @@ void Cap::applyTransformations() {
         int i = v.id/n;
 
         if(i!=0) {
-            QVector3D scaleVector = QVector3D(2.3f, 2.3f, 2.3f);
+            QVector3D scaleVector = QVector3D(2.3f, 2.3f, 1.0f);
             v.rescale(scaleVector);
         }
 
@@ -47,6 +47,7 @@ void Cap::generateBaseEllipsoid() {
     GLushort n = this->params.capNumberOfVerticalDivisions;
     GLushort k = this->params.capNumberOfHorizontalDivisions;
     double height = this->params.height*(1-this->params.stemHeightPart);
+    qDebug() << height;
     double radius = this->params.junctionRadius;
     double capMiddleRadius = this->params.capMiddleRadius;
 
@@ -117,9 +118,10 @@ void Cap::generateBaseEllipsoid() {
 }
 
 void Cap::applyBezierCurve() {
+    float baseHeight = this->params.height*this->params.stemHeightPart;
+
     for(auto&& v: this->vertices) {
         float t = this->params.stemHeightPart+(v.position.z()/this->params.height);
-        QQuaternion rotationQuat = this->bezier.getRotationQuaternion(t);
-        v.rotate(rotationQuat);
+        this->bezier.applyFullBezierTransformationToVertex(v, t, baseHeight);
     }
 }

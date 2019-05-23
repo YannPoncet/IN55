@@ -12,6 +12,7 @@ public:
     NormalDistribution() {
         //std::random_device rd;  //Will be used to obtain a seed for the random number engine
         this->generator = std::default_random_engine(time(0));
+        //this->generator.seed(122222222);
     }
 
     // Templated function that returns a number following a normal distribution function

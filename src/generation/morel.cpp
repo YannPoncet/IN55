@@ -58,3 +58,37 @@ void Morel::rescaleWithGlobalFactor() {
         v.rescale(static_cast<float>(normalized));
     }
 }
+
+VerticesStruct Morel::getBezierVertices() {
+    int n = 50;
+    VertexData* newArray = new VertexData[n];
+
+    for(int i=0; i<n; i++) {
+        float t = ((i+1)*1.0f)/(n*1.0f);
+        QVector3D p = this->bezier.getBezierPoint(t, this->params.height, this->params.stemHeightPart);
+        VertexData vData = {p*this->params.globalSizeFactor, QVector3D(1.0f,0.0f,0.3f)};
+        newArray[i] = vData;
+    }
+
+    VerticesStruct vStruct;
+    vStruct.vertices = newArray;
+    vStruct.nbrVertices = n;
+
+    return vStruct;
+}
+
+IndicesStruct Morel::getBezierIndices() {
+    int n = 50;
+    GLushort* newArray = new GLushort[n];
+
+    for(int i=0; i<n; i++) {
+        newArray[i] = i;
+    }
+
+    IndicesStruct iStruct;
+    iStruct.indices = newArray;
+    iStruct.nbrIndices = n;
+
+    return iStruct;
+}
+

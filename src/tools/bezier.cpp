@@ -1,6 +1,6 @@
 #include "bezier.h"
 
-Bezier::Bezier(double height, double stemHeightPart, double curvatureVariance, double anglePosVariance, GLushort stemNumberOfHorizontalDivisions)
+Bezier::Bezier(double height, double stemHeightPart, double curvatureVariance, double anglePosVariance)
 {
     this->P0 = QVector3D(0.0f, 0.0f, 0.0f);
     this->P1 = QVector3D(0.0f, 0.0f, height*stemHeightPart);
@@ -9,12 +9,10 @@ Bezier::Bezier(double height, double stemHeightPart, double curvatureVariance, d
     this->constructPoints(height, stemHeightPart, curvatureVariance, anglePosVariance);
 
     // finding the t for the stem's base
-    double p = height*stemHeightPart/stemNumberOfHorizontalDivisions;
-    float t = ((stemHeightPart*height)+(-p*(stemNumberOfHorizontalDivisions-1)))/height;
-    this->zeroAngle = this->getRotationAngleStemBase(t);
+    this->computeBaseAngleAndAxis(this->zeroAngle, this->zeroAxis);
 }
 
-QVector3D Bezier::getBezierPoint(float t) {
+QVector3D Bezier::getBezierPoint(float t, double height, double stemHeightPart) {
     float xBezier = pow((1 - t), 2) * this->P0.x()  +  2 * t * (1 -t) * this->P1.x()  +  pow(t, 2) * this->P2.x();
     float yBezier = pow((1 - t), 2) * this->P0.y()  +  2 * t * (1 -t) * this->P1.y()  +  pow(t, 2) * this->P2.y();
     float zBezier = pow((1 - t), 2) * this->P0.z()  +  2 * t * (1 -t) * this->P1.z()  +  pow(t, 2) * this->P2.z();
@@ -22,17 +20,9 @@ QVector3D Bezier::getBezierPoint(float t) {
     return bezierPoint  ;
 }
 
-float Bezier::getRotationAngleStemBase(float t) {
-    // Finding the B(t), Bezier point at t
-    float xBezier = pow((1 - t), 2) * this->P0.x()  +  2 * t * (1 -t) * this->P1.x()  +  pow(t, 2) * this->P2.x();
-    float yBezier = pow((1 - t), 2) * this->P0.y()  +  2 * t * (1 -t) * this->P1.y()  +  pow(t, 2) * this->P2.y();
-    float zBezier = pow((1 - t), 2) * this->P0.z()  +  2 * t * (1 -t) * this->P1.z()  +  pow(t, 2) * this->P2.z();
-
-    // finding the rotation angle
-    QVector3D zAxis = QVector3D(0.0f, 0.0f, 1.0f);
-    QVector3D bezierAxis = QVector3D(xBezier, yBezier, zBezier);
-    float angle = qAcos(QVector3D::dotProduct(zAxis, bezierAxis)/(zAxis.length()*bezierAxis.length()));
-    return angle;
+void Bezier::computeBaseAngleAndAxis(float& zeroAngle, QVector3D& zeroAxis) {
+    QQuaternion qZero = this->getRotationQuaternion(0.00001f);
+    qZero.getAxisAndAngle(&zeroAxis, &zeroAngle);
 }
 
 QQuaternion Bezier::getRotationQuaternion(float t) {
@@ -60,6 +50,20 @@ QQuaternion Bezier::getRotationQuaternion(float t) {
     return rotationQuat;
 }
 
+void Bezier::applyFullBezierTransformationToVertex(MeshVertex& v, float t, float baseHeight) {
+    QVector3D rotationPoint = QVector3D(0, 0, -baseHeight);
+    v.translate(-rotationPoint);
+
+    QQuaternion rotationQuat = this->getRotationQuaternion(t);
+    QQuaternion straightenQuat = QQuaternion::fromAxisAndAngle(this->zeroAxis, -this->zeroAngle);
+
+    v.rotate(rotationQuat);
+    v.rotate(straightenQuat);
+
+    // We can translate the morel back into initial position if needed => comment/uncomment.
+    //v.translate(rotationPoint);
+}
+
 void Bezier::constructPoints(double height, double stemHeightPart, double curvatureVariance, double anglePosVariance) {
     float xValue = this->normalDistribution.getNormalNumber<float>(0, curvatureVariance);
     float yValue = this->normalDistribution.getNormalNumber<float>(0, curvatureVariance);
@@ -74,8 +78,4 @@ void Bezier::constructPoints(double height, double stemHeightPart, double curvat
 
     this->P2 = QVector3D(xValue, yValue, zValue);
     qDebug() << "P2=" << P2;
-}
-
-float Bezier::getZeroAngle() {
-    return this->zeroAngle;
 }

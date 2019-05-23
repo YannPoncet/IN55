@@ -127,6 +127,6 @@ void GeometryEngine::drawGeometry(QOpenGLShaderProgram *program) {
     colorLocation = program->attributeLocation("color");
     program->enableAttributeArray(colorLocation);
     program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
-    glDrawElements(GL_LINES, bezierIndexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
-    glDrawElements(GL_POINTS, bezierIndexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
+    glDrawElements(GL_LINE_STRIP, bezierIndexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
+    //glDrawElements(GL_POINTS, bezierIndexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
 }

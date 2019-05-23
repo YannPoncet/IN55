@@ -65,7 +65,8 @@ VerticesStruct Morel::getBezierVertices() {
 
     for(int i=0; i<n; i++) {
         float t = ((i+1)*1.0f)/(n*1.0f);
-        VertexData vData = {this->bezier.getBezierPoint(t), QVector3D(1.0f,0.0f,0.3f)};
+        QVector3D p = this->bezier.getBezierPoint(t, this->params.height, this->params.stemHeightPart);
+        VertexData vData = {p*this->params.globalSizeFactor, QVector3D(1.0f,0.0f,0.3f)};
         newArray[i] = vData;
     }
 

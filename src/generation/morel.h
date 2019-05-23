@@ -31,11 +31,11 @@ private:
     QVector<GLushort> indices;
 
     Parameters params = {
-        0.65,      // double globalSizeFactor
-        0.05,      // double globalSizeVariance
+        0.4,      // double globalSizeFactor
+        0.005,      // double globalSizeVariance
 
-        2,      // double height
-        0.5,     // double stemHeightPart
+        2.5,      // double height
+        0.35,     // double stemHeightPart
         0,      // double heightVariance
 
         0.2,    // double junctionRadius
@@ -50,11 +50,11 @@ private:
         30,    // GLushort capNumberOfHorizontalDivisions
         30,    // GLushort capNumberOfVerticalDivisions
 
-        0.7,    // double curvatureVariance
-        0.2     // double anglePosVariance;
+        0.1,    // double curvatureVariance
+        0.1     // double anglePosVariance;
     };
 
-    Bezier bezier = Bezier(params.height, params.stemHeightPart, params.curvatureVariance, params.anglePosVariance, params.stemNumberOfHorizontalDivisions);
+    Bezier bezier = Bezier(params.height, params.stemHeightPart, params.curvatureVariance, params.anglePosVariance);
     Cap cap;
     Stem stem;
     NormalDistribution normalDistribution;

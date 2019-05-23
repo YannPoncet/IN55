@@ -4,25 +4,31 @@
 #include <QOpenGLFunctions>
 #include <QtMath>
 #include <QQuaternion>
+
 #include "normaldistribution.h"
+#include "../tools/meshvertex.h"
 
 class Bezier
 {
 public:
-    Bezier(double height, double stemHeightPart, double curvatureVariance, double anglePosVariance, GLushort stemNumberOfHorizontalDivisions);
+    Bezier(double height, double stemHeightPart, double curvatureVariance, double anglePosVariance);
     QQuaternion getRotationQuaternion(float t);
-    QVector3D getBezierPoint(float t);
+    QVector3D getBezierPoint(float t, double height, double stemHeightPart);
+    void applyFullBezierTransformationToVertex(MeshVertex& v, float t, float baseHeight);
     float getZeroAngle();
 
 private:
     QVector3D P0;
     QVector3D P1;
     QVector3D P2;
+
     float zeroAngle;
+    QVector3D zeroAxis;
+
     NormalDistribution normalDistribution;
 
     void constructPoints(double height, double stemHeightPart, double curvatureVariance, double anglePosVariance);
-    float getRotationAngleStemBase(float t);
+    void computeBaseAngleAndAxis(float& zeroAngle, QVector3D& zeroAxis);
 };
 
 #endif // BEZIER_H

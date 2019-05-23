@@ -3,7 +3,8 @@
 Cap::Cap(Parameters& p, Bezier& b) : params(p), bezier(b) {
     this->color = QVector3D(0.87f, 0.60f, 0.38f);
     this->generateBaseEllipsoid();
-    this->applyTransformations();
+    //this->applyTransformations();
+    this->widenCapRealisticaly();
     this->applyBezierCurve();
 }
 
@@ -23,23 +24,6 @@ void Cap::applyTransformations() {
             QVector3D scaleVector = QVector3D(2.3f, 2.3f, 1.0f);
             v.rescale(scaleVector);
         }
-
-        /*
-        if(i!=0 && i<k/5) {
-            QVector3D translation = QVector3D(0, 0, -0.1f);
-            QVector3D scaleVector = QVector3D(2.3f, 2.3f, 2.3f);
-            v.translate(translation);
-            v.rescale(scaleVector);
-        } else if(i!=0) {
-            QVector3D translation = QVector3D(0, 0.1f, 0);
-            QVector3D scaleVector = QVector3D(2.1f, 2.1f, 2.1f);
-            QVector3D rotationAxis = QVector3D(1, 0, 0);
-            QVector3D rotationPoint = QVector3D(0, 0, 0);
-            v.translate(translation);
-            v.rescale(scaleVector);
-            v.rotate(M_PI/10,rotationAxis,rotationPoint);
-        }
-        */
     }
 }
 
@@ -47,7 +31,6 @@ void Cap::generateBaseEllipsoid() {
     GLushort n = this->params.capNumberOfVerticalDivisions;
     GLushort k = this->params.capNumberOfHorizontalDivisions;
     double height = this->params.height*(1-this->params.stemHeightPart);
-    qDebug() << height;
     double radius = this->params.junctionRadius;
     double capMiddleRadius = this->params.capMiddleRadius;
 
@@ -124,4 +107,38 @@ void Cap::applyBezierCurve() {
         float t = this->params.stemHeightPart+(v.position.z()/this->params.height);
         this->bezier.applyFullBezierTransformationToVertex(v, t, baseHeight);
     }
+}
+
+void Cap::widenCapRealisticaly() {
+    GLushort n = this->params.capNumberOfVerticalDivisions;
+    float h = this->params.height*(1-this->params.stemHeightPart);
+
+    float c = 1.5; //maxRadiusFactor
+    float pow = 3; //should be an odd number
+
+    float d = 0.20; //baseMaxHeightFactor: if d=1/3, the morel will be at it's max at 1/3
+    float e = 0.80; //tipMaxHeightFactor: same but for the tip
+
+    float b1 = h*d;
+    float b2 = h*e;
+    float a1 = c/(qPow(b1,pow));
+    float a2 = -c/(qPow(h-b2,pow));
+
+    for(auto&& v: this->vertices) {
+        int i = v.id/n;
+
+        if(i!=0) {
+            float x = v.position.z();
+            float factor = 0;
+            if(x<d*h) {
+                factor = a1*qPow((x-b1),pow)+c;
+            } else if(x>e*h) {
+                factor = -a2*qPow((x-b2),pow)+c;
+            } else {
+                factor = c;
+            }
+            v.position = QVector3D(factor*v.position.x()+v.position.x(), factor*v.position.y()+v.position.y(), v.position.z());
+        }
+    }
+
 }

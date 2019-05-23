@@ -25,6 +25,7 @@ private:
     void generateBaseEllipsoid();
     void applyBezierCurve();
     void applyTransformations();
+    void widenCapRealisticaly();
 };
 
 #endif // CAP_H

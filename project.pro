@@ -12,7 +12,8 @@ SOURCES += \
     src/generation/cap.cpp \
     src/generation/morel.cpp \
     src/tools/meshvertex.cpp \
-    src/tools/bezier.cpp
+    src/tools/bezier.cpp \
+    src/tools/perlinnoise.cpp
 
 HEADERS += \
     src/mainwidget.h \
@@ -21,6 +22,7 @@ HEADERS += \
     src/generation/cap.h \
     src/generation/morel.h \
     src/tools/normaldistribution.h \
+    src/tools/perlinnoise.h \
     src/tools/structs.h \
     src/tools/meshvertex.h \
     src/tools/bezier.h

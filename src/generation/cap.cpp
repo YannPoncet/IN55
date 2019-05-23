@@ -6,6 +6,18 @@ Cap::Cap(Parameters& p, Bezier& b) : params(p), bezier(b) {
     //this->applyTransformations();
     this->widenCapRealisticaly();
     this->applyBezierCurve();
+    PerlinNoise perlinNoise;
+    GLushort n = this->params.capNumberOfVerticalDivisions;
+    for(auto&& v: this->vertices) {
+        int i = v.id/n;
+
+        if(i!=0) {
+            double noise = perlinNoise.noise(v.position.x(), v.position.y(), v.position.z());
+            v.position.setX(v.position.x() + v.position.x()*noise/3);
+            v.position.setY(v.position.y() + v.position.y()*noise/3);
+            v.position.setZ(v.position.z() + v.position.z()*noise/3);
+        }
+    }
 }
 
 QVector<MeshVertex>* Cap::getVertices() {

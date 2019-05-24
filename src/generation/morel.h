@@ -31,7 +31,7 @@ private:
     QVector<GLushort> indices;
 
     Parameters params = {
-        0.4,      // double globalSizeFactor
+        0.75,      // double globalSizeFactor
         0.005,      // double globalSizeVariance
 
         2.5,      // double height
@@ -40,8 +40,8 @@ private:
 
         0.2,    // double junctionRadius
         0.0,    // double junctionRadiusVariance
-        0.3,    // double capMiddleRadius
-        0.0,    // double capMiddleRadiusVariance
+        0.4,    // double capMaxRadius
+        0.0,    // double capMaxRadiusVariance
         2,      // double radiusAtBaseFactor;
         0,      // double radiusAtBaseVariance;
 
@@ -50,8 +50,8 @@ private:
         30,    // GLushort capNumberOfHorizontalDivisions
         30,    // GLushort capNumberOfVerticalDivisions
 
-        0.1,    // double curvatureVariance
-        0.1     // double anglePosVariance;
+        0.5,    // double curvatureVariance
+        0.5     // double anglePosVariance;
     };
 
     Bezier bezier = Bezier(params.height, params.stemHeightPart, params.curvatureVariance, params.anglePosVariance);

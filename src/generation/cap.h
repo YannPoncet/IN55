@@ -27,6 +27,7 @@ private:
     void applyBezierCurve();
     void applyTransformations();
     void widenCapRealisticaly();
+    void applyPerlin();
 };
 
 #endif // CAP_H

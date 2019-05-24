@@ -38,8 +38,8 @@ struct Parameters
     //Radius parameters
     double junctionRadius; //Radius at the junction between the cap and the stem
     double junctionRadiusVariance;
-    double capMiddleRadius;
-    double capMiddleRadiusVariance;
+    double capMaxRadius;
+    double capMaxRadiusVariance;
     double radiusAtBaseFactor;
     double radiusAtBaseVariance;
 

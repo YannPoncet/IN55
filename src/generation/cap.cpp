@@ -6,6 +6,10 @@ Cap::Cap(Parameters& p, Bezier& b) : params(p), bezier(b) {
     //this->applyTransformations();
     this->widenCapRealisticaly();
     this->applyBezierCurve();
+    //this->applyPerlin();
+}
+
+void Cap::applyPerlin() {
     PerlinNoise perlinNoise;
     GLushort n = this->params.capNumberOfVerticalDivisions;
     // this factor has to be high so we don't see the difference when applying the perlin noise
@@ -46,7 +50,7 @@ void Cap::generateBaseEllipsoid() {
     GLushort k = this->params.capNumberOfHorizontalDivisions;
     double height = this->params.height*(1-this->params.stemHeightPart);
     double radius = this->params.junctionRadius;
-    double capMiddleRadius = this->params.capMiddleRadius;
+    double b = this->params.capMaxRadius-this->params.junctionRadius;
 
     // height of a division
     double p = height/k;
@@ -54,10 +58,11 @@ void Cap::generateBaseEllipsoid() {
     float x = 0, y = 0, z = 0;
     // Creation of the vertices
     for (GLushort i=0; i<k; i++) {
-        // function ax^2+bx+c going from f(x=0)=radius to f(x=k)=0, with f(x=k/2)=capMiddleRadius
-        double a = (1/pow(k,2))*(2*radius-4*capMiddleRadius);
-        double b = (1/double(k))*(4*capMiddleRadius-3*radius);
-        double newRadius = a*pow(i,2) + b*i + radius;
+        double h = height;
+        double r = radius;
+        double x = (i*1.0/k*1.0)*h;
+        double newRadius = sqrt(pow(b,2.0)*(1.0-pow(x-h/2.0,2.0)/pow(h/2.0,2.0)))+r-(r/h)*x;
+
         for (GLushort j=0; j<n; j++) {
             angle = (2*M_PI/n)*j;
             x = static_cast<float>(newRadius*qCos(angle));
@@ -127,11 +132,11 @@ void Cap::widenCapRealisticaly() {
     GLushort n = this->params.capNumberOfVerticalDivisions;
     float h = this->params.height*(1-this->params.stemHeightPart);
 
-    float c = 1.5; //maxRadiusFactor
+    float c = 1.2; //maxRadiusFactor
     float pow = 3; //should be an odd number
 
     float d = 0.20; //baseMaxHeightFactor: if d=1/3, the morel will be at it's max at 1/3
-    float e = 0.80; //tipMaxHeightFactor: same but for the tip
+    float e = 0.99; //tipMaxHeightFactor: same but for the tip
 
     float b1 = h*d;
     float b2 = h*e;

@@ -89,7 +89,7 @@ void Stem::widenStemBase() {
     for(auto&& v: this->vertices) {
         float tmpPos = (h+v.position.z());
         factor = b - b/(qPow(h,-1.0/3.0))*qPow(tmpPos,1.0/3.0);
-        v.position = QVector3D(factor*v.position.x()+v.position.x(), factor*v.position.y()+v.position.y(), v.position.z());
+        v.position = QVector3D(factor*v.position.x(), factor*v.position.y(), v.position.z());
     }
 }
 

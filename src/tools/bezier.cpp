@@ -37,8 +37,6 @@ QQuaternion Bezier::getRotationQuaternion(float t) {
     float angle = qAcos(QVector3D::dotProduct(zAxis, bezierAxis)/(zAxis.length()*bezierAxis.length()));
     // changing the angle so the shroom is standing up
 
-    //angle = angle - this->zeroAngle;
-
     //finding the rotation axis
     QVector3D axis = QVector3D::normal(zAxis, bezierAxis);
     //QVector3D axis = bezierAxis - (QVector3D::dotProduct(zAxis, bezierAxis)/zAxis.lengthSquared())*zAxis;
@@ -67,7 +65,7 @@ void Bezier::applyFullBezierTransformationToVertex(MeshVertex& v, float t, float
 void Bezier::constructPoints(double height, double stemHeightPart, double curvatureVariance, double anglePosVariance) {
     float xValue = this->normalDistribution.getNormalNumber<float>(0, curvatureVariance);
     float yValue = this->normalDistribution.getNormalNumber<float>(0, curvatureVariance);
-    float zValue = this->normalDistribution.getNormalNumber<float>(height*stemHeightPart, anglePosVariance);
+    float zValue = this->normalDistribution.getNormalNumber<float>(height*stemHeightPart*0.5, anglePosVariance);
 
     this->P1 = QVector3D(xValue, yValue, zValue);
     qDebug() << "P1=" << P1;

@@ -6,22 +6,73 @@ Cap::Cap(Parameters& p, Bezier& b) : params(p), bezier(b) {
     //this->applyTransformations();
     this->widenCapRealisticaly();
     this->applyBezierCurve();
-    //this->applyPerlin();
+    this->applyPerlin();
 }
 
 void Cap::applyPerlin() {
-    PerlinNoise perlinNoise;
-    GLushort n = this->params.capNumberOfVerticalDivisions;
-    // this factor has to be high so we don't see the difference when applying the perlin noise
-    int perlinFactor = 5;
-    for(auto&& v: this->vertices) {
-        int i = v.id/n;
+    float perlinFactor = 0.18;
 
-        if(i!=0) {
-            double noise = perlinNoise.noise(v.position.x(), v.position.y(), v.position.z());
-            v.position.setX(v.position.x() + v.position.x()*noise/perlinFactor);
-            v.position.setY(v.position.y() + v.position.y()*noise/perlinFactor);
-            v.position.setZ(v.position.z() + v.position.z()*noise/perlinFactor);
+    std::uint32_t seed = 19894264;
+    const siv::PerlinNoise perlinNoise(time(0));
+
+    GLushort n = this->params.capNumberOfVerticalDivisions;
+    GLushort k = this->params.capNumberOfHorizontalDivisions;
+    float h = this->params.height*(1.0f-this->params.stemHeightPart);
+    for(auto&& v: this->vertices) {
+        if(v.layer!=0) {
+            // We create a sphere of radius 1 centered on O on which we'll apply perlin
+            float sZ = 2.0*(v.baseHeight-(h/2.0))/h;
+            double sR = sqrt(1.0-pow(sZ,2.0));
+            float sX = sR*cos(v.baseAngle);
+            float sY = sR*sin(v.baseAngle);
+
+            // We convert the point's coordinate into spherical coordinates
+            float r = 1.0f;
+            float theta = atan2(sY, sX);
+            float phi = acos(sZ);
+            // Below is the real conversion (if radius wasn't 1)
+            //float r = sqrt(pow(x,2.0)+pow(y,2.0)+pow(z,2.0));
+            //float theta = qAtan(y/x);
+            //float phi = qAcos(z/r);
+
+            // We compute the noise and apply it to the radius
+            double noise = perlinNoise.octaveNoise(theta, phi, 2);
+            r = r+r*noise;
+
+            // We convert back to cartesian coordinates
+            float x = r*cos(theta)*sin(phi);
+            float y = r*sin(theta)*sin(phi);
+            float z = r*cos(phi);
+
+            v.position.setX(v.position.x()+v.position.x()*perlinFactor*x);
+            v.position.setY(v.position.y()+v.position.y()*perlinFactor*y);
+            v.position.setZ(v.position.z());
+
+            /*
+            float x = v.position.x();
+            float y = v.position.y();
+            float z = v.position.z()-(hCap/2.0f);
+
+            // We convert the point's coordinate into spherical coordinates (it's not a sphere in theory but will give a sufficient result)
+
+
+            //qDebug() << theta << phi;
+            qDebug() << "r1=" << r;
+
+            // We compute the noise and apply it to the radius
+            double noise = perlinNoise.octaveNoise(theta, phi, 2);
+            r = r+r*noise*perlinFactor;
+            qDebug() << "         r2=" << r;
+
+            // We convert back to cartesian coordinates
+            x = r*qCos(theta)*qSin(phi);
+            y = r*qSin(theta)*qSin(phi);
+            z = r*qCos(phi);
+
+            qDebug() << x << y << z;
+            v.position.setX(x);
+            v.position.setY(y);
+            v.position.setZ(z+(hCap/2.0f));*/
         }
     }
 }
@@ -60,8 +111,8 @@ void Cap::generateBaseEllipsoid() {
     for (GLushort i=0; i<k; i++) {
         double h = height;
         double r = radius;
-        double x = (i*1.0/k*1.0)*h;
-        double newRadius = sqrt(pow(b,2.0)*(1.0-pow(x-h/2.0,2.0)/pow(h/2.0,2.0)))+r-(r/h)*x;
+        double a = (i*1.0/k*1.0)*h;
+        double newRadius = sqrt(pow(b,2.0)*(1.0-pow(a-h/2.0,2.0)/pow(h/2.0,2.0)))+r-(r/h)*a;
 
         for (GLushort j=0; j<n; j++) {
             angle = (2*M_PI/n)*j;
@@ -73,6 +124,9 @@ void Cap::generateBaseEllipsoid() {
             v.id = i*n+j;
             v.position = QVector3D(x, y, z);
             v.color = QVector3D(0.6f, 0.2f, z/height);
+            v.layer = i;
+            v.baseAngle = angle;
+            v.baseHeight = z;
             this->vertices.append(v);
         }
     }
@@ -81,6 +135,9 @@ void Cap::generateBaseEllipsoid() {
     v.id = n*k;
     v.position = QVector3D(0.0f, 0.0f, height);
     v.color = QVector3D(0.6f, 0.2f, 1.0f);
+    v.layer = k;
+    v.baseAngle = 0;
+    v.baseHeight = height;
     this->vertices.append(v);
 
     // Linking the different vertices

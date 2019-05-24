@@ -15,6 +15,11 @@ public:
 
     GLushort id;
     QVector3D position;
+
+    float baseAngle; // Used on Perlin's computation
+    float baseHeight; // Used on Perlin's computation
+    int layer;
+
     QVector3D color;
     MeshVertex* top;
     MeshVertex* bottom;

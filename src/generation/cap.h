@@ -10,7 +10,8 @@
 #include "../tools/bezier.h"
 #include "../tools/structs.h"
 #include "../tools/meshvertex.h"
-#include "../tools/perlinnoise.h"
+
+#include "../libs/perlinnoise.h"
 
 class Cap
 {

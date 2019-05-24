@@ -25,7 +25,8 @@ HEADERS += \
     src/tools/perlinnoise.h \
     src/tools/structs.h \
     src/tools/meshvertex.h \
-    src/tools/bezier.h
+    src/tools/bezier.h \
+    src/libs/perlinnoise.h
 
 RESOURCES += \
     ressources/shaders.qrc \

@@ -37,6 +37,9 @@ void Stem::generateBaseCylinder() {
             v.id = i*n+j;
             v.position = QVector3D(x, y, z);
             v.color = QVector3D(0.2f, 0.6f, -z);
+            v.layer = i;
+            v.baseAngle = angle;
+            v.baseHeight = z;
             this->vertices.append(v);
         }
     }

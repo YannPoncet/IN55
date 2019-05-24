@@ -131,7 +131,7 @@ void MainWidget::drawCube() {
     QMatrix4x4 matrix;
     matrix.translate(0.0, 0, -10);
     matrix.rotate(rotation);
-    matrix.scale(3,3,3);
+    matrix.scale(1.5,1.5,1.5);
     // Set modelview-projection matrix
     program.setUniformValue("mvp", projection * matrix);
     // Draw cube geometry

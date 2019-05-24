@@ -50,8 +50,8 @@ private:
         30,    // GLushort capNumberOfHorizontalDivisions
         30,    // GLushort capNumberOfVerticalDivisions
 
-        0.5,    // double curvatureVariance
-        0.5     // double anglePosVariance;
+        0.2,    // double curvatureVariance
+        0.2     // double anglePosVariance;
     };
 
     Bezier bezier = Bezier(params.height, params.stemHeightPart, params.curvatureVariance, params.anglePosVariance);

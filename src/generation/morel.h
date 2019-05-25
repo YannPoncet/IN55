@@ -38,7 +38,7 @@ private:
         0.38,     // double stemHeightPart
         0,      // double heightVariance
 
-        0.13,    // double junctionRadius
+        0.18,    // double junctionRadius
         0.0,    // double junctionRadiusVariance
         0.30,    // double capMaxRadius
         0.0,    // double capMaxRadiusVariance

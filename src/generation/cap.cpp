@@ -3,9 +3,9 @@
 Cap::Cap(Parameters& p, Bezier& b) : params(p), bezier(b) {
     this->color = QVector3D(0.87f, 0.60f, 0.38f);
     this->generateBaseEllipsoid();
-    //this->widenCapRealisticaly();
-    //this->applyBezierCurve();
-    //this->applyPerlin();
+    this->widenCapRealisticaly();
+    this->applyBezierCurve();
+    this->applyPerlin();
 }
 
 void Cap::applyPerlin() {
@@ -43,35 +43,10 @@ void Cap::applyPerlin() {
             float y = r*sin(theta)*sin(phi);
             float z = r*cos(phi);
 
+            // We apply the noise on the actual position of the point
             v.position.setX(v.position.x()+v.position.x()*perlinFactor*x);
             v.position.setY(v.position.y()+v.position.y()*perlinFactor*y);
             v.position.setZ(v.position.z());
-
-            /*
-            float x = v.position.x();
-            float y = v.position.y();
-            float z = v.position.z()-(hCap/2.0f);
-
-            // We convert the point's coordinate into spherical coordinates (it's not a sphere in theory but will give a sufficient result)
-
-
-            //qDebug() << theta << phi;
-            qDebug() << "r1=" << r;
-
-            // We compute the noise and apply it to the radius
-            double noise = perlinNoise.octaveNoise(theta, phi, 2);
-            r = r+r*noise*perlinFactor;
-            qDebug() << "         r2=" << r;
-
-            // We convert back to cartesian coordinates
-            x = r*qCos(theta)*qSin(phi);
-            y = r*qSin(theta)*qSin(phi);
-            z = r*qCos(phi);
-
-            qDebug() << x << y << z;
-            v.position.setX(x);
-            v.position.setY(y);
-            v.position.setZ(z+(hCap/2.0f));*/
         }
     }
 }

@@ -3,8 +3,8 @@
 Stem::Stem(Parameters& p, Bezier& b) : params(p), bezier(b) {
     this->color = QVector3D(0.87f, 0.60f, 0.38f);
     this->generateBaseCylinder();
-    //this->widenStemBase();
-    //this->applyBezierCurve();
+    this->widenStemBase();
+    this->applyBezierCurve();
 }
 
 QVector<MeshVertex>* Stem::getVertices() {

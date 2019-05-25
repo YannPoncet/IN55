@@ -26,7 +26,6 @@ private:
 
     void generateBaseEllipsoid();
     void applyBezierCurve();
-    void applyTransformations();
     void widenCapRealisticaly();
     void applyPerlin();
 };

@@ -3,10 +3,9 @@
 Cap::Cap(Parameters& p, Bezier& b) : params(p), bezier(b) {
     this->color = QVector3D(0.87f, 0.60f, 0.38f);
     this->generateBaseEllipsoid();
-    //this->applyTransformations();
-    this->widenCapRealisticaly();
-    this->applyBezierCurve();
-    this->applyPerlin();
+    //this->widenCapRealisticaly();
+    //this->applyBezierCurve();
+    //this->applyPerlin();
 }
 
 void Cap::applyPerlin() {
@@ -81,21 +80,6 @@ QVector<MeshVertex>* Cap::getVertices() {
     return &(this->vertices);
 }
 
-void Cap::applyTransformations() {
-    GLushort n = this->params.capNumberOfVerticalDivisions;
-    GLushort k = this->params.capNumberOfHorizontalDivisions;
-
-    // applying some transformations to the cap (to every vertex but the ones forming the base)
-    for(auto&& v: this->vertices) {
-        int i = v.id/n;
-
-        if(i!=0) {
-            QVector3D scaleVector = QVector3D(2.3f, 2.3f, 1.0f);
-            v.rescale(scaleVector);
-        }
-    }
-}
-
 void Cap::generateBaseEllipsoid() {
     GLushort n = this->params.capNumberOfVerticalDivisions;
     GLushort k = this->params.capNumberOfHorizontalDivisions;
@@ -112,7 +96,13 @@ void Cap::generateBaseEllipsoid() {
         double h = height;
         double r = radius;
         double a = (i*1.0/k*1.0)*h;
-        double newRadius = sqrt(pow(b,2.0)*(1.0-pow(a-h/2.0,2.0)/pow(h/2.0,2.0)))+r-(r/h)*a;
+
+        double newRadius;
+        if(a==0) {
+            newRadius = r;
+        } else {
+            newRadius = sqrt(pow(b,2.0)*(1.0-pow(a-h/2.0,2.0)/pow(h/2.0,2.0)))+r-(r/h)*a;
+        }
 
         for (GLushort j=0; j<n; j++) {
             angle = (2*M_PI/n)*j;

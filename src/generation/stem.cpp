@@ -35,7 +35,7 @@ void Stem::generateBaseCylinder() {
 
             MeshVertex v;
             v.id = i*n+j;
-            v.position = QVector3D(x, y, z);
+            v.setPosition(x, y, z);
             v.color = QVector3D(0.2f, 0.6f, -z);
             v.layer = i;
             v.baseAngle = angle;
@@ -79,7 +79,7 @@ void Stem::applyBezierCurve() {
     float baseHeight = this->params.height*this->params.stemHeightPart;
 
     for(auto&& v: this->vertices) {
-        float t = ((this->params.stemHeightPart*this->params.height)+v.position.z())/this->params.height;
+        float t = ((this->params.stemHeightPart*this->params.height)+v.z())/this->params.height;
         this->bezier.applyFullBezierTransformationToVertex(v, t, baseHeight);
     }
 }
@@ -90,9 +90,9 @@ void Stem::widenStemBase() {
     float factor = 1;
 
     for(auto&& v: this->vertices) {
-        float x = (h+v.position.z());
+        float x = (h+v.z());
         factor = b - (b/(pow(h,1.0/3.0)))*pow(x,1.0/3.0);
-        v.position = QVector3D(factor*v.position.x()+v.position.x(), factor*v.position.y()+v.position.y(), v.position.z());
+        v.setPosition(factor*v.x()+v.x(), factor*v.y()+v.y(), v.z());
     }
 }
 

@@ -44,9 +44,9 @@ void Cap::applyPerlin() {
             float z = r*cos(phi);
 
             // We apply the noise on the actual position of the point
-            v.position.setX(v.position.x()+v.position.x()*perlinFactor*x);
-            v.position.setY(v.position.y()+v.position.y()*perlinFactor*y);
-            v.position.setZ(v.position.z());
+            v.setX(v.x()+v.x()*perlinFactor*x);
+            v.setY(v.y()+v.y()*perlinFactor*y);
+            v.setZ(v.z());
         }
     }
 }
@@ -73,7 +73,7 @@ void Cap::generateBaseEllipsoid() {
         double a = (i*1.0/k*1.0)*h;
 
         double newRadius;
-        if(a==0) {
+        if(a<=0) {
             newRadius = r;
         } else {
             newRadius = sqrt(pow(b,2.0)*(1.0-pow(a-h/2.0,2.0)/pow(h/2.0,2.0)))+r-(r/h)*a;
@@ -87,7 +87,7 @@ void Cap::generateBaseEllipsoid() {
 
             MeshVertex v;
             v.id = i*n+j;
-            v.position = QVector3D(x, y, z);
+            v.setPosition(x,y,z);
             v.color = QVector3D(0.6f, 0.2f, z/height);
             v.layer = i;
             v.baseAngle = angle;
@@ -96,9 +96,10 @@ void Cap::generateBaseEllipsoid() {
         }
     }
 
+    // adding a vertex at the top
     MeshVertex v;
     v.id = n*k;
-    v.position = QVector3D(0.0f, 0.0f, height);
+    v.setPosition(0.0f, 0.0f, height);
     v.color = QVector3D(0.6f, 0.2f, 1.0f);
     v.layer = k;
     v.baseAngle = 0;
@@ -139,13 +140,17 @@ void Cap::generateBaseEllipsoid() {
             }
         }
     }
+
+    for(auto&& v: this->vertices) {
+        v.computeNormalVector();
+    }
 }
 
 void Cap::applyBezierCurve() {
     float baseHeight = this->params.height*this->params.stemHeightPart;
 
     for(auto&& v: this->vertices) {
-        float t = this->params.stemHeightPart+(v.position.z()/this->params.height);
+        float t = this->params.stemHeightPart+(v.z()/this->params.height);
         this->bezier.applyFullBezierTransformationToVertex(v, t, baseHeight);
     }
 }
@@ -169,7 +174,7 @@ void Cap::widenCapRealisticaly() {
         int i = v.id/n;
 
         if(i!=0) {
-            float x = v.position.z();
+            float x = v.z();
             float factor = 0;
             if(x<d*h) {
                 factor = a1*qPow((x-b1),pow)+c;
@@ -178,7 +183,7 @@ void Cap::widenCapRealisticaly() {
             } else {
                 factor = c;
             }
-            v.position = QVector3D(factor*v.position.x()+v.position.x(), factor*v.position.y()+v.position.y(), v.position.z());
+            v.setPosition(factor*v.x()+v.x(), factor*v.y()+v.y(), v.z());
         }
     }
 

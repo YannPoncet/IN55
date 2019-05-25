@@ -15,6 +15,7 @@ public:
 
     GLushort id;
     QVector3D position;
+    QVector3D normal;
 
     float baseAngle; // Used on Perlin's computation
     float baseHeight; // Used on Perlin's computation
@@ -26,6 +27,13 @@ public:
     MeshVertex* right;
     MeshVertex* left;
 
+    float x();
+    float y();
+    float z();
+    void setX(float x);
+    void setY(float y);
+    void setZ(float z);
+    void setPosition(float x, float y, float z);
     void computeNormalVector();
     void rescale(QVector3D scale);
     void rescale(float scale);

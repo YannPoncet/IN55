@@ -22,7 +22,8 @@ VerticesStruct Morel::getConvertedVertices() {
     VertexData* newArray = new VertexData[size];
 
     for(int i=0; i<size; i++) {
-        VertexData vData = {this->vertices[i].position, this->vertices[i].color};
+        this->vertices[i].computeNormalVector();
+        VertexData vData = {this->vertices[i].position, this->vertices[i].color, this->vertices[i].normal};
         newArray[i] = vData;
     }
 

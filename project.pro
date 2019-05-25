@@ -13,7 +13,8 @@ SOURCES += \
     src/generation/morel.cpp \
     src/tools/meshvertex.cpp \
     src/tools/bezier.cpp \
-    src/tools/perlinnoise.cpp
+    src/tools/perlinnoise.cpp \
+    src/tools/voronoi.cpp
 
 HEADERS += \
     src/mainwidget.h \
@@ -26,7 +27,8 @@ HEADERS += \
     src/tools/structs.h \
     src/tools/meshvertex.h \
     src/tools/bezier.h \
-    src/libs/perlinnoise.h
+    src/libs/perlinnoise.h \
+    src/tools/voronoi.h
 
 RESOURCES += \
     ressources/shaders.qrc \

@@ -5,11 +5,12 @@
 #include <QVector>
 #include <QtMath>
 
-#include<QDebug>
+#include <QDebug>
 
 #include "../tools/bezier.h"
 #include "../tools/structs.h"
 #include "../tools/meshvertex.h"
+#include "../tools/voronoi.h"
 
 #include "../libs/perlinnoise.h"
 
@@ -28,6 +29,7 @@ private:
     void applyBezierCurve();
     void widenCapRealisticaly();
     void applyPerlin();
+    void applyVoronoiTesselation();
 };
 
 #endif // CAP_H

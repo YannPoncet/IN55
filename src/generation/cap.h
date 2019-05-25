@@ -5,7 +5,7 @@
 #include <QVector>
 #include <QtMath>
 
-#include<QDebug>
+#include <QDebug>
 
 #include "../tools/bezier.h"
 #include "../tools/structs.h"

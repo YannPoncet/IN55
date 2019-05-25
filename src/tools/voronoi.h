@@ -4,6 +4,7 @@
 #include <QtMath>
 #include <QVector>
 #include <QVector2D>
+#include <QDebug>
 
 class Voronoi
 {
@@ -22,7 +23,6 @@ private:
     int distanceType;
     double separationFactor;
     QVector<QVector2D> points;
-
 
     double dist(int x, int y);
     void generatePoints();

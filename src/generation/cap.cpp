@@ -6,10 +6,11 @@ Cap::Cap(Parameters& p, Bezier& b) : params(p), bezier(b) {
     this->widenCapRealisticaly();
     this->applyBezierCurve();
     this->applyPerlin();
+    this->applyVoronoiTesselation();
 }
 
 void Cap::applyPerlin() {
-    float perlinFactor = 0.18;
+    float perlinFactor = 0.08;
 
     std::uint32_t seed = 19894264;
     const siv::PerlinNoise perlinNoise(time(0));
@@ -51,9 +52,54 @@ void Cap::applyPerlin() {
     }
 }
 
+
+void Cap::applyVoronoiTesselation() {
+    float voronoiFactor = 0.08;
+    double fMax = 3;
+    double fMin = 1;
+    Voronoi voronoiGenerator(600, 600, 100, 10, fMax, fMin);
+
+    GLushort n = this->params.capNumberOfVerticalDivisions;
+    GLushort k = this->params.capNumberOfHorizontalDivisions;
+    float h = this->params.height*(1.0f-this->params.stemHeightPart);
+    for(auto&& v: this->vertices) {
+        if(v.layer!=0) {
+            // We create a sphere of radius 1 centered on O on which we'll apply voronoi's tesselation
+            float sZ = 2.0*(v.baseHeight-(h/2.0))/h;
+            double sR = sqrt(1.0-pow(sZ,2.0));
+            float sX = sR*cos(v.baseAngle);
+            float sY = sR*sin(v.baseAngle);
+
+            // We convert the point's coordinate into spherical coordinates
+            float r = 1.0f;
+            float theta = atan2(sY, sX);
+            float phi = acos(sZ);
+
+            // We compute the noise and apply it to the radius
+            double factor = voronoiGenerator.getFactorAt((theta+M_PI)/(2*M_PI), (phi+M_PI)/(2*M_PI));
+            if(factor == fMax) {
+                v.color = QVector3D(0.86, 0.82, 0.67);
+            }
+            r = r*factor;
+
+            // We convert back to cartesian coordinates
+            float x = r*cos(theta)*sin(phi);
+            float y = r*sin(theta)*sin(phi);
+            float z = r*cos(phi);
+
+            // We apply the factor on the actual position of the point
+            v.setX(v.x()+v.x()*voronoiFactor*x);
+            v.setY(v.y()+v.y()*voronoiFactor*y);
+            v.setZ(v.z());
+        }
+    }
+}
+
+
 QVector<MeshVertex>* Cap::getVertices() {
     return &(this->vertices);
 }
+
 
 void Cap::generateBaseEllipsoid() {
     GLushort n = this->params.capNumberOfVerticalDivisions;
@@ -88,7 +134,8 @@ void Cap::generateBaseEllipsoid() {
             MeshVertex v;
             v.id = i*n+j;
             v.setPosition(x,y,z);
-            v.color = QVector3D(0.6f, 0.2f, z/height);
+            //v.color = QVector3D(0.6f, 0.2f, z/height);
+            v.color = QVector3D(0.54, 0.40, 0.12);
             v.layer = i;
             v.baseAngle = angle;
             v.baseHeight = z;
@@ -100,7 +147,8 @@ void Cap::generateBaseEllipsoid() {
     MeshVertex v;
     v.id = n*k;
     v.setPosition(0.0f, 0.0f, height);
-    v.color = QVector3D(0.6f, 0.2f, 1.0f);
+    //v.color = QVector3D(0.6f, 0.2f, 1.0f);
+    v.color = QVector3D(0.84, 0.85, 0.86);
     v.layer = k;
     v.baseAngle = 0;
     v.baseHeight = height;

@@ -9,8 +9,10 @@ Voronoi::Voronoi(int xMax, int yMax, int maxNbPoints, int width, double fMax, do
     this->fMin = fMin;
 
     this->distanceType = 3;
-    this->separationFactor = 2;
+    this->separationFactor = 0.5;
 
+    this->generatePoints();
+    qsrand(0);
 }
 
 
@@ -18,28 +20,40 @@ void Voronoi::generatePoints() {
     for(int i=0; i<this->maxNbPoints; i++) {
         int x = this->randgen(this->xMax);
         int y = this->randgen(this->yMax);
+        bool doNotAdd = false;
 
         for(auto&& p: this->points) {
             double d = dist(x-p.x(), y-p.y());
             if(d<this->separationFactor*this->width) {
-                return;
+                doNotAdd = true;
             }
         }
 
-        this->points.append(QVector2D(x, y));
+        if(!doNotAdd) {
+            this->points.append(QVector2D(x, y));
+        }
     }
 }
 
 
+/*
+* This function is used to compute the voronoi tesselation
+* @param x between 0 and 1
+* @param y between 0 and 1
+* @return a factor between this->fMin and this->fMax
+*/
 double Voronoi::getFactorAt(double x, double y) {
-    double d1 = INFINITY;
-    double d2 = INFINITY;
+    x = x*this->xMax;
+    y = y*this->yMax;
+
+    double d1 = this->xMax;
+    double d2 = this->yMax;
     double d = 0;
     QVector2D p1;
 
     // First, we find the closest point of the coordinates and store its distance in d1
     for(auto&& p: this->points) {
-        double d = dist(x-p.x(), y-p.y());
+        d = dist(x-p.x(), y-p.y());
         if(d<d1) {
             d1 = d;
             p1 = p;
@@ -48,14 +62,14 @@ double Voronoi::getFactorAt(double x, double y) {
 
     // Then, we find the second closest point and store its distance in d2
     for(auto&& p: this->points) {
-        double d = dist(x-p.x(), y-p.y());
-        if(d<d2 && p!=p1) {
+        d = dist(x-p.x(), y-p.y());
+        if(d<d2 && p.x()!=p1.x()) {
             d2 = d;
         }
     }
 
     // If the point is in this->width between p1 and p2
-    if((d2-d1) < (this->width/2)) {
+    if((d2-d1) < (this->width/2.0)) {
         return this->fMax;
     }
 
@@ -79,7 +93,7 @@ double Voronoi::factorFunction(double x) {
 
 
 int Voronoi::randgen(int max) {
-    return static_cast<int>(floor(rand()*max));
+    return qrand() % max + 0;
 }
 
 
@@ -87,7 +101,7 @@ double Voronoi::dist(int x, int y) {
     switch (this->distanceType) {
     case 1: return sqrt(x*x+y*y); // Euclidian distance
     case 2: return abs(x)+abs(y); // Manhattan
-    case 3: return pow(pow(abs(x),3) + pow(abs(y),3),1/3); // Minkovski
+    case 3: return pow(pow(abs(x),3.0) + pow(abs(y),3.0),1.0/3.0); // Minkovski
    }
 }
 

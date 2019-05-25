@@ -36,7 +36,8 @@ void Stem::generateBaseCylinder() {
             MeshVertex v;
             v.id = i*n+j;
             v.setPosition(x, y, z);
-            v.color = QVector3D(0.2f, 0.6f, -z);
+            //v.color = QVector3D(0.2f, 0.6f, -z);
+            v.color = QVector3D(0.86, 0.82, 0.67);
             v.layer = i;
             v.baseAngle = angle;
             v.baseHeight = z;

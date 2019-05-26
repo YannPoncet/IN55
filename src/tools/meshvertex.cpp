@@ -16,19 +16,19 @@ void MeshVertex::computeNormalVector() {
     QVector3D bottomRightNormal;
 
     if(this->right!=nullptr && this->top!=nullptr) {
-        topRightNormal = QVector3D::crossProduct(this->right->position, this->top->position);
+        topRightNormal = QVector3D::crossProduct((this->position-this->right->position), (this->position-this->top->position));
     }
 
     if(this->top!=nullptr && this->left!=nullptr) {
-        topLeftNormal = QVector3D::crossProduct(this->top->position, this->left->position);
+        topLeftNormal = QVector3D::crossProduct((this->position-this->top->position), (this->position-this->left->position));
     }
 
     if(this->left!=nullptr && this->bottom!=nullptr) {
-        bottomLeftNormal = QVector3D::crossProduct(this->left->position, this->bottom->position);
+        bottomLeftNormal = QVector3D::crossProduct((this->position-this->left->position), (this->position-this->bottom->position));
     }
 
     if(this->bottom!=nullptr && this->right!=nullptr) {
-        bottomRightNormal = QVector3D::crossProduct(this->bottom->position, this->right->position);
+        bottomRightNormal = QVector3D::crossProduct((this->position-this->bottom->position), (this->position-this->right->position));
     }
 
 

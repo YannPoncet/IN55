@@ -70,7 +70,7 @@ void MainWidget::initializeGL()
     glEnable(GL_DEPTH_TEST);
 
     // Enable back face culling
-    glEnable(GL_CULL_FACE);
+    //glEnable(GL_CULL_FACE);
     // glCullFace(GL_FRONT);
 
     // Enable point size manipulation
@@ -129,9 +129,12 @@ void MainWidget::paintGL() {
 void MainWidget::drawCube() {
     // Calculate model view transformation
     QMatrix4x4 matrix;
-    matrix.translate(0.0, 0, -10);
+    matrix.translate(0.0, 0, -5);
     matrix.rotate(rotation);
-    matrix.scale(1.5,1.5,1.5);
+    //matrix.scale(1.5,1.5,1.5);
+    program.setUniformValue("mv", matrix);
+    QMatrix4x4 normal = matrix.inverted().transposed();
+    program.setUniformValue("nm", normal);
     // Set modelview-projection matrix
     program.setUniformValue("mvp", projection * matrix);
     // Draw cube geometry

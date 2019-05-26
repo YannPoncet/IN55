@@ -21,12 +21,17 @@ void main()
     vec3 unit_normal = normalize(vec3(nm*vec4(normal, 1.0)));
 
     float ambientStrength = 0.1;
-    vec3 lightPos = vec3(0, 0, 0);
+    vec3 lightPos = vec3(0, 0, -5);
     vec3 lightColor = vec3(1.0f,1.0f,1.0f);
+    float constantAttenuation = 1.0;
+    float linearAttenuation = 0.0;
+    float quadraticAttenuation = 0.1;
 
     //CM08a-46
     vec3 L = lightPos - sp;
     float d = length(L);
+    float attenuation = 1.0 / (constantAttenuation + linearAttenuation * d + quadraticAttenuation * d * d);
+
     L = normalize(L);
     vec3 halfway_vector = normalize(L+V);
     float pf = 0.0; //power factor
@@ -40,5 +45,5 @@ void main()
         pf = pow(nDotH, 0.1);
     }
 
-    fColor = (nDotL+ambientStrength+pf)*lightColor*color;
+    fColor = (nDotL*attenuation+ambientStrength+pf*attenuation)*lightColor*color;
 }

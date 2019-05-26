@@ -129,9 +129,9 @@ void MainWidget::paintGL() {
 void MainWidget::drawCube() {
     // Calculate model view transformation
     QMatrix4x4 matrix;
-    matrix.translate(0.0, 0, -5);
+    matrix.translate(0.0, 0, -10);
     matrix.rotate(rotation);
-    //matrix.scale(1.5,1.5,1.5);
+    matrix.scale(1.5,1.5,1.5);
     program.setUniformValue("mv", matrix);
     QMatrix4x4 normal = matrix.inverted().transposed();
     program.setUniformValue("nm", normal);

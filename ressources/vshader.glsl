@@ -22,26 +22,23 @@ void main()
 
     float ambientStrength = 0.1;
     vec3 lightPos = vec3(0, 0, 0);
-    vec3 lightDir = lightPos - position;
     vec3 lightColor = vec3(1.0f,1.0f,1.0f);
 
-    //CM08a-45
-    vec3 halfway_vector = normalize(V+lightDir);
+    //CM08a-46
+    vec3 L = lightPos - sp;
+    float d = length(L);
+    L = normalize(L);
+    vec3 halfway_vector = normalize(L+V);
     float pf = 0.0; //power factor
     float nDotH;
 
-    float nDotL = max(0.0, dot(unit_normal, normalize(lightDir)));
+    float nDotL = max(0.0, dot(unit_normal, L));
     if(nDotL==0)
-        lightColor = vec3(1.0, 1.0, 1.0);
+        pf = 0.0;
     else{
         nDotH = max(0.0, dot(unit_normal, halfway_vector));
-        pf = pow(nDotH, 4*0.2);
+        pf = pow(nDotH, 0.1);
     }
-
-    mat3 model = mat3(1.0);
-    vec3 norm = mat3(transpose(model))*normal;
-    float diff =  max(dot(normalize(norm), lightDir), 0.0);
-    //float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
 
     fColor = (nDotL+ambientStrength+pf)*lightColor*color;
 }

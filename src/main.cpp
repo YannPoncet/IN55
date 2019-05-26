@@ -5,12 +5,12 @@
 #include <QDebug>
 #include <QDesktopWidget>
 
+#include "globals.h"
+
 #ifndef QT_NO_OPENGL
 #include "mainwidget.h"
 #endif
 
-const int WINDOW_HEIGHT = 1280;
-const int WINDOW_WIDTH = 720;
 
 int main(int argc, char *argv[])
 {

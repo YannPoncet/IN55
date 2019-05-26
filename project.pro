@@ -2,6 +2,8 @@ QT       += core gui widgets
 
 LIBS += -lopengl32
 
+QMAKE_CFLAGS_YACC   = -Wno-sign-conversion
+
 TEMPLATE = app
 
 SOURCES += \
@@ -14,7 +16,8 @@ SOURCES += \
     src/tools/meshvertex.cpp \
     src/tools/bezier.cpp \
     src/tools/perlinnoise.cpp \
-    src/tools/voronoi.cpp
+    src/tools/voronoi.cpp \
+    src/globals.cpp
 
 HEADERS += \
     src/mainwidget.h \
@@ -22,13 +25,14 @@ HEADERS += \
     src/generation/stem.h \
     src/generation/cap.h \
     src/generation/morel.h \
-    src/tools/normaldistribution.h \
     src/tools/perlinnoise.h \
     src/tools/structs.h \
     src/tools/meshvertex.h \
     src/tools/bezier.h \
     src/libs/perlinnoise.h \
-    src/tools/voronoi.h
+    src/tools/voronoi.h \
+    src/tools/randomgenerator.h \
+    src/globals.h
 
 RESOURCES += \
     ressources/shaders.qrc \

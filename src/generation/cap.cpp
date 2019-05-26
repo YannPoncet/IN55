@@ -15,8 +15,6 @@ void Cap::applyPerlin() {
     std::uint32_t seed = 19894264;
     const siv::PerlinNoise perlinNoise(time(0));
 
-    GLushort n = this->params.capNumberOfVerticalDivisions;
-    GLushort k = this->params.capNumberOfHorizontalDivisions;
     float h = this->params.height*(1.0f-this->params.stemHeightPart);
     for(auto&& v: this->vertices) {
         if(v.layer!=0) {
@@ -59,8 +57,6 @@ void Cap::applyVoronoiTesselation() {
     double fMin = 1;
     Voronoi voronoiGenerator(600, 600, 100, 10, fMax, fMin);
 
-    GLushort n = this->params.capNumberOfVerticalDivisions;
-    GLushort k = this->params.capNumberOfHorizontalDivisions;
     float h = this->params.height*(1.0f-this->params.stemHeightPart);
     for(auto&& v: this->vertices) {
         if(v.layer!=0) {

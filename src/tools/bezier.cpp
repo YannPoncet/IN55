@@ -63,16 +63,16 @@ void Bezier::applyFullBezierTransformationToVertex(MeshVertex& v, float t, float
 }
 
 void Bezier::constructPoints(double height, double stemHeightPart, double curvatureVariance, double anglePosVariance) {
-    float xValue = this->normalDistribution.getNormalNumber<float>(0, curvatureVariance);
-    float yValue = this->normalDistribution.getNormalNumber<float>(0, curvatureVariance);
-    float zValue = this->normalDistribution.getNormalNumber<float>(height*stemHeightPart*0.5, anglePosVariance);
+    float xValue = randomGenerator.getNormalNumber<float>(0, curvatureVariance);
+    float yValue = randomGenerator.getNormalNumber<float>(0, curvatureVariance);
+    float zValue = randomGenerator.getNormalNumber<float>(height*stemHeightPart*0.5, anglePosVariance);
 
     this->P1 = QVector3D(xValue, yValue, zValue);
     qDebug() << "P1=" << P1;
 
-    xValue = this->normalDistribution.getNormalNumber<float>(0, curvatureVariance);
-    yValue = this->normalDistribution.getNormalNumber<float>(0, curvatureVariance);
-    zValue = this->normalDistribution.getNormalNumber<float>(height, anglePosVariance);
+    xValue = randomGenerator.getNormalNumber<float>(0, curvatureVariance);
+    yValue = randomGenerator.getNormalNumber<float>(0, curvatureVariance);
+    zValue = randomGenerator.getNormalNumber<float>(height, anglePosVariance);
 
     this->P2 = QVector3D(xValue, yValue, zValue);
     qDebug() << "P2=" << P2;

@@ -6,6 +6,8 @@
 #include <QVector2D>
 #include <QDebug>
 
+#include "../globals.h"
+
 class Voronoi
 {
 public:

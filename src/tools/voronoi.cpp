@@ -93,7 +93,7 @@ double Voronoi::factorFunction(double x) {
 
 
 int Voronoi::randgen(int max) {
-    return qrand() % max + 0;
+    return randomGenerator.getRand(0, max);
 }
 
 

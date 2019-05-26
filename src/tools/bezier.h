@@ -5,8 +5,8 @@
 #include <QtMath>
 #include <QQuaternion>
 
-#include "normaldistribution.h"
 #include "../tools/meshvertex.h"
+#include "../globals.h"
 
 class Bezier
 {
@@ -24,8 +24,6 @@ private:
 
     float zeroAngle;
     QVector3D zeroAxis;
-
-    NormalDistribution normalDistribution;
 
     void constructPoints(double height, double stemHeightPart, double curvatureVariance, double anglePosVariance);
     void computeBaseAngleAndAxis(float& zeroAngle, QVector3D& zeroAxis);

@@ -7,6 +7,7 @@
 
 #include<QDebug>
 
+#include "../globals.h"
 #include "../tools/bezier.h"
 #include "../tools/structs.h"
 #include "../tools/meshvertex.h"

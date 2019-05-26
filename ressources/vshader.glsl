@@ -18,11 +18,11 @@ void main()
     //CM08a-44
     vec3 sp = vec3(mv*vec4(position, 1.0));
     vec3 V = -normalize(sp);
-    vec3 unit_normal = normalize(vec3(nm*vec4(normal, 0.0)));
+    vec3 unit_normal = normalize(vec3(nm*vec4(normal, 1.0)));
 
     float ambientStrength = 0.1;
-    vec3 lightPos = vec3(1, 0, 1);
-    vec3 lightDir = lightPos;
+    vec3 lightPos = vec3(0, 0, 0);
+    vec3 lightDir = lightPos - position;
     vec3 lightColor = vec3(1.0f,1.0f,1.0f);
 
     //CM08a-45

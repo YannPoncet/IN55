@@ -5,13 +5,13 @@ Cap::Cap(Bezier& b) : bezier(b) {
     this->generateBaseEllipsoid();
     this->widenCapRealisticaly();
     //this->applyPerlin(1);
-    this->applyVoronoiTesselation();
-    this->applyPerlin(1);
+    //this->applyVoronoiTesselation();
+    this->applyPerlin(18);
     this->applyBezierCurve();
 }
 
 void Cap::applyPerlin(int octaves) {
-    float perlinFactor = 0.18;
+    float perlinFactor = 1;
 
     std::uint32_t seed = 19894264;
     const siv::PerlinNoise perlinNoise(time(0));
@@ -29,10 +29,6 @@ void Cap::applyPerlin(int octaves) {
             float r = 1.0f;
             float theta = atan2(sY, sX);
             float phi = acos(sZ);
-            // Below is the real conversion (if radius wasn't 1)
-            //float r = sqrt(pow(x,2.0)+pow(y,2.0)+pow(z,2.0));
-            //float theta = qAtan(y/x);
-            //float phi = qAcos(z/r);
 
             // We compute the noise and apply it to the radius
             double noise = perlinNoise.octaveNoise(theta, phi, octaves);
@@ -43,10 +39,17 @@ void Cap::applyPerlin(int octaves) {
             float y = r*sin(theta)*sin(phi);
             float z = r*cos(phi);
 
-            // We apply the noise on the actual position of the point
-            v.setX(v.x()+v.x()*perlinFactor*x);
-            v.setY(v.y()+v.y()*perlinFactor*y);
-            v.setZ(v.z());
+            float factorX = x/sX;
+            if (abs(sX) <= 0.01f) factorX = 1.0f;
+            float factorY = y/sY;
+            if (abs(sY) <= 0.01f) factorY = 1.0f;
+            float factorZ = z/sZ;
+            if (abs(sZ) <= 0.01f) factorZ = 1.0f;
+
+            // We apply the factor on the actual position of the point
+            v.setX(v.x()*factorX);
+            v.setY(v.y()*factorY);
+            //v.setZ(v.z());
         }
     }
 }

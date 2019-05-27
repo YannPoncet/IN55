@@ -15,12 +15,11 @@
 class Stem
 {
 public:
-    Stem(Parameters& p, Bezier& bezier);
+    Stem(Bezier& bezier);
     QVector<MeshVertex>* getVertices();
 private:
     QVector<MeshVertex> vertices;
     QVector3D color;
-    Parameters& params;
     Bezier& bezier;
 
     void generateBaseCylinder();

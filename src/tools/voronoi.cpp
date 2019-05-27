@@ -105,11 +105,9 @@ double Voronoi::getFactorAt(double x, double y) {
 
 QVector2D Voronoi::perpendicularLineLineIntersection(QVector2D A, QVector2D B, QVector2D C, QVector2D D, QVector2D Pab, QVector2D Pcd)
 {
-    // Line AB represented as a1x + b1y = c1
     double b1 = B.y() - A.y();
     double a1 = B.x() - A.x();
     double c1 = a1*(Pab.x()) + b1*(Pab.y());
-    //qDebug() << a1 << "x + " << b1 << "y + "<< c1;
 
     // Line CD represented as a2x + b2y = c2
     double a2 = D.y() - C.y();
@@ -117,7 +115,6 @@ QVector2D Voronoi::perpendicularLineLineIntersection(QVector2D A, QVector2D B, Q
     double c2 = a2*(Pcd.x())+ b2*(Pcd.y());
 
     double determinant = a1*b2 - a2*b1;
-    //qDebug() << a2 << "x + " << b2 << "y + "<< c2;
 
     if (determinant == 0)
     {
@@ -129,7 +126,6 @@ QVector2D Voronoi::perpendicularLineLineIntersection(QVector2D A, QVector2D B, Q
     {
         double x = (b2*c1 - b1*c2)/determinant;
         double y = (a1*c2 - a2*c1)/determinant;
-        //qDebug() << "Result=" << x << y;
         return QVector2D(x, y);
     }
 }

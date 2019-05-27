@@ -18,18 +18,17 @@
 class Cap
 {
 public:
-    Cap(Parameters& p, Bezier& bezier);
+    Cap(Bezier& bezier);
     QVector<MeshVertex>* getVertices();
 private:
     QVector<MeshVertex> vertices;
     QVector3D color;
-    Parameters& params;
     Bezier& bezier;
 
     void generateBaseEllipsoid();
     void applyBezierCurve();
     void widenCapRealisticaly();
-    void applyPerlin();
+    void applyPerlin(int octaves);
     void applyVoronoiTesselation();
 };
 

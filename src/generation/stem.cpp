@@ -1,6 +1,6 @@
 #include "stem.h"
 
-Stem::Stem(Parameters& p, Bezier& b) : params(p), bezier(b) {
+Stem::Stem(Bezier& b) : bezier(b) {
     this->color = QVector3D(0.87f, 0.60f, 0.38f);
     this->generateBaseCylinder();
     this->widenStemBase();
@@ -17,10 +17,10 @@ QVector<MeshVertex>* Stem::getVertices() {
 * @param radius radius of the cylinder
 */
 void Stem::generateBaseCylinder() {
-    GLushort n = this->params.stemNumberOfVerticalDivisions;
-    GLushort k = this->params.stemNumberOfHorizontalDivisions;
-    double height = this->params.height*this->params.stemHeightPart;
-    double radius = this->params.junctionRadius;
+    GLushort n = parameters.stemNumberOfVerticalDivisions;
+    GLushort k = parameters.stemNumberOfHorizontalDivisions;
+    double height = parameters.height*parameters.stemHeightPart;
+    double radius = parameters.junctionRadius;
 
     double p = height/k;
     double angle = 0;
@@ -77,17 +77,17 @@ void Stem::generateBaseCylinder() {
 }
 
 void Stem::applyBezierCurve() {
-    float baseHeight = this->params.height*this->params.stemHeightPart;
+    float baseHeight = parameters.height*parameters.stemHeightPart;
 
     for(auto&& v: this->vertices) {
-        float t = ((this->params.stemHeightPart*this->params.height)+v.z())/this->params.height;
+        float t = ((parameters.stemHeightPart*parameters.height)+v.z())/parameters.height;
         this->bezier.applyFullBezierTransformationToVertex(v, t, baseHeight);
     }
 }
 
 void Stem::widenStemBase() {
-    float h = this->params.stemHeightPart*this->params.height;
-    float b = this->params.radiusAtBaseFactor;
+    float h = parameters.stemHeightPart*parameters.height;
+    float b = parameters.radiusAtBaseFactor;
     float factor = 1;
 
     for(auto&& v: this->vertices) {

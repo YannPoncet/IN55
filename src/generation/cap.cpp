@@ -1,21 +1,22 @@
 #include "cap.h"
 
-Cap::Cap(Parameters& p, Bezier& b) : params(p), bezier(b) {
+Cap::Cap(Bezier& b) : bezier(b) {
     this->color = QVector3D(0.87f, 0.60f, 0.38f);
     this->generateBaseEllipsoid();
     this->widenCapRealisticaly();
+    //this->applyPerlin(1);
     this->applyVoronoiTesselation();
-    this->applyPerlin();
+    this->applyPerlin(1);
     this->applyBezierCurve();
 }
 
-void Cap::applyPerlin() {
+void Cap::applyPerlin(int octaves) {
     float perlinFactor = 0.18;
 
     std::uint32_t seed = 19894264;
     const siv::PerlinNoise perlinNoise(time(0));
 
-    float h = this->params.height*(1.0f-this->params.stemHeightPart);
+    float h = parameters.height*(1.0f-parameters.stemHeightPart);
     for(auto&& v: this->vertices) {
         if(v.layer!=0) {
             // We create a sphere of radius 1 centered on O on which we'll apply perlin
@@ -34,7 +35,7 @@ void Cap::applyPerlin() {
             //float phi = qAcos(z/r);
 
             // We compute the noise and apply it to the radius
-            double noise = perlinNoise.octaveNoise(theta, phi, 2);
+            double noise = perlinNoise.octaveNoise(theta, phi, octaves);
             r = r+r*noise;
 
             // We convert back to cartesian coordinates
@@ -52,12 +53,11 @@ void Cap::applyPerlin() {
 
 
 void Cap::applyVoronoiTesselation() {
-    float voronoiFactor = 0.5;
     double fMax = 1.1;
-    double fMin = 0.5;
+    double fMin = 0.6;
     Voronoi voronoiGenerator(1000, 1000, 400, 15, fMax, fMin);
 
-    float h = this->params.height*(1.0f-this->params.stemHeightPart);
+    float h = parameters.height*(1.0f-parameters.stemHeightPart);
     for(auto&& v: this->vertices) {
         if(v.layer!=0) {
             // We create a sphere of radius 1 centered on O on which we'll apply voronoi's tesselation
@@ -107,11 +107,11 @@ QVector<MeshVertex>* Cap::getVertices() {
 
 
 void Cap::generateBaseEllipsoid() {
-    GLushort n = this->params.capNumberOfVerticalDivisions;
-    GLushort k = this->params.capNumberOfHorizontalDivisions;
-    double height = this->params.height*(1-this->params.stemHeightPart);
-    double radius = this->params.junctionRadius;
-    double b = this->params.capMaxRadius-this->params.junctionRadius;
+    GLushort n = parameters.capNumberOfVerticalDivisions;
+    GLushort k = parameters.capNumberOfHorizontalDivisions;
+    double height = parameters.height*(1-parameters.stemHeightPart);
+    double radius = parameters.junctionRadius;
+    double b = parameters.capMaxRadius-parameters.junctionRadius;
 
     // height of a division
     double p = height/k;
@@ -197,17 +197,17 @@ void Cap::generateBaseEllipsoid() {
 }
 
 void Cap::applyBezierCurve() {
-    float baseHeight = this->params.height*this->params.stemHeightPart;
+    float baseHeight = parameters.height*parameters.stemHeightPart;
 
     for(auto&& v: this->vertices) {
-        float t = this->params.stemHeightPart+(v.z()/this->params.height);
+        float t = parameters.stemHeightPart+(v.z()/parameters.height);
         this->bezier.applyFullBezierTransformationToVertex(v, t, baseHeight);
     }
 }
 
 void Cap::widenCapRealisticaly() {
-    GLushort n = this->params.capNumberOfVerticalDivisions;
-    float h = this->params.height*(1-this->params.stemHeightPart);
+    GLushort n = parameters.capNumberOfVerticalDivisions;
+    float h = parameters.height*(1-parameters.stemHeightPart);
 
     float c = 1.2; //maxRadiusFactor
     float pow = 3; //should be an odd number

@@ -1,8 +1,7 @@
 #include "morel.h"
 
-Morel::Morel() : cap(this->params, this->bezier), stem(this->params, this->bezier)
+Morel::Morel() : cap(this->bezier), stem(this->bezier)
 {
-    this->params.height = 3;
     for(auto&& v: *(this->stem.getVertices())) {
         this->vertices.append(v);
     }
@@ -54,7 +53,7 @@ void Morel::updateIndices() {
 }
 
 void Morel::rescaleWithGlobalFactor() {
-    float normalized = randomGenerator.getNormalNumber<float>(this->params.globalSizeFactor, this->params.globalSizeVariance);
+    float normalized = randomGenerator.getNormalNumber<float>(parameters.globalSizeFactor, parameters.globalSizeVariance);
     for(auto&& v: this->vertices) {
         v.rescale(static_cast<float>(normalized));
     }
@@ -66,8 +65,8 @@ VerticesStruct Morel::getBezierVertices() {
 
     for(int i=0; i<n; i++) {
         float t = ((i+1)*1.0f)/(n*1.0f);
-        QVector3D p = this->bezier.getBezierPoint(t, this->params.height, this->params.stemHeightPart);
-        VertexData vData = {p*this->params.globalSizeFactor, QVector3D(1.0f,0.0f,0.3f)};
+        QVector3D p = this->bezier.getBezierPoint(t, parameters.height, parameters.stemHeightPart);
+        VertexData vData = {p*parameters.globalSizeFactor, QVector3D(1.0f,0.0f,0.3f)};
         newArray[i] = vData;
     }
 

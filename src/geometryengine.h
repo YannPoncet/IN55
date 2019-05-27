@@ -27,6 +27,9 @@ private:
     QOpenGLBuffer systemArrayBuf;
     QOpenGLBuffer systemIndexBuf;
 
+    QOpenGLBuffer soilArrayBuf;
+    QOpenGLBuffer soilIndexBuf;
+
     QOpenGLBuffer bezierArrayBuf;
     QOpenGLBuffer bezierIndexBuf;
 

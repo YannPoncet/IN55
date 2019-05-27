@@ -20,10 +20,10 @@ Parameters parameters = {
     0.17,    // double junctionRadius
 
     0.3,    // double capMaxRadiusFactor
-    0.002,    // double capMaxRadiusVariance
+    0,    // double capMaxRadiusVariance
 
     1.13,    // double capMaxRadiusFactor2;
-    0.40f,  // float capBaseMaxRadiusLocationFactor: if d=1/3, the morel will be at it's max at 1/3
+    0.60f,  // float capBaseMaxRadiusLocationFactor: if d=1/3, the morel will be at it's max at 1/3
     0.99f,  // float capTipMaxRadiusLocationFactor: same but for the tip
 
     1.5,      // double radiusAtBaseFactor;

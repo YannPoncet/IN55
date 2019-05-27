@@ -62,7 +62,7 @@ void MainWidget::initializeGL()
 {
     initializeOpenGLFunctions();
 
-    glClearColor(64.0/255.0, 64.0/255.0, 64.0/255.0, 1);
+    glClearColor(120.0/255.0, 120.0/255.0, 120.0/255.0, 1);
 
     initShaders();
 

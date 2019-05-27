@@ -12,6 +12,8 @@
 #include "../tools/structs.h"
 #include "../tools/meshvertex.h"
 
+#include "../libs/perlinnoise.h"
+
 class Stem
 {
 public:
@@ -25,6 +27,8 @@ private:
     void generateBaseCylinder();
     void applyBezierCurve();
     void widenStemBase();
+    void applyPerlin(int octaves, double factor);
+    void applyColorVariationWithPerlin(int octaves, double factor);
 };
 
 #endif // STEM_H

@@ -26,6 +26,11 @@ public:
         std::uniform_int_distribution<int> distribution(min, max);
         return distribution(this->generator);
     }
+
+    std::default_random_engine getGenerator() {
+        return generator;
+    }
+
 private:
     std::default_random_engine generator;
 };

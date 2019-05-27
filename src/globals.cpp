@@ -12,18 +12,18 @@ Parameters parameters = {
 
 
     //Height
-    3,      // double height
+    2.6,      // double height
     0.38,     // double stemHeightPart
 
 
     //Radius
-    0.18,    // double junctionRadius
+    0.17,    // double junctionRadius
 
-    0.30,    // double capMaxRadiusFactor
-    0.04,    // double capMaxRadiusVariance
+    0.3,    // double capMaxRadiusFactor
+    0.002,    // double capMaxRadiusVariance
 
-    1.2,    // double capMaxRadiusFactor2;
-    0.20f,  // float capBaseMaxRadiusLocationFactor: if d=1/3, the morel will be at it's max at 1/3
+    1.13,    // double capMaxRadiusFactor2;
+    0.40f,  // float capBaseMaxRadiusLocationFactor: if d=1/3, the morel will be at it's max at 1/3
     0.99f,  // float capTipMaxRadiusLocationFactor: same but for the tip
 
     1.5,      // double radiusAtBaseFactor;
@@ -40,9 +40,11 @@ Parameters parameters = {
 
 
     //Colors
-    QVector3D(205.0f/255.0f, 122.0f/255.0f, 54.0f/255.0f), //QVector3D capColor;
-    QVector3D(238.0f/255.0f, 200.0f/255.0f, 164.0f/255.0f), //QVector3D stemColor;
-    QVector3D(225.0f/255.0f, 188.0f/255.0f, 144.0f/255.0f), //QVector3D holesEdgesColor;
+    //QVector3D(205.0f/255.0f, 122.0f/255.0f, 54.0f/255.0f), //QVector3D capColor;
+    //QVector3D(225.0f/255.0f, 188.0f/255.0f, 144.0f/255.0f), //QVector3D holesEdgesColor;
+    QVector3D(97.0f/255.0f, 76.0f/255.0f, 57.0f/255.0f), //QVector3D capColor;
+    QVector3D(109.0f/255.0f, 92.0f/255.0f, 76.0f/255.0f), //QVector3D holesEdgesColor;
+    QVector3D(188.0f/255.0f, 158.0f/255.0f, 104.0f/255.0f), //QVector3D stemColor;
 
 
     //Perlin
@@ -52,5 +54,5 @@ Parameters parameters = {
 
     //Voronoi
     1.0,        // double holesDensityFactor
-    1.0         // double holesEdgesWidthFactor
+    0.8         // double holesEdgesWidthFactor
 };

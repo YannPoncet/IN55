@@ -29,6 +29,7 @@ private:
     void applyBezierCurve();
     void widenCapRealisticaly();
     void applyPerlin(int octaves, double factor);
+    void applyColorVariationWithPerlin(int octaves, double factor);
     void applyVoronoiTesselation();
 };
 

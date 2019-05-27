@@ -64,8 +64,8 @@ struct Parameters
 
     //Colors
     QVector3D capColor;
-    QVector3D stemColor;
     QVector3D holesEdgesColor;
+    QVector3D stemColor;
 
 
     //Perlin parameters

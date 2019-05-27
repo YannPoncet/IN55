@@ -87,7 +87,7 @@ void Stem::applyBezierCurve() {
 
 void Stem::widenStemBase() {
     float h = parameters.stemHeightPart*parameters.height;
-    float b = parameters.radiusAtBaseFactor;
+    float b = randomGenerator.getNormalNumber<float>(parameters.radiusAtBaseFactor, parameters.radiusAtBaseVariance);
     float factor = 1;
 
     for(auto&& v: this->vertices) {

@@ -14,22 +14,20 @@ Parameters parameters = {
     //Height
     3,      // double height
     0.38,     // double stemHeightPart
-    0,      // double heightVariance
 
 
     //Radius
     0.18,    // double junctionRadius
-    0.0,    // double junctionRadiusVariance
 
     0.30,    // double capMaxRadiusFactor
-    0.0,    // double capMaxRadiusVariance
+    0.04,    // double capMaxRadiusVariance
 
     1.2,    // double capMaxRadiusFactor2;
     0.20f,  // float capBaseMaxRadiusLocationFactor: if d=1/3, the morel will be at it's max at 1/3
     0.99f,  // float capTipMaxRadiusLocationFactor: same but for the tip
 
     1.5,      // double radiusAtBaseFactor;
-    0,      // double radiusAtBaseVariance;
+    0.1,      // double radiusAtBaseVariance;
 
     //Mesh
     20,     // GLushort stemNumberOfHorizontalDivisions

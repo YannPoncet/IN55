@@ -104,7 +104,7 @@ void Cap::generateBaseEllipsoid() {
     GLushort k = parameters.capNumberOfHorizontalDivisions;
     double height = parameters.height*(1-parameters.stemHeightPart);
     double radius = parameters.junctionRadius;
-    double b = parameters.capMaxRadiusFactor-parameters.junctionRadius;
+    double b = randomGenerator.getNormalNumber<float>(parameters.capMaxRadiusFactor, parameters.capMaxRadiusVariance)-parameters.junctionRadius;
 
     // height of a division
     double p = height/k;

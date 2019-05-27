@@ -74,7 +74,7 @@ void Cap::applyVoronoiTesselation() {
             // We compute the noise and apply it to the radius
             double factor = voronoiGenerator.getFactorAt((theta+M_PI)/(2*M_PI), (phi+M_PI)/(2*M_PI));
             if(abs(factor-fMax) <= 0.01f) {
-                v.color = QVector3D(254.0/255.0, 233.0/255.0, 194.0/255.0);
+                v.color = QVector3D(225.0/255.0, 188.0/255.0, 144.0/255.0);
             }
             r = r*factor;
 
@@ -140,7 +140,7 @@ void Cap::generateBaseEllipsoid() {
             v.id = i*n+j;
             v.setPosition(x,y,z);
             //v.color = QVector3D(0.6f, 0.2f, z/height);
-            v.color = QVector3D(0.54, 0.40, 0.12);
+            v.color = QVector3D(205/255.0, 122.0/255.0, 54.0/255.0);
             v.layer = i;
             v.baseAngle = angle;
             v.baseHeight = z;
@@ -153,7 +153,7 @@ void Cap::generateBaseEllipsoid() {
     v.id = n*k;
     v.setPosition(0.0f, 0.0f, height);
     //v.color = QVector3D(0.6f, 0.2f, 1.0f);
-    v.color = QVector3D(0.54, 0.40, 0.12);
+    v.color = QVector3D(205/255.0, 122.0/255.0, 54.0/255.0);
     v.layer = k;
     v.baseAngle = 0;
     v.baseHeight = height;

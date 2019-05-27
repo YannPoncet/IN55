@@ -83,7 +83,6 @@ double Voronoi::getFactorAt(double x, double y) {
     }
 
     if(distFactor >= 0) {
-        qDebug() << distFactor << halfwayDist << halfwayDist - this->width/2.0;
         return this->factorFunction((-1.0/(halfwayDist-this->width/2.0))*distFactor+1);
     }
 

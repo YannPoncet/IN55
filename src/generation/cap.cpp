@@ -4,15 +4,13 @@ Cap::Cap(Bezier& b) : bezier(b) {
     this->color = QVector3D(0.87f, 0.60f, 0.38f);
     this->generateBaseEllipsoid();
     this->widenCapRealisticaly();
-    //this->applyPerlin(1);
-    //this->applyVoronoiTesselation();
-    this->applyPerlin(18);
+    this->applyPerlin(1, parameters.capGlobalPerlinPower);
+    this->applyVoronoiTesselation();
+    this->applyPerlin(10, parameters.capDetailsPerlinPower);
     this->applyBezierCurve();
 }
 
-void Cap::applyPerlin(int octaves) {
-    float perlinFactor = 1;
-
+void Cap::applyPerlin(int octaves, double factor) {
     std::uint32_t seed = 19894264;
     const siv::PerlinNoise perlinNoise(time(0));
 
@@ -32,33 +30,31 @@ void Cap::applyPerlin(int octaves) {
 
             // We compute the noise and apply it to the radius
             double noise = perlinNoise.octaveNoise(theta, phi, octaves);
-            r = r+r*noise;
+            r = r+r*noise*factor;
 
             // We convert back to cartesian coordinates
             float x = r*cos(theta)*sin(phi);
             float y = r*sin(theta)*sin(phi);
-            float z = r*cos(phi);
 
             float factorX = x/sX;
             if (abs(sX) <= 0.01f) factorX = 1.0f;
             float factorY = y/sY;
             if (abs(sY) <= 0.01f) factorY = 1.0f;
-            float factorZ = z/sZ;
-            if (abs(sZ) <= 0.01f) factorZ = 1.0f;
 
             // We apply the factor on the actual position of the point
             v.setX(v.x()*factorX);
             v.setY(v.y()*factorY);
-            //v.setZ(v.z());
         }
     }
 }
 
 
 void Cap::applyVoronoiTesselation() {
-    double fMax = 1.1;
-    double fMin = 0.6;
-    Voronoi voronoiGenerator(1000, 1000, 400, 15, fMax, fMin);
+    double fMax = 1.6;
+    double fMin = 0.1;
+    double densityFactor = parameters.holesDensityFactor;
+    double widthFactor = parameters.holesEdgesWidthFactor;
+    Voronoi voronoiGenerator(1000, 1000, 400*densityFactor, 15*widthFactor, fMax, fMin);
 
     float h = parameters.height*(1.0f-parameters.stemHeightPart);
     for(auto&& v: this->vertices) {
@@ -76,29 +72,23 @@ void Cap::applyVoronoiTesselation() {
 
             // We compute the noise and apply it to the radius
             double factor = voronoiGenerator.getFactorAt((theta+M_PI)/(2*M_PI), (phi+M_PI)/(2*M_PI));
-            if(abs(factor-fMax) <= 0.01f) {
-                v.color = QVector3D(225.0/255.0, 188.0/255.0, 144.0/255.0);
+            if(abs(factor-fMax) <= 0.001f) {
+                v.color = parameters.holesEdgesColor;
             }
             r = r*factor;
 
             // We convert back to cartesian coordinates
             float x = r*cos(theta)*sin(phi);
             float y = r*sin(theta)*sin(phi);
-            float z = r*cos(phi);
 
             float factorX = x/sX;
             if (abs(sX) <= 0.01f) factorX = 1.0f;
             float factorY = y/sY;
             if (abs(sY) <= 0.01f) factorY = 1.0f;
-            float factorZ = z/sZ;
-            if (abs(sZ) <= 0.01f) factorZ = 1.0f;
-
-            //qDebug() << v.x() << "  x" << factor << "=  " << v.x()*factorX;
 
             // We apply the factor on the actual position of the point
             v.setX(v.x()*factorX);
             v.setY(v.y()*factorY);
-            //v.setZ(v.z());
         }
     }
 }
@@ -114,7 +104,7 @@ void Cap::generateBaseEllipsoid() {
     GLushort k = parameters.capNumberOfHorizontalDivisions;
     double height = parameters.height*(1-parameters.stemHeightPart);
     double radius = parameters.junctionRadius;
-    double b = parameters.capMaxRadius-parameters.junctionRadius;
+    double b = parameters.capMaxRadiusFactor-parameters.junctionRadius;
 
     // height of a division
     double p = height/k;
@@ -143,7 +133,7 @@ void Cap::generateBaseEllipsoid() {
             v.id = i*n+j;
             v.setPosition(x,y,z);
             //qDebug() << v.z();
-            v.color = QVector3D(205/255.0, 122.0/255.0, 54.0/255.0);
+            v.color = parameters.capColor;
             //v.color = QVector3D(0.6f, 0.2f, z/height);
             v.layer = i;
             v.baseAngle = angle;
@@ -157,7 +147,7 @@ void Cap::generateBaseEllipsoid() {
     v.id = n*k;
     v.setPosition(0.0f, 0.0f, height);
     //qDebug() << v.x() << v.y() << v.z();
-    v.color = QVector3D(205/255.0, 122.0/255.0, 54.0/255.0);
+    v.color = parameters.capColor;
     //v.color = QVector3D(0.6f, 0.2f, 1.0f);
     v.layer = k;
     v.baseAngle = 0;
@@ -212,11 +202,11 @@ void Cap::widenCapRealisticaly() {
     GLushort n = parameters.capNumberOfVerticalDivisions;
     float h = parameters.height*(1-parameters.stemHeightPart);
 
-    float c = 1.2; //maxRadiusFactor
+    float c = parameters.capMaxRadiusFactor2;
     float pow = 3; //should be an odd number
 
-    float d = 0.20; //baseMaxHeightFactor: if d=1/3, the morel will be at it's max at 1/3
-    float e = 0.99; //tipMaxHeightFactor: same but for the tip
+    float d = parameters.capBaseMaxRadiusLocationFactor;
+    float e = parameters.capTipMaxRadiusLocationFactor;
 
     float b1 = h*d;
     float b2 = h*e;

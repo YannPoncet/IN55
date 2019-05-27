@@ -28,7 +28,7 @@ private:
     void generateBaseEllipsoid();
     void applyBezierCurve();
     void widenCapRealisticaly();
-    void applyPerlin(int octaves);
+    void applyPerlin(int octaves, double factor);
     void applyVoronoiTesselation();
 };
 

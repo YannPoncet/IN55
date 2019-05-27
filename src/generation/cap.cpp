@@ -4,13 +4,13 @@ Cap::Cap(Parameters& p, Bezier& b) : params(p), bezier(b) {
     this->color = QVector3D(0.87f, 0.60f, 0.38f);
     this->generateBaseEllipsoid();
     this->widenCapRealisticaly();
-    this->applyBezierCurve();
-    this->applyPerlin();
     this->applyVoronoiTesselation();
+    this->applyPerlin();
+    this->applyBezierCurve();
 }
 
 void Cap::applyPerlin() {
-    float perlinFactor = 0.08;
+    float perlinFactor = 0.18;
 
     std::uint32_t seed = 19894264;
     const siv::PerlinNoise perlinNoise(time(0));
@@ -52,10 +52,10 @@ void Cap::applyPerlin() {
 
 
 void Cap::applyVoronoiTesselation() {
-    float voronoiFactor = 0.08;
-    double fMax = 3;
-    double fMin = 1;
-    Voronoi voronoiGenerator(600, 600, 100, 10, fMax, fMin);
+    float voronoiFactor = 0.5;
+    double fMax = 1.1;
+    double fMin = 0.9;
+    Voronoi voronoiGenerator(1800, 1800, 500, 15, fMax, fMin);
 
     float h = this->params.height*(1.0f-this->params.stemHeightPart);
     for(auto&& v: this->vertices) {
@@ -73,8 +73,8 @@ void Cap::applyVoronoiTesselation() {
 
             // We compute the noise and apply it to the radius
             double factor = voronoiGenerator.getFactorAt((theta+M_PI)/(2*M_PI), (phi+M_PI)/(2*M_PI));
-            if(factor == fMax) {
-                v.color = QVector3D(0.86, 0.82, 0.67);
+            if(abs(factor-fMax) <= 0.01f) {
+                v.color = QVector3D(254.0/255.0, 233.0/255.0, 194.0/255.0);
             }
             r = r*factor;
 
@@ -83,10 +83,19 @@ void Cap::applyVoronoiTesselation() {
             float y = r*sin(theta)*sin(phi);
             float z = r*cos(phi);
 
+            float factorX = x/sX;
+            if (abs(sX) <= 0.01f) factorX = 1.0f;
+            float factorY = y/sY;
+            if (abs(sY) <= 0.01f) factorY = 1.0f;
+            float factorZ = z/sZ;
+            if (abs(sZ) <= 0.01f) factorZ = 1.0f;
+
+            //qDebug() << v.x() << "  x" << factor << "=  " << v.x()*factorX;
+
             // We apply the factor on the actual position of the point
-            v.setX(v.x()+v.x()*voronoiFactor*x);
-            v.setY(v.y()+v.y()*voronoiFactor*y);
-            v.setZ(v.z());
+            v.setX(v.x()*factorX);
+            v.setY(v.y()*factorY);
+            //v.setZ(v.z());
         }
     }
 }
@@ -144,7 +153,7 @@ void Cap::generateBaseEllipsoid() {
     v.id = n*k;
     v.setPosition(0.0f, 0.0f, height);
     //v.color = QVector3D(0.6f, 0.2f, 1.0f);
-    v.color = QVector3D(0.84, 0.85, 0.86);
+    v.color = QVector3D(0.54, 0.40, 0.12);
     v.layer = k;
     v.baseAngle = 0;
     v.baseHeight = height;
@@ -153,11 +162,6 @@ void Cap::generateBaseEllipsoid() {
     // Linking the different vertices
     for(auto&& v: this->vertices) {
         int i = v.id/n;
-
-        v.top = nullptr;
-        v.bottom = nullptr;
-        v.right = nullptr;
-        v.left = nullptr;
 
         if(i!=k) {
             if(i!=0) {

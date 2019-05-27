@@ -8,8 +8,8 @@ Voronoi::Voronoi(int xMax, int yMax, int maxNbPoints, int width, double fMax, do
     this->fMax = fMax;
     this->fMin = fMin;
 
-    this->distanceType = 3;
-    this->separationFactor = 0.5;
+    this->distanceType = 1;
+    this->separationFactor = 2;
 
     this->generatePoints();
     qsrand(0);
@@ -49,7 +49,7 @@ double Voronoi::getFactorAt(double x, double y) {
     double d1 = this->xMax;
     double d2 = this->yMax;
     double d = 0;
-    QVector2D p1;
+    QVector2D p1, p2;
 
     // First, we find the closest point of the coordinates and store its distance in d1
     for(auto&& p: this->points) {
@@ -65,12 +65,26 @@ double Voronoi::getFactorAt(double x, double y) {
         d = dist(x-p.x(), y-p.y());
         if(d<d2 && p.x()!=p1.x()) {
             d2 = d;
+            p2 = p;
         }
     }
 
     // If the point is in this->width between p1 and p2
-    if((d2-d1) < (this->width/2.0)) {
+    double d12 = this->dist(p1.x()-p2.x(), p1.y()-p2.y());
+    double halfwayDist = d12/2.0;
+
+    QVector2D v(p2.x()-p1.x(), p2.y()-p1.y());
+    QVector2D u(x-p1.x(), y-p1.y());
+    double distFactor = ((x-p1.x())*v.x()+(y-p1.y())*v.y())/this->dist(v.x(), v.y());
+
+
+    if(halfwayDist-distFactor <= this->width/2.0) {
         return this->fMax;
+    }
+
+    if(distFactor >= 0) {
+        qDebug() << distFactor << halfwayDist << halfwayDist - this->width/2.0;
+        return this->factorFunction((-1.0/(halfwayDist-this->width/2.0))*distFactor+1);
     }
 
     return this->fMin;
@@ -84,7 +98,7 @@ double Voronoi::getFactorAt(double x, double y) {
 * @return the result of the function
 */
 double Voronoi::factorFunction(double x) {
-    double k = 3;
+    double k = 1;
     double a = (1.0/2.0)*((-1.0) - sqrt( 1.0 - ((4.0*k) / (this->fMin-this->fMax))));
     double b = this->fMax-(k/a);
 

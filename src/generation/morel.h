@@ -32,7 +32,7 @@ private:
     QVector<GLushort> indices;
 
     Parameters params = {
-        1.0,      // double globalSizeFactor
+        1.3,      // double globalSizeFactor
         0.005,      // double globalSizeVariance
 
         2.3,      // double height
@@ -48,8 +48,8 @@ private:
 
         20,     // GLushort stemNumberOfHorizontalDivisions
         20,     // GLushort stemNumberOfVerticalDivisions
-        100,    // GLushort capNumberOfHorizontalDivisions
-        100,    // GLushort capNumberOfVerticalDivisions
+        200,    // GLushort capNumberOfHorizontalDivisions
+        200,    // GLushort capNumberOfVerticalDivisions
 
         0.008,    // double curvatureVariance
         0.05     // double anglePosVariance;

@@ -26,10 +26,11 @@ private:
     double separationFactor;
     QVector<QVector2D> points;
 
-    double dist(int x, int y);
+    double dist(double x, double y);
     void generatePoints();
     int randgen(int max);
     double factorFunction(double x);
+    QVector2D perpendicularLineLineIntersection(QVector2D A, QVector2D B, QVector2D C, QVector2D D, QVector2D Pab, QVector2D Pcd);
 };
 
 #endif // VORONOI_H

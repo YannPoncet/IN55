@@ -8,8 +8,8 @@ Voronoi::Voronoi(int xMax, int yMax, int maxNbPoints, int width, double fMax, do
     this->fMax = fMax;
     this->fMin = fMin;
 
-    this->distanceType = 1;
-    this->separationFactor = 2;
+    this->distanceType = 3;
+    this->separationFactor = this->width/10;
 
     this->generatePoints();
     qsrand(0);
@@ -60,33 +60,78 @@ double Voronoi::getFactorAt(double x, double y) {
         }
     }
 
-    // Then, we find the second closest point and store its distance in d2
+    // Then, we find the second point, closest to... cannot explain here must be done on paper
     for(auto&& p: this->points) {
-        d = dist(x-p.x(), y-p.y());
-        if(d<d2 && p.x()!=p1.x()) {
-            d2 = d;
-            p2 = p;
+        if(p != p1) {
+            QVector2D A(x,y);
+            QVector2D P1 = p1;
+            QVector2D P2 = p;
+            // u = vector between P1 and P2
+            QVector2D u(P2.x()-P1.x(),P2.y()-P1.y());
+            // v = vector between P1 and A
+            QVector2D v(A.x()-P1.x(),A.y()-P1.y());
+            // M = middle of P1P2
+            QVector2D M((P1.x()+P2.x())/2.0, (P1.y()+P2.y())/2.0);
+
+            if(u.dotProduct(u,v) > 0) {
+                // We compute the intersection point between the lines P1P2 going through M and P1A going through A
+                QVector2D H = this->perpendicularLineLineIntersection(P1,P2, P1,A, M, A);
+                // We find the closest distance to the different Hs
+                d = dist(H.x()-P1.x(), H.y()-P1.y());
+                if(d<d2) {
+                    d2 = d;
+                    p2 = P2;
+                }
+            }
         }
     }
 
-    // If the point is in this->width between p1 and p2
-    double d12 = this->dist(p1.x()-p2.x(), p1.y()-p2.y());
-    double halfwayDist = d12/2.0;
+    // Now, p2 is the closest point of the triangle... cannot explain either :)
+    // We compute the distance between P1 and the given point
+    double distP1A = dist(x-p1.x(), y-p1.y());
 
-    QVector2D v(p2.x()-p1.x(), p2.y()-p1.y());
-    QVector2D u(x-p1.x(), y-p1.y());
-    double distFactor = ((x-p1.x())*v.x()+(y-p1.y())*v.y())/this->dist(v.x(), v.y());
-
-
-    if(halfwayDist-distFactor <= this->width/2.0) {
+    //qDebug() << distP1A << d2;
+    if(d2-distP1A <= this->width/2.0) {
         return this->fMax;
     }
 
-    if(distFactor >= 0) {
-        return this->factorFunction((-1.0/(halfwayDist-this->width/2.0))*distFactor+1);
-    }
+    // We get the ratio of its distance to the side of the polygon
+    double ratio = distP1A/(d2-this->width/2.0);
+    double invertedRatio = 1-ratio;
 
-    return this->fMin;
+    return this->factorFunction(invertedRatio);
+}
+
+
+QVector2D Voronoi::perpendicularLineLineIntersection(QVector2D A, QVector2D B, QVector2D C, QVector2D D, QVector2D Pab, QVector2D Pcd)
+{
+    // Line AB represented as a1x + b1y = c1
+    double b1 = B.y() - A.y();
+    double a1 = B.x() - A.x();
+    double c1 = a1*(Pab.x()) + b1*(Pab.y());
+    //qDebug() << a1 << "x + " << b1 << "y + "<< c1;
+
+    // Line CD represented as a2x + b2y = c2
+    double a2 = D.y() - C.y();
+    double b2 = C.x() - D.x();
+    double c2 = a2*(Pcd.x())+ b2*(Pcd.y());
+
+    double determinant = a1*b2 - a2*b1;
+    //qDebug() << a2 << "x + " << b2 << "y + "<< c2;
+
+    if (determinant == 0)
+    {
+        // The lines are parallel. This is simplified
+        // by returning a pair of FLT_MAX
+        return QVector2D(INFINITY, INFINITY);
+    }
+    else
+    {
+        double x = (b2*c1 - b1*c2)/determinant;
+        double y = (a1*c2 - a2*c1)/determinant;
+        //qDebug() << "Result=" << x << y;
+        return QVector2D(x, y);
+    }
 }
 
 
@@ -110,12 +155,13 @@ int Voronoi::randgen(int max) {
 }
 
 
-double Voronoi::dist(int x, int y) {
+double Voronoi::dist(double x, double y) {
     switch (this->distanceType) {
-    case 1: return sqrt(x*x+y*y); // Euclidian distance
+    case 1: return sqrt(qPow(x,2.0)+qPow(y,2.0)); // Euclidian distance
     case 2: return abs(x)+abs(y); // Manhattan
     case 3: return pow(pow(abs(x),3.0) + pow(abs(y),3.0),1.0/3.0); // Minkovski
    }
 }
+
 
 

@@ -12,6 +12,13 @@ out vec3 fColor;
 
 void main()
 {
+    // Vshader before Nafer's work
+    // Calculate vertex position in screen space
+    gl_Position = mvp * vec4( position, 1.0 );
+    fColor = color;
+
+
+    /*
     // Calculate vertex position in screen space
     gl_Position = mvp * vec4(position, 1.0 );
 
@@ -46,4 +53,5 @@ void main()
     }
 
     fColor = (nDotL*attenuation+ambientStrength+pf*attenuation)*lightColor*color;
+    */
 }

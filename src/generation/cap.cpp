@@ -54,8 +54,8 @@ void Cap::applyPerlin() {
 void Cap::applyVoronoiTesselation() {
     float voronoiFactor = 0.5;
     double fMax = 1.1;
-    double fMin = 0.9;
-    Voronoi voronoiGenerator(1800, 1800, 500, 15, fMax, fMin);
+    double fMin = 0.5;
+    Voronoi voronoiGenerator(1000, 1000, 400, 15, fMax, fMin);
 
     float h = this->params.height*(1.0f-this->params.stemHeightPart);
     for(auto&& v: this->vertices) {
@@ -139,8 +139,9 @@ void Cap::generateBaseEllipsoid() {
             MeshVertex v;
             v.id = i*n+j;
             v.setPosition(x,y,z);
-            //v.color = QVector3D(0.6f, 0.2f, z/height);
+            //qDebug() << v.z();
             v.color = QVector3D(205/255.0, 122.0/255.0, 54.0/255.0);
+            //v.color = QVector3D(0.6f, 0.2f, z/height);
             v.layer = i;
             v.baseAngle = angle;
             v.baseHeight = z;
@@ -152,8 +153,9 @@ void Cap::generateBaseEllipsoid() {
     MeshVertex v;
     v.id = n*k;
     v.setPosition(0.0f, 0.0f, height);
-    //v.color = QVector3D(0.6f, 0.2f, 1.0f);
+    //qDebug() << v.x() << v.y() << v.z();
     v.color = QVector3D(205/255.0, 122.0/255.0, 54.0/255.0);
+    //v.color = QVector3D(0.6f, 0.2f, 1.0f);
     v.layer = k;
     v.baseAngle = 0;
     v.baseHeight = height;

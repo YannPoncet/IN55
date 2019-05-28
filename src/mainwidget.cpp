@@ -107,6 +107,7 @@ void MainWidget::initializeGL()
 
     glClearColor(120.0/255.0, 120.0/255.0, 120.0/255.0, 1);
 
+    initTextures();
     initShaders();
 
     // Enable depth buffer
@@ -147,6 +148,25 @@ void MainWidget::initShaders() {
     // Bind shader pipeline for use
     if (!program.bind())
         close();
+}
+
+void MainWidget::initTextures() {
+    /*unsigned int texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    // set the texture wrapping/filtering options (on the currently bound texture object)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    QOpenGLTexture* text = new QOpenGLTexture(QImage(QString(":/soil.png")));
+    text->bind();*/
+
+    glActiveTexture(GL_TEXTURE0);
+    QOpenGLTexture* text = new QOpenGLTexture(QImage(QString(":/soil.png")).mirrored());
+    text->bind(0);
+    program.setUniformValue("colorTexture", 0);
 }
 
 void MainWidget::resizeGL(int w, int h) {

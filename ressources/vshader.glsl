@@ -7,8 +7,12 @@ uniform mat4 nm;
 in vec3 position;
 in vec3 color;
 in vec3 normal;
+in vec2 aTexCoord;
+in float hasTexture;
 
 out vec3 fColor;
+out vec2 TexCoord;
+out float doesHaveTexture;
 
 void main()
 {
@@ -16,6 +20,9 @@ void main()
     // Calculate vertex position in screen space
     gl_Position = mvp * vec4( position, 1.0 );
     fColor = color;
+    TexCoord = aTexCoord;
+    doesHaveTexture = hasTexture;
+
 
 
     /*

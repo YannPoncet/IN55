@@ -17,7 +17,8 @@ SOURCES += \
     src/tools/bezier.cpp \
     src/tools/perlinnoise.cpp \
     src/tools/voronoi.cpp \
-    src/globals.cpp
+    src/globals.cpp \
+    src/libs/stb_image.cpp
 
 HEADERS += \
     src/mainwidget.h \
@@ -32,7 +33,9 @@ HEADERS += \
     src/libs/perlinnoise.h \
     src/tools/voronoi.h \
     src/tools/randomgenerator.h \
-    src/globals.h
+    src/globals.h \
+    src/libs/stb_image.h
 
 RESOURCES += \
     ressources/shaders.qrc \
+    ressources/textures.qrc

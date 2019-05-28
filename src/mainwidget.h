@@ -20,6 +20,7 @@
 #include <string>
 #include <math.h>
 
+#include <QOpenGLTexture>
 #include "tools/structs.h"
 
 class GeometryEngine;

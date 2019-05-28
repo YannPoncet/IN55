@@ -2,6 +2,7 @@
 #define STRUCT_H
 
 #include <QVector3D>
+#include <QVector2D>
 #include <QOpenGLFunctions>
 #include <string>
 #include <QSlider>
@@ -13,17 +14,25 @@ struct VertexData
     QVector3D normal;
 };
 
+struct VertexDataTexture
+{
+    QVector3D position;
+    QVector3D color;
+    QVector2D texture;
+    float hasTexture;
+};
+
 struct VerticesStruct
 {
     VertexData* vertices;
-    int nbrVertices;
+    long nbrVertices;
 };
 
 
 struct IndicesStruct
 {
     GLushort* indices;
-    int nbrIndices;
+    long nbrIndices;
 };
 
 struct SliderParameters

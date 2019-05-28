@@ -68,8 +68,8 @@ void MainWidget::redrawMorel(){
     parameters.capGlobalPerlinPower = this->sliders[4].value;
     parameters.holesDensityFactor = this->sliders[5].value;
 
-    this->geometries->initGeometry();
-    this->drawCube();
+    this->geometries->createAndBindMorels();
+    this->geometries->drawMorels(&program);
 }
 
 MainWidget::~MainWidget() {

@@ -5,7 +5,7 @@ Stem::Stem(Bezier& b) : bezier(b) {
     this->generateBaseCylinder();
     this->widenStemBase();
     this->applyPerlin(1,1);
-    //this->applyColorVariationWithPerlin(10,0.15);
+    this->applyColorVariationWithPerlin(10,0.15);
     this->applyBezierCurve();
 }
 

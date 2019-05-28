@@ -3,6 +3,8 @@
 
 #include <QVector3D>
 #include <QOpenGLFunctions>
+#include <string>
+#include <QSlider>
 
 struct VertexData
 {
@@ -22,6 +24,15 @@ struct IndicesStruct
 {
     GLushort* indices;
     int nbrIndices;
+};
+
+struct SliderParameters
+{
+    double min;
+    double max;
+    double baseValue;
+    std::string text;
+    QSlider* slider;
 };
 
 

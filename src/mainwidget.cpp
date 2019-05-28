@@ -1,14 +1,47 @@
 #include "mainwidget.h"
 
-#include <QMouseEvent>
-
-#include <math.h>
 
 MainWidget::MainWidget(QWidget *parent) :
     QOpenGLWidget(parent),
     geometries(0),
-    angularSpeed(0)
-{}
+    angularSpeed(0),
+    zoomTranslation(0.0f)
+{
+    QVBoxLayout *layout = new QVBoxLayout(this);
+
+    double min1 = 0.1, max1 = 2;
+    QSlider* slider = this->addSlider(parameters.globalSizeFactor, min1, max1, "Global size :");
+    layout->addWidget(slider);
+
+    QPushButton *submitButton = new QPushButton("Regenerate \n a morel", this);
+    submitButton->setFixedSize(100,50);
+    QObject::connect(submitButton, SIGNAL(clicked()), this, SLOT(redrawMorel()));
+    layout->addWidget(submitButton);
+
+    this->setLayout(layout);
+}
+
+QSlider* MainWidget::addSlider(double value, double min, double max, std::string text) {
+    QSlider *slider = new QSlider(Qt::Horizontal);
+    slider->setFocusPolicy(Qt::StrongFocus);
+    slider->setSingleStep(1);
+    slider->setFixedSize(100,20);
+
+    slider->setValue(abs(100*value)/abs(max-min));
+
+    SliderParameters p = {min, max, value, text, slider};
+    this->sliders.append(p);
+    return slider;
+}
+
+void MainWidget::redrawMorel(){
+    SliderParameters s = this->sliders[0];
+    double val = this->sliders[0].slider->value()/100.0;
+    parameters.globalSizeFactor = s.min+val*abs(s.max-s.min);
+
+    this->geometries->initGeometry();
+    this->drawCube();
+}
 
 MainWidget::~MainWidget() {
     // Make sure the context is current when deleting the texture
@@ -21,6 +54,16 @@ MainWidget::~MainWidget() {
 void MainWidget::mousePressEvent(QMouseEvent *e) {
     // Save mouse press position
     mousePressPosition = QVector2D(e->localPos());
+}
+
+void MainWidget::wheelEvent(QWheelEvent *e){
+    if(e->delta() < 0){
+        zoomTranslation -= 0.5f;
+    }
+    else{
+        zoomTranslation += 0.5f;
+    }
+    update();
 }
 
 void MainWidget::mouseReleaseEvent(QMouseEvent *e) {
@@ -129,7 +172,7 @@ void MainWidget::paintGL() {
 void MainWidget::drawCube() {
     // Calculate model view transformation
     QMatrix4x4 matrix;
-    matrix.translate(0.0, 0, -10);
+    matrix.translate(0.0, 0, -10+zoomTranslation);
     matrix.rotate(rotation);
     matrix.scale(1.5,1.5,1.5);
     program.setUniformValue("mv", matrix);

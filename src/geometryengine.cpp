@@ -86,7 +86,12 @@ void GeometryEngine::initGeometry() {
     Morel morel1;
     IndicesStruct indicesStruct = morel1.getConvertedIndices();
     VerticesStruct verticesStruct = morel1.getConvertedVertices();
-
+    arrayBuf.bind();
+    arrayBuf.allocate(verticesStruct.vertices, verticesStruct.nbrVertices * static_cast<int>(sizeof(VertexData)));
+    indexBuf.bind();
+    indexBuf.allocate(indicesStruct.indices, indicesStruct.nbrIndices * static_cast<int>(sizeof(GLushort)));
+    delete[] verticesStruct.vertices;
+    delete[] indicesStruct.indices;
 
     IndicesStruct bezierIndicesStruct = morel1.getBezierIndices();
     VerticesStruct bezierVerticesStruct = morel1.getBezierVertices();
@@ -104,14 +109,6 @@ void GeometryEngine::initGeometry() {
     soilArrayBuf.allocate(soilVertices, nbrSoilVertices * static_cast<int>(sizeof(VertexData)));
     soilIndexBuf.bind();
     soilIndexBuf.allocate(soilIndices, nbrSoilIndices * static_cast<int>(sizeof(GLushort)));
-
-    // Transfer vertex data to VBO 0
-    arrayBuf.bind();
-    arrayBuf.allocate(verticesStruct.vertices, verticesStruct.nbrVertices * static_cast<int>(sizeof(VertexData)));
-
-    // Transfer index data to VBO 1
-    indexBuf.bind();
-    indexBuf.allocate(indicesStruct.indices, indicesStruct.nbrIndices * static_cast<int>(sizeof(GLushort)));
 }
 
 void GeometryEngine::drawGeometry(QOpenGLShaderProgram *program) {

@@ -20,10 +20,9 @@ public:
 
     void drawGeometry(QOpenGLShaderProgram *program);
     void drawCube(QOpenGLShaderProgram *program);
-
-private:
     void initGeometry();
 
+private:
     QOpenGLBuffer systemArrayBuf;
     QOpenGLBuffer systemIndexBuf;
 

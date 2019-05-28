@@ -12,6 +12,16 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLTexture>
 
+#include <QMouseEvent>
+#include <QWidget>
+#include <QLayout>
+#include <QPushButton>
+#include <QSlider>
+#include <string>
+#include <math.h>
+
+#include "tools/structs.h"
+
 class GeometryEngine;
 
 class MainWidget : public QOpenGLWidget, protected QOpenGLFunctions
@@ -22,9 +32,13 @@ public:
     explicit MainWidget(QWidget *parent = 0);
     ~MainWidget() override;
 
+public slots:
+    void redrawMorel(void);
+
 protected:
     void mousePressEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
+    void wheelEvent(QWheelEvent *e) override;
     void timerEvent(QTimerEvent *e) override;
 
     void initializeGL() override;
@@ -35,6 +49,8 @@ protected:
     void initTextures();
 
     void drawCube();
+
+    QSlider* addSlider(double value, double min, double max, std::string text);
 
 private:
     QBasicTimer timer;
@@ -47,6 +63,9 @@ private:
     QVector3D rotationAxis;
     qreal angularSpeed;
     QQuaternion rotation;
+
+    float zoomTranslation;
+    QVector<SliderParameters> sliders;
 };
 
 #endif // MAINWIDGET_H

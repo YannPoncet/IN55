@@ -19,7 +19,7 @@ vec3 PhongShading()
     vec3 MaterialDiffuse = fColor;
     vec3 LightDiffuse = vec3(1.0,1.0,1.0);
     vec3 MaterialSpecular = fColor;
-    vec3 LightSpecular = vec3(1.0,1.0,1.0);
+    vec3 LightSpecular = vec3(0.0,0.0,0.0);
 
     normalizeNormal = normalize(fNormal);
     normalizeEyeCoord = normalize(fPosition);

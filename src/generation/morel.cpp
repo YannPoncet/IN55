@@ -34,9 +34,16 @@ VerticesStruct Morel::getConvertedVertices() {
 }
 
 IndicesStruct Morel::getConvertedIndices() {
+    int size = this->indices.size();
+    GLushort* newArray = new GLushort[size];
+
+    for(int i=0; i<size; i++) {
+        newArray[i] = this->indices[i];
+    }
+
     IndicesStruct iStruct;
-    iStruct.indices = this->indices.data();
-    iStruct.nbrIndices = this->indices.size();
+    iStruct.indices = newArray;
+    iStruct.nbrIndices = size;
 
     return iStruct;
 }

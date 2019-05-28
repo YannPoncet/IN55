@@ -7,7 +7,7 @@ Cap::Cap(Bezier& b) : bezier(b) {
     this->applyPerlin(1, parameters.capGlobalPerlinPower);
     this->applyVoronoiTesselation();
     this->applyPerlin(10, parameters.capDetailsPerlinPower);
-    this->applyColorVariationWithPerlin(25,0.4);
+    this->applyColorVariationWithPerlin(50,0.3);
     this->applyBezierCurve();
 }
 
@@ -75,14 +75,7 @@ void Cap::applyColorVariationWithPerlin(int octaves, double factor) {
             float y = r*sin(theta)*sin(phi);
             float z = r*cos(phi);
 
-            float factorX = x/sX;
-            if (abs(sX) <= 0.01f) factorX = 1.0f;
-            float factorY = y/sY;
-            if (abs(sY) <= 0.01f) factorY = 1.0f;
-            float factorZ = z/sZ;
-            if (abs(sZ) <= 0.01f) factorZ = 1.0f;
-
-            v.color = QVector3D(v.color.x()*factorX, v.color.y()*factorY, v.color.z()*factorZ);
+            v.color = QVector3D(v.color.x()*r, v.color.y()*r, v.color.z()*r);
             if(v.color.x()<0) v.color.setX(0);
             if(v.color.y()<0) v.color.setY(0);
             if(v.color.z()<0) v.color.setZ(0);
@@ -121,6 +114,15 @@ void Cap::applyVoronoiTesselation() {
                 v.color = parameters.holesEdgesColor;
             }
             r = r*factor;
+
+            // We could replace this by a shadow shader
+            v.color = QVector3D(v.color.x()*pow(r,1.0/3.0), v.color.y()*pow(r,1.0/3.0), v.color.z()*pow(r,1.0/3.0));
+            if(v.color.x()<0) v.color.setX(0);
+            if(v.color.y()<0) v.color.setY(0);
+            if(v.color.z()<0) v.color.setZ(0);
+            if(v.color.x()>1) v.color.setX(1);
+            if(v.color.y()>1) v.color.setY(1);
+            if(v.color.z()>1) v.color.setZ(1);
 
             // We convert back to cartesian coordinates
             float x = r*cos(theta)*sin(phi);

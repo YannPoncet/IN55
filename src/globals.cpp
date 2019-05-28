@@ -30,10 +30,10 @@ Parameters parameters = {
     0.1,      // double radiusAtBaseVariance;
 
     //Mesh
-    20,     // GLushort stemNumberOfHorizontalDivisions
-    20,     // GLushort stemNumberOfVerticalDivisions
-    200,    // GLushort capNumberOfHorizontalDivisions
-    200,    // GLushort capNumberOfVerticalDivisions
+    50,     // GLushort stemNumberOfHorizontalDivisions
+    50,     // GLushort stemNumberOfVerticalDivisions
+    250,    // GLushort capNumberOfHorizontalDivisions
+    250,    // GLushort capNumberOfVerticalDivisions
 
     0.008,    // double curvatureVariance
     0.05,     // double anglePosVariance;
@@ -43,7 +43,7 @@ Parameters parameters = {
     //QVector3D(205.0f/255.0f, 122.0f/255.0f, 54.0f/255.0f), //QVector3D capColor;
     //QVector3D(225.0f/255.0f, 188.0f/255.0f, 144.0f/255.0f), //QVector3D holesEdgesColor;
     QVector3D(97.0f/255.0f, 76.0f/255.0f, 57.0f/255.0f), //QVector3D capColor;
-    QVector3D(109.0f/255.0f, 92.0f/255.0f, 76.0f/255.0f), //QVector3D holesEdgesColor;
+    QVector3D(110.0f/255.0f, 90.0f/255.0f, 72.0f/255.0f), //QVector3D holesEdgesColor;
     QVector3D(188.0f/255.0f, 158.0f/255.0f, 104.0f/255.0f), //QVector3D stemColor;
 
 
@@ -54,5 +54,5 @@ Parameters parameters = {
 
     //Voronoi
     1.0,        // double holesDensityFactor
-    0.8         // double holesEdgesWidthFactor
+    0.5         // double holesEdgesWidthFactor
 };

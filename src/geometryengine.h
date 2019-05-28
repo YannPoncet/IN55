@@ -21,6 +21,8 @@ public:
     void drawGeometry(QOpenGLShaderProgram *program);
     void drawCube(QOpenGLShaderProgram *program);
     void initGeometry();
+    void createAndBindMorels();
+    void drawMorels(QOpenGLShaderProgram *program);
 
 private:
     QOpenGLBuffer systemArrayBuf;

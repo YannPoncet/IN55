@@ -51,14 +51,21 @@ const int nbrSoilIndices = 36;
 GeometryEngine::GeometryEngine() : systemIndexBuf(QOpenGLBuffer::IndexBuffer), soilIndexBuf(QOpenGLBuffer::IndexBuffer), indexBuf(QOpenGLBuffer::IndexBuffer), bezierIndexBuf(QOpenGLBuffer::IndexBuffer)  {
     initializeOpenGLFunctions();
 
-    systemArrayBuf.create();
-    systemIndexBuf.create();
+    if(showSystem) {
+        systemArrayBuf.create();
+        systemIndexBuf.create();
+    }
 
-    soilArrayBuf.create();
-    soilIndexBuf.create();
+    if(showSoil) {
+        soilArrayBuf.create();
+        soilIndexBuf.create();
+    }
 
-    bezierArrayBuf.create();
-    bezierIndexBuf.create();
+    if(showBezier) {
+        bezierArrayBuf.create();
+        bezierIndexBuf.create();
+    }
+
 
     // Generate 2 VBOs
     arrayBuf.create();
@@ -69,20 +76,26 @@ GeometryEngine::GeometryEngine() : systemIndexBuf(QOpenGLBuffer::IndexBuffer), s
 }
 
 GeometryEngine::~GeometryEngine() {
-    systemArrayBuf.destroy();
-    systemIndexBuf.destroy();
+    if(showSystem) {
+        systemArrayBuf.destroy();
+        systemIndexBuf.destroy();
+    }
 
-    soilArrayBuf.destroy();
-    soilIndexBuf.destroy();
+    if(showSoil) {
+        soilArrayBuf.destroy();
+        soilIndexBuf.destroy();
+    }
 
-    bezierArrayBuf.destroy();
-    bezierIndexBuf.destroy();
+    if(showBezier) {
+        bezierArrayBuf.destroy();
+        bezierIndexBuf.destroy();
+    }
 
     arrayBuf.destroy();
     indexBuf.destroy();
 }
 
-void GeometryEngine::initGeometry() {
+void GeometryEngine::createAndBindMorels() {
     Morel morel1;
     IndicesStruct indicesStruct = morel1.getConvertedIndices();
     VerticesStruct verticesStruct = morel1.getConvertedVertices();
@@ -93,25 +106,35 @@ void GeometryEngine::initGeometry() {
     delete[] verticesStruct.vertices;
     delete[] indicesStruct.indices;
 
-    IndicesStruct bezierIndicesStruct = morel1.getBezierIndices();
-    VerticesStruct bezierVerticesStruct = morel1.getBezierVertices();
-    bezierArrayBuf.bind();
-    bezierArrayBuf.allocate(bezierVerticesStruct.vertices, bezierVerticesStruct.nbrVertices * static_cast<int>(sizeof(VertexData)));
-    bezierIndexBuf.bind();
-    bezierIndexBuf.allocate(bezierIndicesStruct.indices, bezierIndicesStruct.nbrIndices * static_cast<int>(sizeof(GLushort)));
-
-    systemArrayBuf.bind();
-    systemArrayBuf.allocate(systemVertices, nbrSystemVertices * static_cast<int>(sizeof(VertexData)));
-    systemIndexBuf.bind();
-    systemIndexBuf.allocate(systemIndices, nbrSystemIndices * static_cast<int>(sizeof(GLushort)));
-
-    soilArrayBuf.bind();
-    soilArrayBuf.allocate(soilVertices, nbrSoilVertices * static_cast<int>(sizeof(VertexData)));
-    soilIndexBuf.bind();
-    soilIndexBuf.allocate(soilIndices, nbrSoilIndices * static_cast<int>(sizeof(GLushort)));
+    if(showBezier) {
+        IndicesStruct bezierIndicesStruct = morel1.getBezierIndices();
+        VerticesStruct bezierVerticesStruct = morel1.getBezierVertices();
+        bezierArrayBuf.bind();
+        bezierArrayBuf.allocate(bezierVerticesStruct.vertices, bezierVerticesStruct.nbrVertices * static_cast<int>(sizeof(VertexData)));
+        bezierIndexBuf.bind();
+        bezierIndexBuf.allocate(bezierIndicesStruct.indices, bezierIndicesStruct.nbrIndices * static_cast<int>(sizeof(GLushort)));
+    }
 }
 
-void GeometryEngine::drawGeometry(QOpenGLShaderProgram *program) {
+void GeometryEngine::initGeometry() {
+    this->createAndBindMorels();
+
+    if(showSystem) {
+        systemArrayBuf.bind();
+        systemArrayBuf.allocate(systemVertices, nbrSystemVertices * static_cast<int>(sizeof(VertexData)));
+        systemIndexBuf.bind();
+        systemIndexBuf.allocate(systemIndices, nbrSystemIndices * static_cast<int>(sizeof(GLushort)));
+    }
+
+    if(showSoil) {
+        soilArrayBuf.bind();
+        soilArrayBuf.allocate(soilVertices, nbrSoilVertices * static_cast<int>(sizeof(VertexData)));
+        soilIndexBuf.bind();
+        soilIndexBuf.allocate(soilIndices, nbrSoilIndices * static_cast<int>(sizeof(GLushort)));
+    }
+}
+
+void GeometryEngine::drawMorels(QOpenGLShaderProgram *program) {
     // Tell OpenGL which VBOs to use
     arrayBuf.bind();
     indexBuf.bind();
@@ -132,51 +155,58 @@ void GeometryEngine::drawGeometry(QOpenGLShaderProgram *program) {
     program->enableAttributeArray(colorLocation);
     program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
 
-    //qDebug() << indexBuf.size();
-    //qDebug() << (arrayBuf.size()/sizeof(VertexData));
-
     // Draw cube geometry using indices from VBO 1
     glDrawElements(GL_TRIANGLES, indexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
     //glDrawElements(GL_POINTS, indexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
 
+    if(showBezier) {
+        bezierArrayBuf.bind();
+        bezierIndexBuf.bind();
+        offset = 0;
+        vertexLocation = program->attributeLocation("position");
+        program->enableAttributeArray(vertexLocation);
+        program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+        offset += sizeof(QVector3D);
+        colorLocation = program->attributeLocation("color");
+        program->enableAttributeArray(colorLocation);
+        program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+        glDrawElements(GL_LINE_STRIP, bezierIndexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
+        //glDrawElements(GL_POINTS, bezierIndexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
+    }
+}
 
-    systemArrayBuf.bind();
-    systemIndexBuf.bind();
-    offset = 0;
-    vertexLocation = program->attributeLocation("position");
-    program->enableAttributeArray(vertexLocation);
-    program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
-    offset += sizeof(QVector3D);
-    colorLocation = program->attributeLocation("color");
-    program->enableAttributeArray(colorLocation);
-    program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
-    glDrawElements(GL_LINES, systemIndexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
-    glDrawElements(GL_POINTS, systemIndexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
+void GeometryEngine::drawGeometry(QOpenGLShaderProgram *program) {
+    this->drawMorels(program);
 
+    quintptr offset = 0;
+    int vertexLocation = 0;
+    int colorLocation = 0;
+    if(showSystem) {
+        systemArrayBuf.bind();
+        systemIndexBuf.bind();
+        offset = 0;
+        vertexLocation = vertexLocation = program->attributeLocation("position");
+        program->enableAttributeArray(vertexLocation);
+        program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+        offset += sizeof(QVector3D);
+        colorLocation = program->attributeLocation("color");
+        program->enableAttributeArray(colorLocation);
+        program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+        glDrawElements(GL_LINES, systemIndexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
+        glDrawElements(GL_POINTS, systemIndexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
+    }
 
-    soilArrayBuf.bind();
-    soilIndexBuf.bind();
-    offset = 0;
-    vertexLocation = program->attributeLocation("position");
-    program->enableAttributeArray(vertexLocation);
-    program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
-    offset += sizeof(QVector3D);
-    colorLocation = program->attributeLocation("color");
-    program->enableAttributeArray(colorLocation);
-    program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
-    glDrawElements(GL_TRIANGLES, soilIndexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
-
-
-    bezierArrayBuf.bind();
-    bezierIndexBuf.bind();
-    offset = 0;
-    vertexLocation = program->attributeLocation("position");
-    program->enableAttributeArray(vertexLocation);
-    program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
-    offset += sizeof(QVector3D);
-    colorLocation = program->attributeLocation("color");
-    program->enableAttributeArray(colorLocation);
-    program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
-    glDrawElements(GL_LINE_STRIP, bezierIndexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
-    //glDrawElements(GL_POINTS, bezierIndexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
+    if(showSoil) {
+        soilArrayBuf.bind();
+        soilIndexBuf.bind();
+        offset = 0;
+        vertexLocation = program->attributeLocation("position");
+        program->enableAttributeArray(vertexLocation);
+        program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+        offset += sizeof(QVector3D);
+        colorLocation = program->attributeLocation("color");
+        program->enableAttributeArray(colorLocation);
+        program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+        glDrawElements(GL_TRIANGLES, soilIndexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
+    }
 }

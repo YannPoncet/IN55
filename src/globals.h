@@ -10,4 +10,9 @@ extern const int WINDOW_WIDTH;
 extern RandomGenerator randomGenerator;
 extern Parameters parameters;
 
+extern bool showBezier;
+extern bool showSystem;
+extern bool showSoil;
+
+
 #endif // GLOBALS_H

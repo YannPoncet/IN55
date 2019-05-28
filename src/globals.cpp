@@ -3,6 +3,10 @@
 const int WINDOW_HEIGHT = 1280;
 const int WINDOW_WIDTH = 720;
 
+bool showBezier = false;
+bool showSystem = false;
+bool showSoil = true;
+
 RandomGenerator randomGenerator;
 
 Parameters parameters = {

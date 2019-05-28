@@ -19,7 +19,7 @@ MainWidget::MainWidget(QWidget *parent) :
     layout->addWidget(this->addSlider(parameters.radiusAtBaseFactor, 1, 4));
 
     layout->addWidget(this->addLabel("Stem height part :"));
-    layout->addWidget(this->addSlider(parameters.stemHeightPart, 0.1, 1));
+    layout->addWidget(this->addSlider(parameters.stemHeightPart, 0.1, 0.9));
 
     layout->addWidget(this->addLabel("Perlin power :"));
     layout->addWidget(this->addSlider(parameters.capGlobalPerlinPower, 0.10, 2));
@@ -48,7 +48,7 @@ QSlider* MainWidget::addSlider(double value, double min, double max) {
     slider->setSingleStep(1);
     slider->setFixedSize(100,20);
 
-    slider->setValue(abs(100*value)/abs(max-min));
+    slider->setValue(100*abs(value-min)/abs(max-min));
 
     SliderParameters p = {min, max, value, slider};
     this->sliders.append(p);
@@ -56,17 +56,14 @@ QSlider* MainWidget::addSlider(double value, double min, double max) {
 }
 
 void MainWidget::redrawMorel(){
-    //qDebug() << this->sliders[3].value;
     for(auto&& s: this->sliders) {
         double sval = s.slider->value()/100.0;
-        //qDebug() << sval;
         s.value = s.min+sval*abs(s.max-s.min);
     }
 
     parameters.globalSizeFactor = this->sliders[0].value;
     parameters.curvatureVariance = this->sliders[1].value;
     parameters.radiusAtBaseFactor = this->sliders[2].value;
-    //qDebug() << this->sliders[3].value;
     parameters.stemHeightPart = this->sliders[3].value;
     parameters.capGlobalPerlinPower = this->sliders[4].value;
     parameters.holesDensityFactor = this->sliders[5].value;

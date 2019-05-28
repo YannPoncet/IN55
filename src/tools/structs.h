@@ -30,8 +30,7 @@ struct SliderParameters
 {
     double min;
     double max;
-    double baseValue;
-    std::string text;
+    double value;
     QSlider* slider;
 };
 

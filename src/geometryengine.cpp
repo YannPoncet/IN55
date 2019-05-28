@@ -20,14 +20,14 @@ const int nbrSystemIndices = 6;
 
 
 VertexData soilVertices[] = {
-    {QVector3D(-3.0f, 2.0f, 0.0f), QVector3D(1.0f, 1.0f, 1.0f)},
-    {QVector3D(3.0f, 2.0f, 0.0f), QVector3D(1.0f, 1.0f, 1.0f)},
-    {QVector3D(3.0f, -2.0f, 0.0f), QVector3D(1.0f, 1.0f, 1.0f)},
-    {QVector3D(-3.0f, -2.0f, 0.0f), QVector3D(1.0f, 1.0f, 1.0f)},
-    {QVector3D(-3.0f, 2.0f, -1.0f), QVector3D(1.0f, 1.0f, 1.0f)},
-    {QVector3D(3.0f, 2.0f, -1.0f), QVector3D(1.0f, 1.0f, 1.0f)},
-    {QVector3D(3.0f, -2.0f, -1.0f), QVector3D(1.0f, 1.0f, 1.0f)},
-    {QVector3D(-3.0f, -2.0f, -1.0f), QVector3D(1.0f, 1.0f, 1.0f)},
+    {QVector3D(-3.0f, 2.0f, 0.0f), QVector3D(41.0f/255.0, 74.0f/255.0, 28.0f/255.0)},
+    {QVector3D(3.0f, 2.0f, 0.0f), QVector3D(41.0f/255.0, 74.0f/255.0, 28.0f/255.0)},
+    {QVector3D(3.0f, -2.0f, 0.0f), QVector3D(41.0f/255.0, 74.0f/255.0, 28.0f/255.0)},
+    {QVector3D(-3.0f, -2.0f, 0.0f), QVector3D(41.0f/255.0, 74.0f/255.0, 28.0f/255.0)},
+    {QVector3D(-3.0f, 2.0f, -1.0f), QVector3D(46.0f/255.0, 29.0f/255.0, 18.0f/255.0)},
+    {QVector3D(3.0f, 2.0f, -1.0f), QVector3D(46.0f/255.0, 29.0f/255.0, 18.0f/255.0)},
+    {QVector3D(3.0f, -2.0f, -1.0f), QVector3D(46.0f/255.0, 29.0f/255.0, 18.0f/255.0)},
+    {QVector3D(-3.0f, -2.0f, -1.0f), QVector3D(46.0f/255.0, 29.0f/255.0, 18.0f/255.0)},
 };
 const int nbrSoilVertices = 8;
 

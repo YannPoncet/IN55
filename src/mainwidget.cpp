@@ -9,19 +9,40 @@ MainWidget::MainWidget(QWidget *parent) :
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
 
-    double min1 = 0.1, max1 = 2;
-    QSlider* slider = this->addSlider(parameters.globalSizeFactor, min1, max1, "Global size :");
-    layout->addWidget(slider);
+    layout->addWidget(this->addLabel("Global size :"));
+    layout->addWidget(this->addSlider(parameters.globalSizeFactor, 0.1, 2));
+
+    layout->addWidget(this->addLabel("Curvature variance :"));
+    layout->addWidget(this->addSlider(parameters.curvatureVariance, 0.008, 0.5));
+
+    layout->addWidget(this->addLabel("Radius at base :"));
+    layout->addWidget(this->addSlider(parameters.radiusAtBaseFactor, 1, 4));
+
+    layout->addWidget(this->addLabel("Stem height part :"));
+    layout->addWidget(this->addSlider(parameters.stemHeightPart, 0.1, 1));
+
+    layout->addWidget(this->addLabel("Perlin power :"));
+    layout->addWidget(this->addSlider(parameters.capGlobalPerlinPower, 0.10, 2));
+
+    layout->addWidget(this->addLabel("Holes density :"));
+    layout->addWidget(this->addSlider(parameters.holesDensityFactor, 0.10, 2));
 
     QPushButton *submitButton = new QPushButton("Regenerate \n a morel", this);
     submitButton->setFixedSize(100,50);
     QObject::connect(submitButton, SIGNAL(clicked()), this, SLOT(redrawMorel()));
-    layout->addWidget(submitButton);
+    layout->addWidget(submitButton,0,Qt::AlignTop);
 
     this->setLayout(layout);
 }
 
-QSlider* MainWidget::addSlider(double value, double min, double max, std::string text) {
+QLabel* MainWidget::addLabel(QString text) {
+    QLabel *label = new QLabel(this);
+    label->setText(text);
+    label->setFixedSize(100,20);
+    return label;
+}
+
+QSlider* MainWidget::addSlider(double value, double min, double max) {
     QSlider *slider = new QSlider(Qt::Horizontal);
     slider->setFocusPolicy(Qt::StrongFocus);
     slider->setSingleStep(1);
@@ -29,15 +50,26 @@ QSlider* MainWidget::addSlider(double value, double min, double max, std::string
 
     slider->setValue(abs(100*value)/abs(max-min));
 
-    SliderParameters p = {min, max, value, text, slider};
+    SliderParameters p = {min, max, value, slider};
     this->sliders.append(p);
     return slider;
 }
 
 void MainWidget::redrawMorel(){
-    SliderParameters s = this->sliders[0];
-    double val = this->sliders[0].slider->value()/100.0;
-    parameters.globalSizeFactor = s.min+val*abs(s.max-s.min);
+    //qDebug() << this->sliders[3].value;
+    for(auto&& s: this->sliders) {
+        double sval = s.slider->value()/100.0;
+        //qDebug() << sval;
+        s.value = s.min+sval*abs(s.max-s.min);
+    }
+
+    parameters.globalSizeFactor = this->sliders[0].value;
+    parameters.curvatureVariance = this->sliders[1].value;
+    parameters.radiusAtBaseFactor = this->sliders[2].value;
+    //qDebug() << this->sliders[3].value;
+    parameters.stemHeightPart = this->sliders[3].value;
+    parameters.capGlobalPerlinPower = this->sliders[4].value;
+    parameters.holesDensityFactor = this->sliders[5].value;
 
     this->geometries->initGeometry();
     this->drawCube();
@@ -172,7 +204,7 @@ void MainWidget::paintGL() {
 void MainWidget::drawCube() {
     // Calculate model view transformation
     QMatrix4x4 matrix;
-    matrix.translate(0.0, 0, -10+zoomTranslation);
+    matrix.translate(0, 0, -10+zoomTranslation);
     matrix.rotate(rotation);
     matrix.scale(1.5,1.5,1.5);
     program.setUniformValue("mv", matrix);

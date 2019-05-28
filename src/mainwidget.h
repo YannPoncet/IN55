@@ -17,6 +17,7 @@
 #include <QLayout>
 #include <QPushButton>
 #include <QSlider>
+#include <QLabel>
 #include <string>
 #include <math.h>
 
@@ -50,7 +51,8 @@ protected:
 
     void drawCube();
 
-    QSlider* addSlider(double value, double min, double max, std::string text);
+    QSlider* addSlider(double value, double min, double max);
+    QLabel* addLabel(QString text);
 
 private:
     QBasicTimer timer;

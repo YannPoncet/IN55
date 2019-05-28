@@ -7,7 +7,7 @@ Cap::Cap(Bezier& b) : bezier(b) {
     this->applyPerlin(1, parameters.capGlobalPerlinPower);
     this->applyVoronoiTesselation();
     this->applyPerlin(10, parameters.capDetailsPerlinPower);
-    this->applyColorVariationWithPerlin(50,0.3);
+    //this->applyColorVariationWithPerlin(50,0.3);
     this->applyBezierCurve();
 }
 
@@ -116,7 +116,7 @@ void Cap::applyVoronoiTesselation() {
             r = r*factor;
 
             // We could replace this by a shadow shader
-            v.color = QVector3D(v.color.x()*pow(r,1.0/3.0), v.color.y()*pow(r,1.0/3.0), v.color.z()*pow(r,1.0/3.0));
+            //v.color = QVector3D(v.color.x()*pow(r,1.0/3.0), v.color.y()*pow(r,1.0/3.0), v.color.z()*pow(r,1.0/3.0));
             if(v.color.x()<0) v.color.setX(0);
             if(v.color.y()<0) v.color.setY(0);
             if(v.color.z()<0) v.color.setZ(0);

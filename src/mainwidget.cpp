@@ -205,7 +205,7 @@ void MainWidget::drawCube() {
     matrix.rotate(rotation);
     matrix.scale(1.5,1.5,1.5);
     program.setUniformValue("mv", matrix);
-    QMatrix4x4 normal = matrix.inverted().transposed();
+    QMatrix4x4 normal = (matrix.inverted()).transposed();
     program.setUniformValue("nm", normal);
     // Set modelview-projection matrix
     program.setUniformValue("mvp", projection * matrix);

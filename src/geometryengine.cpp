@@ -155,6 +155,12 @@ void GeometryEngine::drawMorels(QOpenGLShaderProgram *program) {
     program->enableAttributeArray(colorLocation);
     program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
 
+    offset += sizeof(QVector3D);
+
+    int normalLocation = program->attributeLocation("normal");
+    program->enableAttributeArray(normalLocation);
+    program->setAttributeBuffer(normalLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+
     // Draw cube geometry using indices from VBO 1
     glDrawElements(GL_TRIANGLES, indexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
     //glDrawElements(GL_POINTS, indexBuf.size(), GL_UNSIGNED_SHORT, nullptr);

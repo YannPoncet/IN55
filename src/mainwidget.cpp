@@ -51,6 +51,7 @@ MainWidget::MainWidget(QWidget *parent) :
 
 
     this->setLayout(layout);
+    this->withAngularSpeed = false;
 }
 
 void MainWidget::setLight(bool state) {
@@ -110,7 +111,11 @@ MainWidget::~MainWidget() {
 
 void MainWidget::mousePressEvent(QMouseEvent *e) {
     // Save mouse press position
-    mousePressPosition = QVector2D(e->localPos());
+    if(this->withAngularSpeed) {
+        mousePressPosition = QVector2D(e->localPos());
+    } else {
+        previousMousePosition = QVector2D(0.0, 0.0);
+    }
 }
 
 void MainWidget::wheelEvent(QWheelEvent *e){
@@ -123,22 +128,46 @@ void MainWidget::wheelEvent(QWheelEvent *e){
     update();
 }
 
+
+void MainWidget::mouseMoveEvent(QMouseEvent *e) {
+    if(!this->withAngularSpeed) {
+        QVector2D prev = previousMousePosition;
+        QVector2D diff = QVector2D(e->localPos()) - previousMousePosition;
+        previousMousePosition = QVector2D(e->localPos());
+        if(prev == QVector2D(0.0f,0.0f)) return;
+
+        // Rotation axis is perpendicular to the mouse position difference
+        // vector
+        QVector3D n = QVector3D(diff.y(), diff.x(), 0.0).normalized();
+
+        // Accelerate angular speed relative to the length of the mouse sweep
+        qreal acc = diff.length() / 100.0;
+
+        // Update rotation
+        rotationAxis = (rotationAxis * angularSpeed + n * acc).normalized();
+        rotation = QQuaternion::fromAxisAndAngle(rotationAxis, acc*50) * rotation;
+        update();
+    }
+}
+
 void MainWidget::mouseReleaseEvent(QMouseEvent *e) {
-    // Mouse release position - mouse press position
-    QVector2D diff = QVector2D(e->localPos()) - mousePressPosition;
+    if(this->withAngularSpeed) {
+        // Mouse release position - mouse press position
+        QVector2D diff = QVector2D(e->localPos()) - mousePressPosition;
 
-    // Rotation axis is perpendicular to the mouse position difference
-    // vector
-    QVector3D n = QVector3D(diff.y(), diff.x(), 0.0).normalized();
+        // Rotation axis is perpendicular to the mouse position difference
+        // vector
+        QVector3D n = QVector3D(diff.y(), diff.x(), 0.0).normalized();
 
-    // Accelerate angular speed relative to the length of the mouse sweep
-    qreal acc = diff.length() / 100.0;
+        // Accelerate angular speed relative to the length of the mouse sweep
+        qreal acc = diff.length() / 100.0;
 
-    // Calculate new rotation axis as weighted sum
-    rotationAxis = (rotationAxis * angularSpeed + n * acc).normalized();
+        // Calculate new rotation axis as weighted sum
+        rotationAxis = (rotationAxis * angularSpeed + n * acc).normalized();
 
-    // Increase angular speed
-    angularSpeed += acc;
+        // Increase angular speed
+        angularSpeed += acc;
+    }
 }
 
 void MainWidget::timerEvent(QTimerEvent *)

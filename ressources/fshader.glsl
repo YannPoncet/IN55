@@ -19,7 +19,8 @@ vec3 PhongShading()
     vec3 MaterialDiffuse = fColor;
     vec3 LightDiffuse = vec3(1.0,1.0,1.0);
     vec3 MaterialSpecular = fColor;
-    vec3 LightSpecular = vec3(0.0,0.0,0.0);
+    vec3 LightSpecular = vec3(1.0,1.0,1.0);
+    float MaterialShininess = 255.0;
 
     normalizeNormal = normalize(fNormal);
     normalizeEyeCoord = normalize(fPosition);
@@ -31,7 +32,7 @@ vec3 PhongShading()
     // Specular Intensity
     V = -normalizeEyeCoord; // Viewer's vector
     R = reflect(-normalizeLightVec, normalizeNormal);
-    sIntensity = pow(max(0.0,dot(R,V)), 0);
+    sIntensity = pow(max(0.0,dot(R,V)), MaterialShininess);
     ambient = MaterialAmbient * LightAmbient;
     diffuse = MaterialDiffuse * LightDiffuse;
     specular = MaterialSpecular * LightSpecular;

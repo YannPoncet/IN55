@@ -147,7 +147,7 @@ double Voronoi::factorFunction(double x) {
 
 
 int Voronoi::randgen(int max) {
-    return randomGenerator.getRand(0, max);
+    return randomGenerator.getFastRandom(0, max);
 }
 
 

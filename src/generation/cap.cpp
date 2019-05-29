@@ -86,7 +86,7 @@ void Cap::applyVoronoiTesselation() {
     double fMin = 0.1;
     double densityFactor = parameters.holesDensityFactor;
     double widthFactor = parameters.holesEdgesWidthFactor;
-    Voronoi voronoiGenerator(1000, 1000, 400*densityFactor, 15*widthFactor, fMax, fMin);
+    Voronoi voronoiGenerator(1000, 1000, 300*densityFactor, 15*widthFactor, fMax, fMin);
 
     float h = parameters.height*(1.0f-parameters.stemHeightPart);
     for(auto&& v: this->vertices) {

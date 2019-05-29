@@ -46,24 +46,24 @@ Parameters parameters = {
 
     //Colors
     {   //Blond morel
-        {   QVector3D(205.0f/255.0f, 122.0f/255.0f, 54.0f/255.0f), //capColor
-            QVector3D(241.0f/255.0f, 162.0f/255.0f, 97.0f/255.0f), //holesEdgesColor
+        {   QVector3D(131.0f/255.0f, 109.0f/255.0f, 52.0f/255.0f), //capColor
+            QVector3D(216.0f/255.0f, 191.0f/255.0f, 134.0f/255.0f), //holesEdgesColor
             QVector3D(188.0f/255.0f, 158.0f/255.0f, 104.0f/255.0f) }, // stemColor
 
         //Brown morel
-        {   QVector3D(97.0f/255.0f, 76.0f/255.0f, 57.0f/255.0f), //capColor
-            QVector3D(110.0f/255.0f, 90.0f/255.0f, 72.0f/255.0f), //holesEdgesColor
-            QVector3D(188.0f/255.0f, 158.0f/255.0f, 104.0f/255.0f) }, // stemColor
+        {   QVector3D(80.0f/255.0f, 58.0f/255.0f, 44.0f/255.0f), //capColor
+            QVector3D(131.0f/255.0f, 91.0f/255.0f, 66.0f/255.0f), //holesEdgesColor
+            QVector3D(200.0f/255.0f, 176.0f/255.0f, 116.0f/255.0f) }, // stemColor
 
         //Black morel
-        {   QVector3D(17.0f/255.0f, 17.0f/255.0f, 17.0f/255.0f), //capColor
-            QVector3D(40.0f/255.0f, 40.0f/255.0f, 40.0f/255.0f), //holesEdgesColor
-            QVector3D(199.0f/255.0f, 185.0f/255.0f, 172.0f/255.0f) }, // stemColor
+        {   QVector3D(48.0f/255.0f, 40.0f/255.0f, 29.0f/255.0f), //capColor
+            QVector3D(145.0f/255.0f, 133.0f/255.0f, 109.0f/255.0f), //holesEdgesColor
+            QVector3D(181.0f/255.0f, 164.0f/255.0f, 118.0f/255.0f) }, // stemColor
 
         //Gray morel
-        {   QVector3D(67.0f/255.0f, 64.0f/255.0f, 71.0f/255.0f), //capColor
-            QVector3D(120.0f/255.0f, 120.0f/255.0f, 130.0f/255.0f), //holesEdgesColor
-            QVector3D(192.0f/255.0f, 201.0f/255.0f, 207.0f/255.0f) } // stemColor
+        {   QVector3D(159.0f/255.0f, 142.0f/255.0f, 117.0f/255.0f), //capColor
+            QVector3D(183.0f/255.0f, 179.0f/255.0f, 176.0f/255.0f), //holesEdgesColor
+            QVector3D(188.0f/255.0f, 158.0f/255.0f, 104.0f/255.0f) }, // stemColor
     },
     0, // choosenSet -> is set in GeometryEngine::createAndBindMorels
 

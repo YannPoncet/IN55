@@ -7,6 +7,8 @@ bool showBezier = false;
 bool showSystem = false;
 bool showSoil = true;
 
+bool lightsEnabled[5] = {0,0,0,0,1}; //Only light on camera enabled by default
+
 RandomGenerator randomGenerator;
 
 Parameters parameters = {

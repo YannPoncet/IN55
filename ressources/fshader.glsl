@@ -1,10 +1,13 @@
 #version 330
+#define N 5
 
 in vec3 fColor;
 in vec3 fPosition;
 in vec3 fNormal;
 
 uniform mat4 mv;
+uniform int nbLights;
+uniform vec3 LightPositions[int(N)];
 
 out vec4 fragColor;
 
@@ -13,12 +16,6 @@ float sIntensity, cosAngle;
 
 vec3 PhongShading(int i)
 {
-    vec3 LightPositions[3];
-    LightPositions[0] = vec3(mv*vec4(-3.0f, 2.0f, 3.0f,1.0f));
-    //LightPositions[1] = vec3(mv*vec4(3.0f, 2.0f, 3.0f,1.0f));
-    LightPositions[1] = vec3(mv*vec4(3.0f, -2.0f, 3.0f,1.0f));
-    //LightPositions[3] = vec3(mv*vec4(-3.0f, -2.0f, 3.0f,1.0f));
-    LightPositions[2] = vec3(0.0,0.0,0.0); //Camera light
     vec3 LightPosition = LightPositions[i];
     vec3 MaterialAmbient = fColor;
     vec3 LightAmbient = vec3(0.0,0.0,0.0);
@@ -49,7 +46,7 @@ vec3 PhongShading(int i)
 void main()
 {
     vec4 tmpColor = vec4(0.0);
-    for(int i=0; i<3; i++)
+    for(int i=0; i<nbLights; i++)
         tmpColor += vec4(PhongShading(i), 1.0 );
     fragColor = tmpColor;
 }

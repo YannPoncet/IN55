@@ -14,5 +14,6 @@ extern bool showBezier;
 extern bool showSystem;
 extern bool showSoil;
 
+extern bool lightsEnabled[5];
 
 #endif // GLOBALS_H

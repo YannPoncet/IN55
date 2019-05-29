@@ -43,7 +43,6 @@ MainWidget::MainWidget(QWidget *parent) :
         if(lightsEnabled[i]) {
             c->setCheckState(Qt::Checked);
         }
-        qDebug() << c;
         QObject::connect(c, SIGNAL(clicked(bool)), this, SLOT(setLight(bool)));
         c->setFixedSize(15,15);
         groupBoxLayout->addWidget(c);
@@ -61,6 +60,7 @@ void MainWidget::setLight(bool state) {
             lightsEnabled[i] = state;
         }
     }
+    update();
 }
 
 QLabel* MainWidget::addLabel(QString text) {

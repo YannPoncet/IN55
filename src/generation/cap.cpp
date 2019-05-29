@@ -1,7 +1,6 @@
 #include "cap.h"
 
 Cap::Cap(Bezier& b) : bezier(b) {
-    this->color = QVector3D(0.87f, 0.60f, 0.38f);
     this->generateBaseEllipsoid();
     this->widenCapRealisticaly();
     this->applyPerlin(1, parameters.capGlobalPerlinPower);
@@ -106,7 +105,7 @@ void Cap::applyVoronoiTesselation() {
             // We compute the noise and apply it to the radius
             double factor = voronoiGenerator.getFactorAt((theta+M_PI)/(2*M_PI), (phi+M_PI)/(2*M_PI));
             if(abs(factor-fMax) <= 0.001f) {
-                v.color = parameters.holesEdgesColor;
+                v.color = parameters.colorSets[parameters.choosenSet].holesEdgesColor;
             }
             r = r*factor;
 
@@ -175,7 +174,7 @@ void Cap::generateBaseEllipsoid() {
             v.id = i*n+j;
             v.setPosition(x,y,z);
             //qDebug() << v.z();
-            v.color = parameters.capColor;
+            v.color = parameters.colorSets[parameters.choosenSet].capColor;
             //v.color = QVector3D(0.6f, 0.2f, z/height);
             v.layer = i;
             v.baseAngle = angle;
@@ -189,7 +188,7 @@ void Cap::generateBaseEllipsoid() {
     v.id = n*k;
     v.setPosition(0.0f, 0.0f, height);
     //qDebug() << v.x() << v.y() << v.z();
-    v.color = parameters.capColor;
+    v.color = parameters.colorSets[parameters.choosenSet].capColor;
     //v.color = QVector3D(0.6f, 0.2f, 1.0f);
     v.layer = k;
     v.baseAngle = 0;

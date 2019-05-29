@@ -14,7 +14,6 @@
 #include "../tools/meshvertex.h"
 #include "../tools/structs.h"
 
-
 class Morel
 {
 public:

@@ -44,6 +44,13 @@ struct SliderParameters
     QSlider* slider;
 };
 
+struct ColorSet
+{
+    QVector3D capColor;
+    QVector3D holesEdgesColor;
+    QVector3D stemColor;
+};
+
 
 struct Parameters
 {
@@ -77,15 +84,15 @@ struct Parameters
     GLushort capNumberOfHorizontalDivisions;
     GLushort capNumberOfVerticalDivisions;
 
+
     //Morel curvature parameters (Bezier)
     double curvatureVariance;
     double anglePosVariance;
 
 
     //Colors
-    QVector3D capColor;
-    QVector3D holesEdgesColor;
-    QVector3D stemColor;
+    QVector<ColorSet> colorSets;
+    int choosenSet;
 
 
     //Perlin parameters

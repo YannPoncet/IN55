@@ -49,6 +49,8 @@ GeometryEngine::~GeometryEngine() {
 }
 
 void GeometryEngine::createAndBindMorels() {
+    parameters.choosenSet = randomGenerator.getRand(0, parameters.colorSets.size()-1);
+
     Morel morel1;
     IndicesStruct indicesStruct = morel1.getConvertedIndices();
     VerticesStruct verticesStruct = morel1.getConvertedVertices();

@@ -1,7 +1,6 @@
 #include "stem.h"
 
 Stem::Stem(Bezier& b) : bezier(b) {
-    this->color = QVector3D(0.87f, 0.60f, 0.38f);
     this->generateBaseCylinder();
     this->widenStemBase();
     this->applyPerlin(1,1);
@@ -110,7 +109,7 @@ void Stem::generateBaseCylinder() {
             v.id = i*n+j;
             v.setPosition(x, y, z);
             //v.color = QVector3D(0.2f, 0.6f, -z);
-            v.color = parameters.stemColor;
+            v.color = parameters.colorSets[parameters.choosenSet].stemColor;
             v.layer = i;
             v.baseAngle = angle;
             v.baseHeight = z;

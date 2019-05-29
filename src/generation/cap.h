@@ -22,7 +22,6 @@ public:
     QVector<MeshVertex>* getVertices();
 private:
     QVector<MeshVertex> vertices;
-    QVector3D color;
     Bezier& bezier;
 
     void generateBaseEllipsoid();

@@ -13,7 +13,7 @@ float sIntensity, cosAngle;
 
 vec3 PhongShading()
 {
-    vec3 LightPosition = vec3(mv*vec4(0,0,5,1));
+    vec3 LightPosition = vec3(0,0,0);
     vec3 MaterialAmbient = fColor;
     vec3 LightAmbient = vec3(0.1,0.1,0.1);
     vec3 MaterialDiffuse = fColor;

@@ -6,13 +6,23 @@
 #include <string>
 #include <QSlider>
 
+struct VertexDataWithoutNormal
+{
+    QVector3D position;
+    QVector3D color;
+};
+struct VerticesStructWithoutNormal
+{
+    VertexDataWithoutNormal* vertices;
+    int nbrVertices;
+};
+
 struct VertexData
 {
     QVector3D position;
     QVector3D color;
     QVector3D normal;
 };
-
 struct VerticesStruct
 {
     VertexData* vertices;

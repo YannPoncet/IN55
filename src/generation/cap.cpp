@@ -70,11 +70,6 @@ void Cap::applyColorVariationWithPerlin(int octaves, double factor) {
             double noise = perlinNoise.octaveNoise(theta, phi, octaves);
             r = r+r*noise*factor;
 
-            // We convert back to cartesian coordinates
-            float x = r*cos(theta)*sin(phi);
-            float y = r*sin(theta)*sin(phi);
-            float z = r*cos(phi);
-
             v.color = QVector3D(v.color.x()*r, v.color.y()*r, v.color.z()*r);
             if(v.color.x()<0) v.color.setX(0);
             if(v.color.y()<0) v.color.setY(0);

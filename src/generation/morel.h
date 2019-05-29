@@ -24,7 +24,7 @@ public:
     void updateIndices();
     void rescaleWithGlobalFactor();
 
-    VerticesStruct getBezierVertices();
+    VerticesStructWithoutNormal getBezierVertices();
     IndicesStruct getBezierIndices();
 
 private:

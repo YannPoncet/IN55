@@ -14,7 +14,6 @@
 #include "../tools/meshvertex.h"
 #include "../tools/structs.h"
 
-
 class Morel
 {
 public:
@@ -24,7 +23,7 @@ public:
     void updateIndices();
     void rescaleWithGlobalFactor();
 
-    VerticesStruct getBezierVertices();
+    VerticesStructWithoutNormal getBezierVertices();
     IndicesStruct getBezierIndices();
 
 private:

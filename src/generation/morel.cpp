@@ -66,18 +66,18 @@ void Morel::rescaleWithGlobalFactor() {
     }
 }
 
-VerticesStruct Morel::getBezierVertices() {
+VerticesStructWithoutNormal Morel::getBezierVertices() {
     int n = 50;
-    VertexData* newArray = new VertexData[n];
+    VertexDataWithoutNormal* newArray = new VertexDataWithoutNormal[n];
 
     for(int i=0; i<n; i++) {
         float t = ((i+1)*1.0f)/(n*1.0f);
         QVector3D p = this->bezier.getBezierPoint(t, parameters.height, parameters.stemHeightPart);
-        VertexData vData = {p*parameters.globalSizeFactor, QVector3D(1.0f,0.0f,0.3f)};
+        VertexDataWithoutNormal vData = {p*parameters.globalSizeFactor, QVector3D(1.0f,0.0f,0.3f)};
         newArray[i] = vData;
     }
 
-    VerticesStruct vStruct;
+    VerticesStructWithoutNormal vStruct;
     vStruct.vertices = newArray;
     vStruct.nbrVertices = n;
 

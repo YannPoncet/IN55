@@ -6,13 +6,23 @@
 #include <string>
 #include <QSlider>
 
+struct VertexDataWithoutNormal
+{
+    QVector3D position;
+    QVector3D color;
+};
+struct VerticesStructWithoutNormal
+{
+    VertexDataWithoutNormal* vertices;
+    int nbrVertices;
+};
+
 struct VertexData
 {
     QVector3D position;
     QVector3D color;
     QVector3D normal;
 };
-
 struct VerticesStruct
 {
     VertexData* vertices;
@@ -32,6 +42,13 @@ struct SliderParameters
     double max;
     double value;
     QSlider* slider;
+};
+
+struct ColorSet
+{
+    QVector3D capColor;
+    QVector3D holesEdgesColor;
+    QVector3D stemColor;
 };
 
 
@@ -67,15 +84,15 @@ struct Parameters
     GLushort capNumberOfHorizontalDivisions;
     GLushort capNumberOfVerticalDivisions;
 
+
     //Morel curvature parameters (Bezier)
     double curvatureVariance;
     double anglePosVariance;
 
 
     //Colors
-    QVector3D capColor;
-    QVector3D holesEdgesColor;
-    QVector3D stemColor;
+    QVector<ColorSet> colorSets;
+    int choosenSet;
 
 
     //Perlin parameters

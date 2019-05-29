@@ -7,8 +7,9 @@ bool showBezier = false;
 bool showSystem = false;
 bool showSoil = true;
 
-RandomGenerator randomGenerator;
+QVector<bool> lightsEnabled = {0,0,0,0,1}; //Only light on camera enabled by default
 
+RandomGenerator randomGenerator;
 Parameters parameters = {
     //Size
     1,      // double globalSizeFactor
@@ -44,11 +45,27 @@ Parameters parameters = {
 
 
     //Colors
-    //QVector3D(205.0f/255.0f, 122.0f/255.0f, 54.0f/255.0f), //QVector3D capColor;
-    //QVector3D(225.0f/255.0f, 188.0f/255.0f, 144.0f/255.0f), //QVector3D holesEdgesColor;
-    QVector3D(97.0f/255.0f, 76.0f/255.0f, 57.0f/255.0f), //QVector3D capColor;
-    QVector3D(110.0f/255.0f, 90.0f/255.0f, 72.0f/255.0f), //QVector3D holesEdgesColor;
-    QVector3D(188.0f/255.0f, 158.0f/255.0f, 104.0f/255.0f), //QVector3D stemColor;
+    {   //Blond morel
+        {   QVector3D(205.0f/255.0f, 122.0f/255.0f, 54.0f/255.0f), //capColor
+            QVector3D(241.0f/255.0f, 162.0f/255.0f, 97.0f/255.0f), //holesEdgesColor
+            QVector3D(188.0f/255.0f, 158.0f/255.0f, 104.0f/255.0f) }, // stemColor
+
+        //Brown morel
+        {   QVector3D(97.0f/255.0f, 76.0f/255.0f, 57.0f/255.0f), //capColor
+            QVector3D(110.0f/255.0f, 90.0f/255.0f, 72.0f/255.0f), //holesEdgesColor
+            QVector3D(188.0f/255.0f, 158.0f/255.0f, 104.0f/255.0f) }, // stemColor
+
+        //Black morel
+        {   QVector3D(17.0f/255.0f, 17.0f/255.0f, 17.0f/255.0f), //capColor
+            QVector3D(40.0f/255.0f, 40.0f/255.0f, 40.0f/255.0f), //holesEdgesColor
+            QVector3D(199.0f/255.0f, 185.0f/255.0f, 172.0f/255.0f) }, // stemColor
+
+        //Gray morel
+        {   QVector3D(67.0f/255.0f, 64.0f/255.0f, 71.0f/255.0f), //capColor
+            QVector3D(120.0f/255.0f, 120.0f/255.0f, 130.0f/255.0f), //holesEdgesColor
+            QVector3D(192.0f/255.0f, 201.0f/255.0f, 207.0f/255.0f) } // stemColor
+    },
+    0, // choosenSet -> is set in GeometryEngine::createAndBindMorels
 
 
     //Perlin

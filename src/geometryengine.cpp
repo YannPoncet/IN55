@@ -1,52 +1,5 @@
 #include "geometryengine.h"
 
-VertexData systemVertices[] = {
-    {QVector3D(0.0f, 0.0f, 0.0f), QVector3D(1.0f, 0.0f, 0.0f)}, // x is red
-    {QVector3D(5.0f, 0.0f, 0.0f), QVector3D(1.0f, 0.0f, 0.0f)},
-    {QVector3D(0.0f, 0.0f, 0.0f), QVector3D(0.0f, 1.0f, 0.0f)}, // y is green
-    {QVector3D(0.0f, 5.0f, 0.0f), QVector3D(0.0f, 1.0f, 0.0f)},
-    {QVector3D(0.0f, 0.0f, -5.0f), QVector3D(0.0f, 0.0f, 1.0f)}, // z is blue
-    {QVector3D(0.0f, 0.0f, 5.0f), QVector3D(0.0f, 0.0f, 1.0f)},
-};
-const int nbrSystemVertices = 6;
-
-GLushort systemIndices[] = {
-    0,1,
-    2,3,
-    4,5
-};
-const int nbrSystemIndices = 6;
-
-
-
-VertexData soilVertices[] = {
-    {QVector3D(-3.0f, 2.0f, 0.0f), QVector3D(41.0f/255.0, 74.0f/255.0, 28.0f/255.0)},
-    {QVector3D(3.0f, 2.0f, 0.0f), QVector3D(41.0f/255.0, 74.0f/255.0, 28.0f/255.0)},
-    {QVector3D(3.0f, -2.0f, 0.0f), QVector3D(41.0f/255.0, 74.0f/255.0, 28.0f/255.0)},
-    {QVector3D(-3.0f, -2.0f, 0.0f), QVector3D(41.0f/255.0, 74.0f/255.0, 28.0f/255.0)},
-    {QVector3D(-3.0f, 2.0f, -1.0f), QVector3D(46.0f/255.0, 29.0f/255.0, 18.0f/255.0)},
-    {QVector3D(3.0f, 2.0f, -1.0f), QVector3D(46.0f/255.0, 29.0f/255.0, 18.0f/255.0)},
-    {QVector3D(3.0f, -2.0f, -1.0f), QVector3D(46.0f/255.0, 29.0f/255.0, 18.0f/255.0)},
-    {QVector3D(-3.0f, -2.0f, -1.0f), QVector3D(46.0f/255.0, 29.0f/255.0, 18.0f/255.0)},
-};
-const int nbrSoilVertices = 8;
-
-GLushort soilIndices[] = {
-    0,1,2,
-    2,3,0,
-    3,2,6,
-    7,6,3,
-    5,1,2,
-    2,6,5,
-    1,0,4,
-    4,5,1,
-    0,3,4,
-    4,3,7,
-    4,5,7,
-    7,5,6
-};
-const int nbrSoilIndices = 36;
-
 
 GeometryEngine::GeometryEngine() : systemIndexBuf(QOpenGLBuffer::IndexBuffer), soilIndexBuf(QOpenGLBuffer::IndexBuffer), indexBuf(QOpenGLBuffer::IndexBuffer), bezierIndexBuf(QOpenGLBuffer::IndexBuffer)  {
     initializeOpenGLFunctions();
@@ -96,6 +49,8 @@ GeometryEngine::~GeometryEngine() {
 }
 
 void GeometryEngine::createAndBindMorels() {
+    parameters.choosenSet = randomGenerator.getRand(0, parameters.colorSets.size()-1);
+
     Morel morel1;
     IndicesStruct indicesStruct = morel1.getConvertedIndices();
     VerticesStruct verticesStruct = morel1.getConvertedVertices();
@@ -108,9 +63,9 @@ void GeometryEngine::createAndBindMorels() {
 
     if(showBezier) {
         IndicesStruct bezierIndicesStruct = morel1.getBezierIndices();
-        VerticesStruct bezierVerticesStruct = morel1.getBezierVertices();
+        VerticesStructWithoutNormal bezierVerticesStruct = morel1.getBezierVertices();
         bezierArrayBuf.bind();
-        bezierArrayBuf.allocate(bezierVerticesStruct.vertices, bezierVerticesStruct.nbrVertices * static_cast<int>(sizeof(VertexData)));
+        bezierArrayBuf.allocate(bezierVerticesStruct.vertices, bezierVerticesStruct.nbrVertices * static_cast<int>(sizeof(VertexDataWithoutNormal)));
         bezierIndexBuf.bind();
         bezierIndexBuf.allocate(bezierIndicesStruct.indices, bezierIndicesStruct.nbrIndices * static_cast<int>(sizeof(GLushort)));
     }
@@ -120,13 +75,68 @@ void GeometryEngine::initGeometry() {
     this->createAndBindMorels();
 
     if(showSystem) {
+        VertexDataWithoutNormal systemVertices[] = {
+            {QVector3D(0.0f, 0.0f, 0.0f), QVector3D(1.0f, 0.0f, 0.0f)}, // x is red
+            {QVector3D(5.0f, 0.0f, 0.0f), QVector3D(1.0f, 0.0f, 0.0f)},
+            {QVector3D(0.0f, 0.0f, 0.0f), QVector3D(0.0f, 1.0f, 0.0f)}, // y is green
+            {QVector3D(0.0f, 5.0f, 0.0f), QVector3D(0.0f, 1.0f, 0.0f)},
+            {QVector3D(0.0f, 0.0f, -5.0f), QVector3D(0.0f, 0.0f, 1.0f)}, // z is blue
+            {QVector3D(0.0f, 0.0f, 5.0f), QVector3D(0.0f, 0.0f, 1.0f)},
+        };
+        const int nbrSystemVertices = 6;
+
+        GLushort systemIndices[] = {
+            0,1,
+            2,3,
+            4,5
+        };
+        const int nbrSystemIndices = 6;
+
         systemArrayBuf.bind();
-        systemArrayBuf.allocate(systemVertices, nbrSystemVertices * static_cast<int>(sizeof(VertexData)));
+        systemArrayBuf.allocate(systemVertices, nbrSystemVertices * static_cast<int>(sizeof(VertexDataWithoutNormal)));
         systemIndexBuf.bind();
         systemIndexBuf.allocate(systemIndices, nbrSystemIndices * static_cast<int>(sizeof(GLushort)));
     }
 
     if(showSoil) {
+        QVector3D color1 = QVector3D(41.0f/255.0f, 74.0f/255.0f, 28.0f/255.0f);
+        QVector3D color2 = QVector3D(46.0f/255.0f, 29.0f/255.0f, 18.0f/255.0f);
+        QVector3D P0 = QVector3D(-3.0f, 2.0f, 0.0f);
+        QVector3D P1 = QVector3D(3.0f, 2.0f, 0.0f);
+        QVector3D P2 = QVector3D(3.0f, -2.0f, 0.0f);
+        QVector3D P3 = QVector3D(-3.0f, -2.0f, 0.0f);
+        QVector3D P4 = QVector3D(-3.0f, 2.0f, -1.0f);
+        QVector3D P5 = QVector3D(3.0f, 2.0f, -1.0f);
+        QVector3D P6 = QVector3D(3.0f, -2.0f, -1.0f);
+        QVector3D P7 = QVector3D(-3.0f, -2.0f, -1.0f);
+        VertexData soilVertices[] = {
+            {P0, color1, QVector3D::crossProduct(P0-P3,P0-P1)+QVector3D::crossProduct(P0-P1,P0-P4)+QVector3D::crossProduct(P0-P4,P0-P3)},
+            {P1, color1, QVector3D::crossProduct(P1-P0,P1-P2)+QVector3D::crossProduct(P1-P2,P1-P5)+QVector3D::crossProduct(P1-P5,P1-P0)},
+            {P2, color1, QVector3D::crossProduct(P2-P1,P2-P3)+QVector3D::crossProduct(P2-P3,P2-P6)+QVector3D::crossProduct(P2-P6,P2-P1)},
+            {P3, color1, QVector3D::crossProduct(P3-P2,P3-P0)+QVector3D::crossProduct(P3-P0,P3-P7)+QVector3D::crossProduct(P3-P7,P3-P2)},
+            {P4, color1, QVector3D::crossProduct(P4-P7,P4-P0)+QVector3D::crossProduct(P4-P0,P4-P5)+QVector3D::crossProduct(P4-P5,P4-P7)},
+            {P5, color1, QVector3D::crossProduct(P5-P6,P5-P4)+QVector3D::crossProduct(P5-P4,P5-P1)+QVector3D::crossProduct(P5-P1,P5-P6)},
+            {P6, color1, QVector3D::crossProduct(P6-P5,P6-P2)+QVector3D::crossProduct(P6-P2,P6-P7)+QVector3D::crossProduct(P6-P7,P6-P5)},
+            {P7, color1, QVector3D::crossProduct(P7-P3,P7-P4)+QVector3D::crossProduct(P7-P4,P7-P6)+QVector3D::crossProduct(P7-P6,P7-P3)},
+        };
+        const int nbrSoilVertices = 8;
+
+        GLushort soilIndices[] = {
+            0,1,2,
+            2,3,0,
+            3,2,6,
+            7,6,3,
+            5,1,2,
+            2,6,5,
+            1,0,4,
+            4,5,1,
+            0,3,4,
+            4,3,7,
+            4,5,7,
+            7,5,6
+        };
+        const int nbrSoilIndices = 36;
+
         soilArrayBuf.bind();
         soilArrayBuf.allocate(soilVertices, nbrSoilVertices * static_cast<int>(sizeof(VertexData)));
         soilIndexBuf.bind();
@@ -155,6 +165,12 @@ void GeometryEngine::drawMorels(QOpenGLShaderProgram *program) {
     program->enableAttributeArray(colorLocation);
     program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
 
+    offset += sizeof(QVector3D);
+
+    int normalLocation = program->attributeLocation("normal");
+    program->enableAttributeArray(normalLocation);
+    program->setAttributeBuffer(normalLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+
     // Draw cube geometry using indices from VBO 1
     glDrawElements(GL_TRIANGLES, indexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
     //glDrawElements(GL_POINTS, indexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
@@ -165,11 +181,11 @@ void GeometryEngine::drawMorels(QOpenGLShaderProgram *program) {
         offset = 0;
         vertexLocation = program->attributeLocation("position");
         program->enableAttributeArray(vertexLocation);
-        program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+        program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexDataWithoutNormal));
         offset += sizeof(QVector3D);
         colorLocation = program->attributeLocation("color");
         program->enableAttributeArray(colorLocation);
-        program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+        program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexDataWithoutNormal));
         glDrawElements(GL_LINE_STRIP, bezierIndexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
         //glDrawElements(GL_POINTS, bezierIndexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
     }
@@ -187,11 +203,11 @@ void GeometryEngine::drawGeometry(QOpenGLShaderProgram *program) {
         offset = 0;
         vertexLocation = vertexLocation = program->attributeLocation("position");
         program->enableAttributeArray(vertexLocation);
-        program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+        program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexDataWithoutNormal));
         offset += sizeof(QVector3D);
         colorLocation = program->attributeLocation("color");
         program->enableAttributeArray(colorLocation);
-        program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+        program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexDataWithoutNormal));
         glDrawElements(GL_LINES, systemIndexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
         glDrawElements(GL_POINTS, systemIndexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
     }
@@ -207,6 +223,10 @@ void GeometryEngine::drawGeometry(QOpenGLShaderProgram *program) {
         colorLocation = program->attributeLocation("color");
         program->enableAttributeArray(colorLocation);
         program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+        offset += sizeof(QVector3D);
+        int normalLocation = program->attributeLocation("normal");
+        program->enableAttributeArray(normalLocation);
+        program->setAttributeBuffer(normalLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
         glDrawElements(GL_TRIANGLES, soilIndexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
     }
 }

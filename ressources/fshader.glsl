@@ -11,16 +11,22 @@ out vec4 fragColor;
 vec3 normalizeNormal, normalizeEyeCoord, normalizeLightVec, V, R, ambient, diffuse, specular;
 float sIntensity, cosAngle;
 
-vec3 PhongShading()
+vec3 PhongShading(int i)
 {
-    vec3 LightPosition = vec3(mv*vec4(0,0,5,1));
+    vec3 LightPositions[3];
+    LightPositions[0] = vec3(mv*vec4(-3.0f, 2.0f, 3.0f,1.0f));
+    //LightPositions[1] = vec3(mv*vec4(3.0f, 2.0f, 3.0f,1.0f));
+    LightPositions[1] = vec3(mv*vec4(3.0f, -2.0f, 3.0f,1.0f));
+    //LightPositions[3] = vec3(mv*vec4(-3.0f, -2.0f, 3.0f,1.0f));
+    LightPositions[2] = vec3(0.0,0.0,0.0); //Camera light
+    vec3 LightPosition = LightPositions[i];
     vec3 MaterialAmbient = fColor;
-    vec3 LightAmbient = vec3(0.1,0.1,0.1);
+    vec3 LightAmbient = vec3(0.0,0.0,0.0);
     vec3 MaterialDiffuse = fColor;
     vec3 LightDiffuse = vec3(1.0,1.0,1.0);
-    vec3 MaterialSpecular = fColor;
+    vec3 MaterialSpecular = vec3(0.0,0.0,0.0);
     vec3 LightSpecular = vec3(1.0,1.0,1.0);
-    float MaterialShininess = 255.0;
+    float MaterialShininess = 30.0;
 
     normalizeNormal = normalize(fNormal);
     normalizeEyeCoord = normalize(fPosition);
@@ -42,5 +48,8 @@ vec3 PhongShading()
 
 void main()
 {
-    fragColor = vec4(PhongShading(), 1.0 );
+    vec4 tmpColor = vec4(0.0);
+    for(int i=0; i<3; i++)
+        tmpColor += vec4(PhongShading(i), 1.0 );
+    fragColor = tmpColor;
 }

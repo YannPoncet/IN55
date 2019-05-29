@@ -66,6 +66,7 @@ void Bezier::constructPoints(double height, double stemHeightPart, double curvat
     float xValue = randomGenerator.getNormalNumber<float>(0, curvatureVariance);
     float yValue = randomGenerator.getNormalNumber<float>(0, curvatureVariance);
     float zValue = randomGenerator.getNormalNumber<float>(height*stemHeightPart*0.5, anglePosVariance);
+    if(zValue <= 0) zValue = -zValue;
 
     this->P1 = QVector3D(xValue, yValue, zValue);
     qDebug() << "P1=" << P1;
@@ -73,6 +74,8 @@ void Bezier::constructPoints(double height, double stemHeightPart, double curvat
     xValue = randomGenerator.getNormalNumber<float>(0, curvatureVariance);
     yValue = randomGenerator.getNormalNumber<float>(0, curvatureVariance);
     zValue = randomGenerator.getNormalNumber<float>(height, anglePosVariance);
+    if(zValue <= 0) zValue = -zValue;
+
 
     this->P2 = QVector3D(xValue, yValue, zValue);
     qDebug() << "P2=" << P2;

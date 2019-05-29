@@ -3,8 +3,8 @@
 const int WINDOW_HEIGHT = 1280;
 const int WINDOW_WIDTH = 720;
 
-bool showBezier = true;
-bool showSystem = true;
+bool showBezier = false;
+bool showSystem = false;
 bool showSoil = true;
 
 RandomGenerator randomGenerator;

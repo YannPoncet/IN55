@@ -1,4 +1,5 @@
 #include "mainwidget.h"
+#include "globals.h"
 
 
 MainWidget::MainWidget(QWidget *parent) :
@@ -209,6 +210,33 @@ void MainWidget::drawCube() {
     program.setUniformValue("nm", normal);
     // Set modelview-projection matrix
     program.setUniformValue("mvp", projection * matrix);
+
+    //lights positions
+    int nbLights = 5;
+    QVector3D LightPositions[nbLights];
+    LightPositions[0] = QVector3D(matrix*QVector4D(-3.0f, 2.0f, 3.0f,1.0f));
+    LightPositions[1] = QVector3D(matrix*QVector4D(3.0f, 2.0f, 3.0f,1.0f));
+    LightPositions[2] = QVector3D(matrix*QVector4D(3.0f, -2.0f, 3.0f,1.0f));
+    LightPositions[3] = QVector3D(matrix*QVector4D(-3.0f, -2.0f, 3.0f,1.0f));
+    LightPositions[4] = QVector3D(0.0f,0.0f,0.0f); //Camera light
+
+    int nbLightsEnabled = 0;
+    int IndexLightsEnabled[nbLights];
+    for(int i=0; i<5; i++){
+        if(lightsEnabled[i]){
+            IndexLightsEnabled[nbLightsEnabled] = i;
+            nbLightsEnabled++;
+        }
+    }
+
+    QVector3D LEP[nbLightsEnabled];
+    for(int i=0; i<nbLightsEnabled; i++){
+        LEP[i] = LightPositions[IndexLightsEnabled[i]];
+    }
+
+    program.setUniformValue("nbLights", nbLightsEnabled);
+    program.setUniformValueArray("LightPositions", LEP, nbLightsEnabled);
+
     // Draw cube geometry
     geometries->drawGeometry(&program);
 }

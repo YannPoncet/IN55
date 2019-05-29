@@ -18,10 +18,15 @@
 #include <QPushButton>
 #include <QSlider>
 #include <QLabel>
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QSignalMapper>
 #include <string>
 #include <math.h>
 
 #include "tools/structs.h"
+#include "globals.h"
+
 
 class GeometryEngine;
 
@@ -35,6 +40,7 @@ public:
 
 public slots:
     void redrawMorel(void);
+    void setLight(bool state);
 
 protected:
     void mousePressEvent(QMouseEvent *e) override;
@@ -68,6 +74,7 @@ private:
 
     float zoomTranslation;
     QVector<SliderParameters> sliders;
+    QVector<QCheckBox*> boxes;
 };
 
 #endif // MAINWIDGET_H

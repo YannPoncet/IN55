@@ -1,5 +1,4 @@
 #include "mainwidget.h"
-#include "globals.h"
 
 
 MainWidget::MainWidget(QWidget *parent) :
@@ -33,7 +32,35 @@ MainWidget::MainWidget(QWidget *parent) :
     QObject::connect(submitButton, SIGNAL(clicked()), this, SLOT(redrawMorel()));
     layout->addWidget(submitButton,0,Qt::AlignTop);
 
+    QGroupBox* horizontalGroupBox = new QGroupBox(tr("Enable/disable the lights:"));
+    horizontalGroupBox->setFixedSize(200,60);
+    layout->addWidget(horizontalGroupBox);
+    QHBoxLayout *groupBoxLayout = new QHBoxLayout;
+    horizontalGroupBox->setLayout(groupBoxLayout);
+    QSignalMapper* signalMapper = new QSignalMapper(this);
+    for (int i=0; i<lightsEnabled.size(); i++) {
+        QCheckBox* c = new QCheckBox(this);
+        if(lightsEnabled[i]) {
+            c->setCheckState(Qt::Checked);
+        }
+        qDebug() << c;
+        QObject::connect(c, SIGNAL(clicked(bool)), this, SLOT(setLight(bool)));
+        c->setFixedSize(15,15);
+        groupBoxLayout->addWidget(c);
+        this->boxes.append(c);
+    }
+
+
     this->setLayout(layout);
+}
+
+void MainWidget::setLight(bool state) {
+    QObject* c = sender();
+    for (int i=0; i<this->boxes.size(); i++) {
+        if(this->boxes[i] == c) {
+            lightsEnabled[i] = state;
+        }
+    }
 }
 
 QLabel* MainWidget::addLabel(QString text) {
@@ -222,7 +249,7 @@ void MainWidget::drawCube() {
 
     int nbLightsEnabled = 0;
     int IndexLightsEnabled[nbLights];
-    for(int i=0; i<5; i++){
+    for(int i=0; i<lightsEnabled.size(); i++){
         if(lightsEnabled[i]){
             IndexLightsEnabled[nbLightsEnabled] = i;
             nbLightsEnabled++;

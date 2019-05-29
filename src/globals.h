@@ -14,6 +14,6 @@ extern bool showBezier;
 extern bool showSystem;
 extern bool showSoil;
 
-extern bool lightsEnabled[5];
+extern QVector<bool> lightsEnabled;
 
 #endif // GLOBALS_H

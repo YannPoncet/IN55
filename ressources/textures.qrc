@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>soil.png</file>
+    </qresource>
+</RCC>

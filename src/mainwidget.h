@@ -65,6 +65,7 @@ private:
     QBasicTimer timer;
     QOpenGLShaderProgram program;
     GeometryEngine *geometries;
+    QOpenGLTexture *texture;
 
     QMatrix4x4 projection;
 

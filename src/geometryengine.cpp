@@ -100,7 +100,7 @@ void GeometryEngine::initGeometry() {
 
     if(showSoil) {
         QVector3D color1 = QVector3D(41.0f/255.0f, 74.0f/255.0f, 28.0f/255.0f);
-        QVector3D color2 = QVector3D(46.0f/255.0f, 29.0f/255.0f, 18.0f/255.0f);
+        QVector3D color2 = QVector3D(43.0f/255.0f, 22.0f/255.0f, 14.0f/255.0f);
         QVector3D P0 = QVector3D(-3.0f, 2.0f, 0.0f);
         QVector3D P1 = QVector3D(3.0f, 2.0f, 0.0f);
         QVector3D P2 = QVector3D(3.0f, -2.0f, 0.0f);
@@ -110,28 +110,35 @@ void GeometryEngine::initGeometry() {
         QVector3D P6 = QVector3D(3.0f, -2.0f, -1.0f);
         QVector3D P7 = QVector3D(-3.0f, -2.0f, -1.0f);
         VertexData soilVertices[] = {
-            {P0, color1, QVector3D::crossProduct(P0-P3,P0-P1)+QVector3D::crossProduct(P0-P1,P0-P4)+QVector3D::crossProduct(P0-P4,P0-P3)},
-            {P1, color1, QVector3D::crossProduct(P1-P0,P1-P2)+QVector3D::crossProduct(P1-P2,P1-P5)+QVector3D::crossProduct(P1-P5,P1-P0)},
-            {P2, color1, QVector3D::crossProduct(P2-P1,P2-P3)+QVector3D::crossProduct(P2-P3,P2-P6)+QVector3D::crossProduct(P2-P6,P2-P1)},
-            {P3, color1, QVector3D::crossProduct(P3-P2,P3-P0)+QVector3D::crossProduct(P3-P0,P3-P7)+QVector3D::crossProduct(P3-P7,P3-P2)},
-            {P4, color1, QVector3D::crossProduct(P4-P7,P4-P0)+QVector3D::crossProduct(P4-P0,P4-P5)+QVector3D::crossProduct(P4-P5,P4-P7)},
-            {P5, color1, QVector3D::crossProduct(P5-P6,P5-P4)+QVector3D::crossProduct(P5-P4,P5-P1)+QVector3D::crossProduct(P5-P1,P5-P6)},
-            {P6, color1, QVector3D::crossProduct(P6-P5,P6-P2)+QVector3D::crossProduct(P6-P2,P6-P7)+QVector3D::crossProduct(P6-P7,P6-P5)},
-            {P7, color1, QVector3D::crossProduct(P7-P3,P7-P4)+QVector3D::crossProduct(P7-P4,P7-P6)+QVector3D::crossProduct(P7-P6,P7-P3)},
+            {P0, color1, QVector3D::crossProduct(P0-P3,P0-P1)+QVector3D::crossProduct(P0-P1,P0-P4)+QVector3D::crossProduct(P0-P4,P0-P3), QVector2D(0.0f, 1.0f), 1.0},
+            {P1, color1, QVector3D::crossProduct(P1-P0,P1-P2)+QVector3D::crossProduct(P1-P2,P1-P5)+QVector3D::crossProduct(P1-P5,P1-P0), QVector2D(1.0f, 1.0f), 1.0},
+            {P2, color1, QVector3D::crossProduct(P2-P1,P2-P3)+QVector3D::crossProduct(P2-P3,P2-P6)+QVector3D::crossProduct(P2-P6,P2-P1), QVector2D(1.0f, 0.0f), 1.0},
+            {P3, color1, QVector3D::crossProduct(P3-P2,P3-P0)+QVector3D::crossProduct(P3-P0,P3-P7)+QVector3D::crossProduct(P3-P7,P3-P2), QVector2D(0.0f, 0.0f), 1.0},
+
+            {P4, color2, QVector3D::crossProduct(P4-P7,P4-P0)+QVector3D::crossProduct(P4-P0,P4-P5)+QVector3D::crossProduct(P4-P5,P4-P7), QVector2D(), 0.0},
+            {P5, color2, QVector3D::crossProduct(P5-P6,P5-P4)+QVector3D::crossProduct(P5-P4,P5-P1)+QVector3D::crossProduct(P5-P1,P5-P6), QVector2D(), 0.0},
+            {P6, color2, QVector3D::crossProduct(P6-P5,P6-P2)+QVector3D::crossProduct(P6-P2,P6-P7)+QVector3D::crossProduct(P6-P7,P6-P5), QVector2D(), 0.0},
+            {P7, color2, QVector3D::crossProduct(P7-P3,P7-P4)+QVector3D::crossProduct(P7-P4,P7-P6)+QVector3D::crossProduct(P7-P6,P7-P3), QVector2D(), 0.0},
+
+            {P0, color2, QVector3D::crossProduct(P0-P3,P0-P1)+QVector3D::crossProduct(P0-P1,P0-P4)+QVector3D::crossProduct(P0-P4,P0-P3), QVector2D(), 0.0},
+            {P1, color2, QVector3D::crossProduct(P1-P0,P1-P2)+QVector3D::crossProduct(P1-P2,P1-P5)+QVector3D::crossProduct(P1-P5,P1-P0), QVector2D(), 0.0},
+            {P2, color2, QVector3D::crossProduct(P2-P1,P2-P3)+QVector3D::crossProduct(P2-P3,P2-P6)+QVector3D::crossProduct(P2-P6,P2-P1), QVector2D(), 0.0},
+            {P3, color2, QVector3D::crossProduct(P3-P2,P3-P0)+QVector3D::crossProduct(P3-P0,P3-P7)+QVector3D::crossProduct(P3-P7,P3-P2), QVector2D(), 0.0},
         };
-        const int nbrSoilVertices = 8;
+        const int nbrSoilVertices = 12;
 
         GLushort soilIndices[] = {
             0,1,2,
             2,3,0,
-            3,2,6,
-            7,6,3,
-            5,1,2,
-            2,6,5,
-            1,0,4,
-            4,5,1,
-            0,3,4,
-            4,3,7,
+
+            11,10,6,
+            7,6,11,
+            5,9,10,
+            10,6,5,
+            9,8,4,
+            4,5,9,
+            8,11,4,
+            4,11,7,
             4,5,7,
             7,5,6
         };
@@ -227,6 +234,15 @@ void GeometryEngine::drawGeometry(QOpenGLShaderProgram *program) {
         int normalLocation = program->attributeLocation("normal");
         program->enableAttributeArray(normalLocation);
         program->setAttributeBuffer(normalLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+        offset += sizeof(QVector3D);
+        int texcoordLocation = program->attributeLocation("a_texcoord");
+        program->enableAttributeArray(texcoordLocation);
+        program->setAttributeBuffer(texcoordLocation, GL_FLOAT, offset, 2, sizeof(VertexData));
+        glDrawElements(GL_TRIANGLES, soilIndexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
+        offset += sizeof(QVector2D);
+        int texpartLocation = program->attributeLocation("a_texpart");
+        program->enableAttributeArray(texpartLocation);
+        program->setAttributeBuffer(texpartLocation, GL_FLOAT, offset, 1, sizeof(VertexData));
         glDrawElements(GL_TRIANGLES, soilIndexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
     }
 }

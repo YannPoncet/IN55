@@ -36,3 +36,4 @@ HEADERS += \
 
 RESOURCES += \
     ressources/shaders.qrc \
+    ressources/textures.qrc \

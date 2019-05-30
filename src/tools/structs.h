@@ -2,6 +2,7 @@
 #define STRUCT_H
 
 #include <QVector3D>
+#include <QVector2D>
 #include <QOpenGLFunctions>
 #include <string>
 #include <QSlider>
@@ -22,6 +23,8 @@ struct VertexData
     QVector3D position;
     QVector3D color;
     QVector3D normal;
+    QVector2D texCoord;
+    float texturePart; //0 to 1, if 0, the texture will not be applied, 0.5 for half color half texture
 };
 struct VerticesStruct
 {

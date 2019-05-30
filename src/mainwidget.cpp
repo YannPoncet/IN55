@@ -4,6 +4,7 @@
 MainWidget::MainWidget(QWidget *parent) :
     QOpenGLWidget(parent),
     geometries(0),
+    texture(0),
     angularSpeed(0),
     zoomTranslation(0.0f)
 {
@@ -194,6 +195,7 @@ void MainWidget::initializeGL()
     glClearColor(120.0/255.0, 120.0/255.0, 120.0/255.0, 1);
 
     initShaders();
+    initTextures();
 
     // Enable depth buffer
     glEnable(GL_DEPTH_TEST);
@@ -235,6 +237,22 @@ void MainWidget::initShaders() {
         close();
 }
 
+void MainWidget::initTextures()
+{
+    // Load soil.png image
+    texture = new QOpenGLTexture(QImage(":/soil.png").mirrored());
+
+    // Set nearest filtering mode for texture minification
+    texture->setMinificationFilter(QOpenGLTexture::Nearest);
+
+    // Set bilinear filtering mode for texture magnification
+    texture->setMagnificationFilter(QOpenGLTexture::Linear);
+
+    // Wrap texture coordinates by repeating
+    // f.ex. texture coordinate (1.1, 1.2) is same as (0.1, 0.2)
+    texture->setWrapMode(QOpenGLTexture::Repeat);
+}
+
 void MainWidget::resizeGL(int w, int h) {
     // Calculate aspect ratio
     qreal aspect = qreal(w) / qreal(h ? h : 1);
@@ -252,6 +270,11 @@ void MainWidget::resizeGL(int w, int h) {
 void MainWidget::paintGL() {
     // Clear color and depth buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    texture->bind();
+    // Use texture unit 0 which contains soil.png
+    program.setUniformValue("texture", 0);
+
     drawCube();
 }
 
@@ -292,6 +315,7 @@ void MainWidget::drawCube() {
 
     program.setUniformValue("nbLights", nbLightsEnabled);
     program.setUniformValueArray("LightPositions", LEP, nbLightsEnabled);
+
 
     // Draw cube geometry
     geometries->drawGeometry(&program);

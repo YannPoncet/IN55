@@ -12,8 +12,12 @@ class RandomGenerator
 public:
     RandomGenerator() {
         //std::random_device rd;  //Will be used to obtain a seed for the random number engine
-        srand(time(0));
+        srand(time(nullptr));
+
         this->generator = std::default_random_engine(rand());
+        this->getRand(0,1000); //Without that it's not truly random, don't know why exactly
+        this->seed = this->getRand(0,1000000);
+
         //this->generator.seed(122222222);
     }
 
@@ -50,7 +54,7 @@ public:
 
 private:
     std::default_random_engine generator;
-    int seed = this->getRand(0,1000000);
+    int seed;
 };
 
 #endif // RANDOMGENERATOR_H

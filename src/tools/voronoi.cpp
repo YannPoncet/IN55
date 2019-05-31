@@ -8,7 +8,7 @@ Voronoi::Voronoi(int xMax, int yMax, int maxNbPoints, int width, double fMax, do
     this->fMax = fMax;
     this->fMin = fMin;
 
-    this->distanceType = 3;
+    this->distanceType = 1;
     this->separationFactor = this->width/10;
 
     this->generatePoints();

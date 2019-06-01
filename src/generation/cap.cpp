@@ -17,24 +17,24 @@ void Cap::applyPerlin(int octaves, double factor) {
     for(auto&& v: this->vertices) {
         if(v.layer!=0) {
             // We create a sphere of radius 1 centered on O on which we'll apply perlin
-            float sZ = 2.0*(v.baseHeight-(h/2.0))/h;
-            double sR = sqrt(1.0-pow(sZ,2.0));
-            float sX = sR*cos(v.baseAngle);
-            float sY = sR*sin(v.baseAngle);
+            float sZ = 2.0f*(v.baseHeight-(h/2.0f))/h;
+            float sR = sqrtf(1.0f-powf(sZ,2.0f));
+            float sX = sR*cosf(v.baseAngle);
+            float sY = sR*sinf(v.baseAngle);
 
             // We convert the point's coordinate into spherical coordinates
             float r = 1.0f;
-            float theta = atan2(sY, sX);
-            float phi = acos(sZ);
+            float theta = atan2f(sY, sX);
+            float phi = acosf(sZ);
 
             // We compute the noise and apply it to the radius
-            double noise = perlinNoise.octaveNoise(cos(theta), sin(theta), phi, octaves);
+            float noise = perlinNoise.octaveNoise(cos(theta), sin(theta), phi, octaves);
             r = r+r*noise*factor;
 
             // We convert back to cartesian coordinates
-            float x = r*cos(theta)*sin(phi);
-            float y = r*sin(theta)*sin(phi);
-            float z = r*cos(phi);
+            float x = r*cosf(theta)*sinf(phi);
+            float y = r*sinf(theta)*sinf(phi);
+            //float z = r*cos(phi); //Not used at the moment
 
             float factorX = x/sX;
             if (abs(sX) <= 0.01f) factorX = 1.0f;
@@ -56,18 +56,18 @@ void Cap::applyColorVariationWithPerlin(int octaves, double factor) {
     for(auto&& v: this->vertices) {
         if(v.layer!=0) {
             // We create a sphere of radius 1 centered on O on which we'll apply perlin
-            float sZ = 2.0*(v.baseHeight-(h/2.0))/h;
-            double sR = sqrt(1.0-pow(sZ,2.0));
-            float sX = sR*cos(v.baseAngle);
-            float sY = sR*sin(v.baseAngle);
+            float sZ = 2.0f*(v.baseHeight-(h/2.0f))/h;
+            float sR = sqrtf(1.0f-powf(sZ,2.0f));
+            float sX = sR*cosf(v.baseAngle);
+            float sY = sR*sinf(v.baseAngle);
 
             // We convert the point's coordinate into spherical coordinates
             float r = 1.0f;
-            float theta = atan2(sY, sX);
-            float phi = acos(sZ);
+            float theta = atan2f(sY, sX);
+            float phi = acosf(sZ);
 
             // We compute the noise and apply it to the radius
-            double noise = perlinNoise.octaveNoise(cos(theta), sin(theta), phi, octaves);
+            float noise = perlinNoise.octaveNoise(cos(theta), sin(theta), phi, octaves);
             r = r+r*noise*factor;
 
             v.color = QVector3D(v.color.x()*r, v.color.y()*r, v.color.z()*r);

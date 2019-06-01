@@ -72,7 +72,7 @@ VerticesStructWithoutNormal Morel::getBezierVertices() {
 
     for(int i=0; i<n; i++) {
         float t = ((i+1)*1.0f)/(n*1.0f);
-        QVector3D p = this->bezier.getBezierPoint(t, parameters.height, parameters.stemHeightPart);
+        QVector3D p = this->bezier.getBezierPoint(t);
         VertexDataWithoutNormal vData = {p*parameters.globalSizeFactor, QVector3D(1.0f,0.0f,0.3f)};
         newArray[i] = vData;
     }

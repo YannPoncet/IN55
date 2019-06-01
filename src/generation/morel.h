@@ -8,11 +8,11 @@
 #include <QDebug>
 
 #include "../globals.h"
+#include "../structures/structs.h"
+#include "../structures/meshvertex.h"
 #include "cap.h"
 #include "stem.h"
 #include "../tools/bezier.h"
-#include "../tools/meshvertex.h"
-#include "../tools/structs.h"
 
 class Morel
 {

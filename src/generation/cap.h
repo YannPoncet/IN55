@@ -8,9 +8,9 @@
 #include <QDebug>
 
 #include "../globals.h"
+#include "../structures/structs.h"
+#include "../structures/meshvertex.h"
 #include "../tools/bezier.h"
-#include "../tools/structs.h"
-#include "../tools/meshvertex.h"
 #include "../tools/voronoi.h"
 
 #include "../libs/perlinnoise.h"

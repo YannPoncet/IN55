@@ -12,7 +12,7 @@ Bezier::Bezier(double height, double stemHeightPart, double curvatureVariance, d
     this->computeBaseAngleAndAxis(this->zeroAngle, this->zeroAxis);
 }
 
-QVector3D Bezier::getBezierPoint(float t, double height, double stemHeightPart) {
+QVector3D Bezier::getBezierPoint(float t) {
     float xBezier = pow((1 - t), 2) * this->P0.x()  +  2 * t * (1 -t) * this->P1.x()  +  pow(t, 2) * this->P2.x();
     float yBezier = pow((1 - t), 2) * this->P0.y()  +  2 * t * (1 -t) * this->P1.y()  +  pow(t, 2) * this->P2.y();
     float zBezier = pow((1 - t), 2) * this->P0.z()  +  2 * t * (1 -t) * this->P1.z()  +  pow(t, 2) * this->P2.z();

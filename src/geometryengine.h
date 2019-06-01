@@ -9,7 +9,7 @@
 
 #include <QDebug>
 
-#include "tools/structs.h"
+#include "structures/structs.h"
 #include "generation/morel.h"
 
 class GeometryEngine : protected QOpenGLFunctions

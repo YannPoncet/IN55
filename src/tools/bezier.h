@@ -5,7 +5,7 @@
 #include <QtMath>
 #include <QQuaternion>
 
-#include "../tools/meshvertex.h"
+#include "../structures/meshvertex.h"
 #include "../globals.h"
 
 class Bezier
@@ -13,7 +13,7 @@ class Bezier
 public:
     Bezier(double height, double stemHeightPart, double curvatureVariance, double anglePosVariance);
     QQuaternion getRotationQuaternion(float t);
-    QVector3D getBezierPoint(float t, double height, double stemHeightPart);
+    QVector3D getBezierPoint(float t);
     void applyFullBezierTransformationToVertex(MeshVertex& v, float t, float baseHeight);
     float getZeroAngle();
 

@@ -38,7 +38,6 @@ MainWidget::MainWidget(QWidget *parent) :
     layout->addWidget(horizontalGroupBox);
     QHBoxLayout *groupBoxLayout = new QHBoxLayout;
     horizontalGroupBox->setLayout(groupBoxLayout);
-    QSignalMapper* signalMapper = new QSignalMapper(this);
     for (int i=0; i<lightsEnabled.size(); i++) {
         QCheckBox* c = new QCheckBox(this);
         if(lightsEnabled[i]) {

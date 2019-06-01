@@ -24,7 +24,7 @@
 #include <string>
 #include <math.h>
 
-#include "tools/structs.h"
+#include "structures/structs.h"
 #include "globals.h"
 
 

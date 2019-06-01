@@ -138,14 +138,11 @@ QVector2D Voronoi::perpendicularLineLineIntersection(QVector2D A, QVector2D B, Q
 
     double determinant = a1*b2 - a2*b1;
 
-    if (determinant == 0)
-    {
+    if (determinant == 0) { //Should not happen but we never know, better than having nan values
         // The lines are parallel. This is simplified
         // by returning a pair of FLT_MAX
         return QVector2D(INFINITY, INFINITY);
-    }
-    else
-    {
+    } else {
         double x = (b2*c1 - b1*c2)/determinant;
         double y = (a1*c2 - a2*c1)/determinant;
         return QVector2D(x, y);
@@ -179,6 +176,7 @@ double Voronoi::dist(double x, double y) {
     case 2: return abs(x)+abs(y); // Manhattan
     case 3: return pow(pow(abs(x),3.0) + pow(abs(y),3.0),1.0/3.0); // Minkovski
    }
+   return 0;
 }
 
 

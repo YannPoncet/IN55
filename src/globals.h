@@ -2,7 +2,7 @@
 #define GLOBALS_H
 
 #include "tools/randomgenerator.h"
-#include "tools/structs.h"
+#include "structures/structs.h"
 
 extern const int WINDOW_HEIGHT;
 extern const int WINDOW_WIDTH;

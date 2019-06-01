@@ -100,6 +100,7 @@ void MainWidget::redrawMorel(){
 
     this->geometries->createAndBindMorels();
     this->geometries->drawMorels(&program);
+    update();
 }
 
 MainWidget::~MainWidget() {

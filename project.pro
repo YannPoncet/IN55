@@ -15,7 +15,6 @@ SOURCES += \
     src/generation/morel.cpp \
     src/tools/meshvertex.cpp \
     src/tools/bezier.cpp \
-    src/tools/perlinnoise.cpp \
     src/tools/voronoi.cpp \
     src/globals.cpp
 
@@ -25,7 +24,6 @@ HEADERS += \
     src/generation/stem.h \
     src/generation/cap.h \
     src/generation/morel.h \
-    src/tools/perlinnoise.h \
     src/tools/structs.h \
     src/tools/meshvertex.h \
     src/tools/bezier.h \

@@ -28,12 +28,13 @@ void Cap::applyPerlin(int octaves, double factor) {
             float phi = acos(sZ);
 
             // We compute the noise and apply it to the radius
-            double noise = perlinNoise.octaveNoise(theta, phi, octaves);
+            double noise = perlinNoise.octaveNoise(cos(theta), sin(theta), phi, octaves);
             r = r+r*noise*factor;
 
             // We convert back to cartesian coordinates
             float x = r*cos(theta)*sin(phi);
             float y = r*sin(theta)*sin(phi);
+            float z = r*cos(phi);
 
             float factorX = x/sX;
             if (abs(sX) <= 0.01f) factorX = 1.0f;
@@ -66,7 +67,7 @@ void Cap::applyColorVariationWithPerlin(int octaves, double factor) {
             float phi = acos(sZ);
 
             // We compute the noise and apply it to the radius
-            double noise = perlinNoise.octaveNoise(theta, phi, octaves);
+            double noise = perlinNoise.octaveNoise(cos(theta), sin(theta), phi, octaves);
             r = r+r*noise*factor;
 
             v.color = QVector3D(v.color.x()*r, v.color.y()*r, v.color.z()*r);
@@ -102,8 +103,16 @@ void Cap::applyVoronoiTesselation() {
             float theta = atan2(sY, sX);
             float phi = acos(sZ);
 
+            float tmp_angle = asin(sin(theta));
+            if(cos(theta) < 0) {
+                tmp_angle = M_PI-tmp_angle;
+            } else if(tmp_angle < 0) {
+                tmp_angle += 2*M_PI;
+            }
+            theta = tmp_angle;
+
             // We compute the noise and apply it to the radius
-            double factor = voronoiGenerator.getFactorAt((theta+M_PI)/(2*M_PI), (phi+M_PI)/(2*M_PI));
+            double factor = voronoiGenerator.getFactorAt((theta)/(2*M_PI), (phi+M_PI)/(2*M_PI));
             if(abs(factor-fMax) <= 0.001f) {
                 v.color = parameters.colorSets[parameters.choosenSet].holesEdgesColor;
             }

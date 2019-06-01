@@ -53,19 +53,41 @@ double Voronoi::getFactorAt(double x, double y) {
 
     // First, we find the closest point of the coordinates and store its distance in d1
     for(auto&& p: this->points) {
-        d = dist(x-p.x(), y-p.y());
+        QVector2D ptmp = p;
+
+        float dx = abs(p.x()-x);
+        if(dx > this->xMax/2.0) {
+            if(p.x() > this->xMax/2.0) {
+                ptmp.setX(p.x()-this->xMax);
+            } else {
+                ptmp.setX(p.x()+this->xMax);
+            }
+        }
+
+        d = dist(x-ptmp.x(), y-ptmp.y());
         if(d<d1) {
             d1 = d;
-            p1 = p;
+            p1 = ptmp;
         }
     }
 
     // Then, we find the second point, closest to... cannot explain here must be done on paper
     for(auto&& p: this->points) {
         if(p != p1) {
+            QVector2D ptmp = p;
+
+            float dx = abs(p.x()-x);
+            if(dx > this->xMax/2.0) {
+                if(p.x() > this->xMax/2.0) {
+                    ptmp.setX(p.x()-this->xMax);
+                } else {
+                    ptmp.setX(p.x()+this->xMax);
+                }
+            }
+
             QVector2D A(x,y);
             QVector2D P1 = p1;
-            QVector2D P2 = p;
+            QVector2D P2 = ptmp;
             // u = vector between P1 and P2
             QVector2D u(P2.x()-P1.x(),P2.y()-P1.y());
             // v = vector between P1 and A

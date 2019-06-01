@@ -4,7 +4,7 @@ Stem::Stem(Bezier& b) : bezier(b) {
     this->generateBaseCylinder();
     this->widenStemBase();
     this->applyPerlin(1,1);
-    this->applyColorVariationWithPerlin(10,0.15);
+    this->applyColorVariationWithPerlin(10, 0.15);
     this->applyBezierCurve();
 }
 
@@ -31,7 +31,7 @@ void Stem::applyPerlin(int octaves, double factor) {
             float phi = acos(sZ);
 
             // We compute the noise and apply it to the radius
-            double noise = perlinNoise.octaveNoise(theta, phi, octaves);
+            double noise = perlinNoise.octaveNoise(cos(theta), sin(theta), phi, octaves);
             r = r+r*noise*factor*(abs(v.z())/h);
 
             // We convert back to cartesian coordinates
@@ -69,7 +69,7 @@ void Stem::applyColorVariationWithPerlin(int octaves, double factor) {
             float phi = acos(sZ);
 
             // We compute the noise and apply it to the radius
-            double noise = perlinNoise.octaveNoise(theta, phi, octaves);
+            double noise = perlinNoise.octaveNoise(cos(theta), sin(theta), phi, octaves);
             r = r+r*noise*factor;
 
             v.color = QVector3D(v.color.x()*r, v.color.y()*r, v.color.z()*r);

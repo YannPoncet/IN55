@@ -41,7 +41,11 @@ void MorelPart::applyPerlin(int octaves, double factor) {
 
             // We compute the noise and apply it to the radius
             double noise = perlinNoise.octaveNoise(cos(theta), sin(theta), phi, octaves);
-            r = r+r*noise*factor*(abs(v.z())/h);
+            if(this->isStem) {
+                r = r+r*noise*factor*(abs(v.z())/h); //For the stem, the variation decreses depending on the height
+            } else {
+                r = r+r*noise*factor;
+            }
 
             // We convert back to cartesian coordinates
             float x = r*cos(theta)*sin(phi);

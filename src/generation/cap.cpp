@@ -19,7 +19,7 @@ Cap::Cap(Bezier& b) : MorelPart(b) {
 */
 void Cap::applyVoronoiTesselation() {
     double fMax = 1.6;
-    double fMin = 0.1;
+    double fMin = 0.8;
     double densityFactor = parameters.holesDensityFactor;
     double widthFactor = parameters.holesEdgesWidthFactor;
     Voronoi voronoiGenerator(1000, 1000, 300*densityFactor, 15*widthFactor, fMax, fMin);

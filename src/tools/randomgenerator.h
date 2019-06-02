@@ -14,7 +14,7 @@ public:
         //std::random_device rd;  //Will be used to obtain a seed for the random number engine
         srand(time(nullptr));
 
-        this->generator = std::default_random_engine(3);
+        this->generator = std::default_random_engine(rand());
         this->getRand(0,1000); //Without that it's not truly random, don't know why exactly
         this->seed = this->getRand(0,1000000);
 

@@ -1,7 +1,8 @@
 #include "geometryengine.h"
+#include "globals.h"
 
 
-GeometryEngine::GeometryEngine() : systemIndexBuf(QOpenGLBuffer::IndexBuffer), soilIndexBuf(QOpenGLBuffer::IndexBuffer), indexBuf(QOpenGLBuffer::IndexBuffer), bezierIndexBuf(QOpenGLBuffer::IndexBuffer)  {
+GeometryEngine::GeometryEngine() : lightsIndexBuf(QOpenGLBuffer::IndexBuffer), systemIndexBuf(QOpenGLBuffer::IndexBuffer), soilIndexBuf(QOpenGLBuffer::IndexBuffer), indexBuf(QOpenGLBuffer::IndexBuffer), bezierIndexBuf(QOpenGLBuffer::IndexBuffer)  {
     initializeOpenGLFunctions();
 
     if(showSystem) {
@@ -19,6 +20,9 @@ GeometryEngine::GeometryEngine() : systemIndexBuf(QOpenGLBuffer::IndexBuffer), s
         bezierIndexBuf.create();
     }
 
+    //Lights VBOs
+    lightsArrayBuf.create();
+    lightsIndexBuf.create();
 
     // Generate 2 VBOs
     arrayBuf.create();
@@ -43,6 +47,9 @@ GeometryEngine::~GeometryEngine() {
         bezierArrayBuf.destroy();
         bezierIndexBuf.destroy();
     }
+
+    lightsArrayBuf.destroy();
+    lightsIndexBuf.destroy();
 
     arrayBuf.destroy();
     indexBuf.destroy();
@@ -245,4 +252,121 @@ void GeometryEngine::drawGeometry(QOpenGLShaderProgram *program) {
         program->setAttributeBuffer(texpartLocation, GL_FLOAT, offset, 1, sizeof(VertexData));
         glDrawElements(GL_TRIANGLES, soilIndexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
     }
+
+    //Lights positions for drawing "cube light" except for the camera light
+    const int nbrLights = 4;
+    QVector3D lightPositions[nbrLights];
+    lightPositions[0] = QVector3D(-3.0f, 2.0f, 3.0f);
+    lightPositions[1] = QVector3D(3.0f, 2.0f, 3.0f);
+    lightPositions[2] = QVector3D(3.0f, -2.0f, 3.0f);
+    lightPositions[3] = QVector3D(-3.0f, -2.0f, 3.0f);
+
+    const int nbrLightsVertices = 8*nbrLights;
+    VertexData lightsVertices[nbrLightsVertices];
+    for(int i=0; i<nbrLights; i++){
+        computeLightVertices(lightsVertices, i, lightPositions[i]);
+    }
+
+    const int nbrLightsIndices = 36*nbrLights;
+    GLushort lightsIndices[nbrLightsIndices];
+    GLushort lightIndices[] = {
+        0,1,2,
+        2,3,0,
+
+        0,4,7,
+        7,3,0,
+
+        0,4,5,
+        5,1,0,
+
+        1,5,6,
+        6,2,1,
+
+        6,2,3,
+        3,7,6,
+
+        7,6,5,
+        5,4,7
+    };
+
+    for(int i=0; i<nbrLights; i++){
+        for(int j=0; j<36; j++){
+            lightsIndices[36*i+j] = lightIndices[j] + 8*i;
+            qDebug() << 36*i+j;
+        }
+    }
+
+    lightsArrayBuf.bind();
+    lightsArrayBuf.allocate(lightsVertices, nbrLightsVertices * static_cast<int>(sizeof(VertexData)));
+    lightsIndexBuf.bind();
+    lightsIndexBuf.allocate(lightsIndices, nbrLightsIndices * static_cast<int>(sizeof(GLushort)));
+
+    lightsArrayBuf.bind();
+    lightsIndexBuf.bind();
+    offset = 0;
+    vertexLocation = program->attributeLocation("position");
+    program->enableAttributeArray(vertexLocation);
+    program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+    offset += sizeof(QVector3D);
+    colorLocation = program->attributeLocation("color");
+    program->enableAttributeArray(colorLocation);
+    program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+    offset += sizeof(QVector3D);
+    int normalLocation = program->attributeLocation("normal");
+    program->enableAttributeArray(normalLocation);
+    program->setAttributeBuffer(normalLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+    offset += sizeof(QVector3D);
+    int texcoordLocation = program->attributeLocation("a_texcoord");
+    program->enableAttributeArray(texcoordLocation);
+    program->setAttributeBuffer(texcoordLocation, GL_FLOAT, offset, 2, sizeof(VertexData));
+    offset += sizeof(QVector2D);
+    int texpartLocation = program->attributeLocation("a_texpart");
+    program->enableAttributeArray(texpartLocation);
+    program->setAttributeBuffer(texpartLocation, GL_FLOAT, offset, 1, sizeof(VertexData));
+    glDrawElements(GL_TRIANGLES, lightsIndexBuf.size(), GL_UNSIGNED_SHORT, nullptr);
+}
+
+void GeometryEngine::computeLightVertices(VertexData *array, int index, QVector3D lightPosition, double size){
+    VertexData lightVertices[8]; //Cube representation of light
+    QVector3D lightColor = QVector3D(0.0,0.0,0.0); //white light
+    if(lightsEnabled[index])
+        lightColor = QVector3D(1.0,1.0,1.0);
+
+    //Upper face of cube
+    QVector3D tmpPose1 = QVector3D(lightPosition[0] - size, lightPosition[1] - size, lightPosition[2] + size);
+    QVector3D tmpPose2 = QVector3D(lightPosition[0] + size, lightPosition[1] - size, lightPosition[2] + size);
+    QVector3D tmpPose3 = QVector3D(lightPosition[0] + size, lightPosition[1] + size, lightPosition[2] + size);
+    QVector3D tmpPose4 = QVector3D(lightPosition[0] - size, lightPosition[1] + size, lightPosition[2] + size);
+
+    //Down face of cube
+    QVector3D tmpPose5 = QVector3D(lightPosition[0] - size, lightPosition[1] - size, lightPosition[2] - size);
+    QVector3D tmpPose6 = QVector3D(lightPosition[0] + size, lightPosition[1] - size, lightPosition[2] - size);
+    QVector3D tmpPose7 = QVector3D(lightPosition[0] + size, lightPosition[1] + size, lightPosition[2] - size);
+    QVector3D tmpPose8 = QVector3D(lightPosition[0] - size, lightPosition[1] + size, lightPosition[2] - size);
+
+//    array[8*index + 0] = {tmpPose1, lightColor, computeNormal(tmpPose1, tmpPose2, tmpPose4, tmpPose5), QVector2D(), 0};
+//    array[8*index + 1] = {tmpPose2, lightColor, computeNormal(tmpPose2, tmpPose1, tmpPose3, tmpPose6), QVector2D(), 0};
+//    array[8*index + 2] = {tmpPose3, lightColor, computeNormal(tmpPose3, tmpPose2, tmpPose4, tmpPose7), QVector2D(), 0};
+//    array[8*index + 4] = {tmpPose5, lightColor, computeNormal(tmpPose4, tmpPose1, tmpPose3, tmpPose8), QVector2D(), 0};
+//    array[8*index + 3] = {tmpPose4, lightColor, computeNormal(tmpPose5, tmpPose1, tmpPose6, tmpPose8), QVector2D(), 0};
+//    array[8*index + 5] = {tmpPose6, lightColor, computeNormal(tmpPose6, tmpPose5, tmpPose7, tmpPose2), QVector2D(), 0};
+//    array[8*index + 6] = {tmpPose7, lightColor, computeNormal(tmpPose7, tmpPose6, tmpPose8, tmpPose3), QVector2D(), 0};
+//    array[8*index + 7] = {tmpPose8, lightColor, computeNormal(tmpPose8, tmpPose7, tmpPose5, tmpPose4), QVector2D(), 0};
+
+    array[8*index + 0] = {tmpPose1, lightColor, -(tmpPose1 - lightPosition), QVector2D(), 0};
+    array[8*index + 1] = {tmpPose2, lightColor, -(tmpPose2 - lightPosition), QVector2D(), 0};
+    array[8*index + 2] = {tmpPose3, lightColor, -(tmpPose3 - lightPosition), QVector2D(), 0};
+    array[8*index + 4] = {tmpPose5, lightColor, -(tmpPose4 - lightPosition), QVector2D(), 0};
+    array[8*index + 3] = {tmpPose4, lightColor, -(tmpPose5 - lightPosition), QVector2D(), 0};
+    array[8*index + 5] = {tmpPose6, lightColor, -(tmpPose6 - lightPosition), QVector2D(), 0};
+    array[8*index + 6] = {tmpPose7, lightColor, -(tmpPose7 - lightPosition), QVector2D(), 0};
+    array[8*index + 7] = {tmpPose8, lightColor, -(tmpPose8 - lightPosition), QVector2D(), 0};
+}
+
+QVector3D GeometryEngine::computeNormal(QVector3D o, QVector3D a, QVector3D b, QVector3D c){
+    QVector3D v1 = a - o;
+    QVector3D v2 = b - o;
+    QVector3D v3 = c - o;
+
+    return QVector3D::crossProduct(v1,v2) + QVector3D::crossProduct(v2,v3) + QVector3D::crossProduct(v1,v3);
 }

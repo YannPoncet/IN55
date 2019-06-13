@@ -37,8 +37,11 @@ private:
     QOpenGLBuffer arrayBuf;
     QOpenGLBuffer indexBuf;
 
+    QOpenGLBuffer lightsArrayBuf;
+    QOpenGLBuffer lightsIndexBuf;
 
-
+    void computeLightVertices(VertexData *array, int index, QVector3D lightPosition, double size=.1);
+    QVector3D computeNormal(QVector3D o, QVector3D a, QVector3D b, QVector3D c);
 };
 
 #endif // GEOMETRYENGINE_H

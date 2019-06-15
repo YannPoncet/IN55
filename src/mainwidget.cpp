@@ -6,7 +6,7 @@ MainWidget::MainWidget(QWidget *parent) :
     geometries(0),
     texture(0),
     angularSpeed(0),
-    zoomTranslation(0.0f)
+    userTranslation(0,0,0)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
 
@@ -66,8 +66,8 @@ MainWidget::MainWidget(QWidget *parent) :
 
 
     this->setLayout(layout);
-    this->withAngularSpeed = false;
 }
+
 
 void MainWidget::addGlobalBox(bool state, QLayout* layout) {
     QCheckBox* c = new QCheckBox(this);
@@ -79,6 +79,7 @@ void MainWidget::addGlobalBox(bool state, QLayout* layout) {
     this->globalsBoxes.append(c);
     layout->addWidget(c);
 }
+
 
 void MainWidget::redrawElements(bool state) {
     QObject* c = sender();
@@ -106,6 +107,7 @@ void MainWidget::redrawElements(bool state) {
     update();
 }
 
+
 void MainWidget::setLight(bool state) {
     QObject* c = sender();
     for (int i=0; i<this->lightBoxes.size(); i++) {
@@ -116,12 +118,14 @@ void MainWidget::setLight(bool state) {
     update();
 }
 
+
 QLabel* MainWidget::addLabel(QString text) {
     QLabel *label = new QLabel(this);
     label->setText(text);
     label->setFixedSize(100,20);
     return label;
 }
+
 
 QSlider* MainWidget::addSlider(double value, double min, double max) {
     QSlider *slider = new QSlider(Qt::Horizontal);
@@ -135,6 +139,7 @@ QSlider* MainWidget::addSlider(double value, double min, double max) {
     this->sliders.append(p);
     return slider;
 }
+
 
 void MainWidget::redrawMorel(){
     for(auto&& s: this->sliders) {
@@ -154,6 +159,7 @@ void MainWidget::redrawMorel(){
     update();
 }
 
+
 MainWidget::~MainWidget() {
     // Make sure the context is current when deleting the texture
     // and the buffers.
@@ -162,83 +168,104 @@ MainWidget::~MainWidget() {
     doneCurrent();
 }
 
+
 void MainWidget::mousePressEvent(QMouseEvent *e) {
-    // Save mouse press position
-    if(this->withAngularSpeed) {
-        mousePressPosition = QVector2D(e->localPos());
-    } else {
-        previousMousePosition = QVector2D(0.0, 0.0);
-    }
+    previousMousePosition = QVector2D(0.0, 0.0);
 }
+
 
 void MainWidget::wheelEvent(QWheelEvent *e){
     if(e->delta() < 0){
-        zoomTranslation -= 0.5f;
+        userTranslation.setZ(userTranslation.z()-0.5f);
     }
     else{
-        zoomTranslation += 0.5f;
+        userTranslation.setZ(userTranslation.z()+0.5f);
     }
     update();
 }
 
 
 void MainWidget::mouseMoveEvent(QMouseEvent *e) {
-    if(!this->withAngularSpeed) {
-        QVector2D prev = previousMousePosition;
-        QVector2D diff = QVector2D(e->localPos()) - previousMousePosition;
-        previousMousePosition = QVector2D(e->localPos());
-        if(prev == QVector2D(0.0f,0.0f)) return;
+    QVector2D prev = previousMousePosition;
+    QVector2D diff = QVector2D(e->localPos()) - previousMousePosition;
+    previousMousePosition = QVector2D(e->localPos());
+    if(prev == QVector2D(0.0f,0.0f)) return;
 
-        // Rotation axis is perpendicular to the mouse position difference
-        // vector
-        QVector3D n = QVector3D(diff.y(), diff.x(), 0.0).normalized();
+    // Rotation axis is perpendicular to the mouse position difference
+    QVector3D n = QVector3D(diff.y(), diff.x(), 0.0).normalized();
 
-        // Accelerate angular speed relative to the length of the mouse sweep
-        qreal acc = diff.length() / 100.0;
+    // Relative to the length of the mouse sweep
+    qreal acc = diff.length() / 100.0;
 
-        // Update rotation
-        rotationAxis = (rotationAxis * angularSpeed + n * acc).normalized();
-        rotation = QQuaternion::fromAxisAndAngle(rotationAxis, acc*50) * rotation;
-        update();
+    // Update rotation
+    rotationAxis = (rotationAxis * angularSpeed + n * acc).normalized();
+    rotation = QQuaternion::fromAxisAndAngle(rotationAxis, acc*50) * rotation;
+    update();
+}
+
+
+void MainWidget::keyPressEvent(QKeyEvent *event) {
+    //Right left
+    if(event->key() == Qt::Key_D) {
+        isDPressed = true;
+    }
+    if(event->key() == Qt::Key_Q) {
+        isQPressed = true;
+    }
+
+    //Up down
+    if(event->key() == Qt::Key_Z) {
+        isZPressed = true;
+    }
+    if(event->key() == Qt::Key_S) {
+        isSPressed = true;
     }
 }
 
-void MainWidget::mouseReleaseEvent(QMouseEvent *e) {
-    if(this->withAngularSpeed) {
-        // Mouse release position - mouse press position
-        QVector2D diff = QVector2D(e->localPos()) - mousePressPosition;
 
-        // Rotation axis is perpendicular to the mouse position difference
-        // vector
-        QVector3D n = QVector3D(diff.y(), diff.x(), 0.0).normalized();
+void MainWidget::keyReleaseEvent(QKeyEvent *event) {
+    //Right left
+    if(event->key() == Qt::Key_D) {
+        isDPressed = false;
+    }
+    if(event->key() == Qt::Key_Q) {
+        isQPressed = false;
+    }
 
-        // Accelerate angular speed relative to the length of the mouse sweep
-        qreal acc = diff.length() / 100.0;
-
-        // Calculate new rotation axis as weighted sum
-        rotationAxis = (rotationAxis * angularSpeed + n * acc).normalized();
-
-        // Increase angular speed
-        angularSpeed += acc;
+    //Up down
+    if(event->key() == Qt::Key_Z) {
+        isZPressed = false;
+    }
+    if(event->key() == Qt::Key_S) {
+        isSPressed = false;
     }
 }
+
 
 void MainWidget::timerEvent(QTimerEvent *)
 {
-    // Decrease angular speed (friction)
-    angularSpeed *= 0.99;
-
-    // Stop rotation when speed goes below threshold
-    if (angularSpeed < 0.01) {
-        angularSpeed = 0.0;
-    } else {
-        // Update rotation
-        rotation = QQuaternion::fromAxisAndAngle(rotationAxis, angularSpeed) * rotation;
-
-        // Request an update
+    bool needToUpdate = false;
+    if(isQPressed) {
+        this->userTranslation.setX(this->userTranslation.x()+0.1);
+        needToUpdate = true;
+    }
+    if(isDPressed) {
+        this->userTranslation.setX(this->userTranslation.x()-0.1);
+        needToUpdate = true;
+    }
+    if(isZPressed) {
+        this->userTranslation.setY(this->userTranslation.y()-0.1);
+        needToUpdate = true;
+    }
+    if(isSPressed) {
+        this->userTranslation.setY(this->userTranslation.y()+0.1);
+        needToUpdate = true;
+    }
+    if(needToUpdate) {
         update();
     }
 }
+
 
 void MainWidget::initializeGL()
 {
@@ -266,6 +293,7 @@ void MainWidget::initializeGL()
     timer.start(12, this);
 }
 
+
 void MainWidget::initShaders() {
     QString vshader;
     QString fshader;
@@ -289,6 +317,7 @@ void MainWidget::initShaders() {
         close();
 }
 
+
 void MainWidget::initTextures()
 {
     // Load soil.png image
@@ -305,6 +334,7 @@ void MainWidget::initTextures()
     texture->setWrapMode(QOpenGLTexture::Repeat);
 }
 
+
 void MainWidget::resizeGL(int w, int h) {
     // Calculate aspect ratio
     qreal aspect = qreal(w) / qreal(h ? h : 1);
@@ -319,6 +349,7 @@ void MainWidget::resizeGL(int w, int h) {
     projection.perspective(fov, aspect, zNear, zFar);
 }
 
+
 void MainWidget::paintGL() {
     // Clear color and depth buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -330,10 +361,12 @@ void MainWidget::paintGL() {
     drawCube();
 }
 
+
 void MainWidget::drawCube() {
     // Calculate model view transformation
     QMatrix4x4 matrix;
-    matrix.translate(0, 0, -10+zoomTranslation);
+    matrix.translate(0, 0, -10);
+    matrix.translate(userTranslation);
     matrix.rotate(rotation);
     matrix.scale(1.5,1.5,1.5);
     program.setUniformValue("mv", matrix);

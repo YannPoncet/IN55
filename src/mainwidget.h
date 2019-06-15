@@ -13,6 +13,7 @@
 #include <QOpenGLTexture>
 
 #include <QMouseEvent>
+#include <QKeyEvent>
 #include <QWidget>
 #include <QLayout>
 #include <QPushButton>
@@ -45,10 +46,11 @@ public slots:
 
 protected:
     void mousePressEvent(QMouseEvent *e) override;
-    void mouseReleaseEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
     void wheelEvent(QWheelEvent *e) override;
     void timerEvent(QTimerEvent *e) override;
+    void keyPressEvent(QKeyEvent *) override;
+    void keyReleaseEvent(QKeyEvent *) override;
 
     void initializeGL() override;
     void resizeGL(int w, int h) override;
@@ -76,13 +78,18 @@ private:
     qreal angularSpeed;
     QQuaternion rotation;
 
-    float zoomTranslation;
+    QVector3D userTranslation;
+    bool isZPressed = false;
+    bool isQPressed = false;
+    bool isSPressed = false;
+    bool isDPressed = false;
+
+
     QVector<SliderParameters> sliders;
     QVector<QCheckBox*> lightBoxes;
     QVector<QCheckBox*> globalsBoxes;
 
     QVector2D previousMousePosition;
-    bool withAngularSpeed;
 };
 
 #endif // MAINWIDGET_H

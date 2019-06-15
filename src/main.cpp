@@ -32,7 +32,8 @@ int main(int argc, char *argv[])
     int width = rec.width();
 
     widget.resize(WINDOW_HEIGHT,WINDOW_WIDTH);
-    widget.move((width-WINDOW_HEIGHT)/2,(height-WINDOW_WIDTH)/2);
+    //widget.move((width-WINDOW_HEIGHT)/2,(height-WINDOW_WIDTH)/2);
+    widget.showMaximized();
     widget.show();
 #else
     QLabel note("OpenGL Support required");

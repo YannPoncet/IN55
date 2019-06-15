@@ -64,7 +64,6 @@ MainWidget::MainWidget(QWidget *parent) :
         this->lightBoxes.append(c);
     }
 
-
     this->setLayout(layout);
 }
 

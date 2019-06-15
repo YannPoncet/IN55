@@ -34,6 +34,19 @@ MainWidget::MainWidget(QWidget *parent) :
     layout->addWidget(submitButton,0,Qt::AlignTop);
 
 
+    // Global checkboxes
+    QGroupBox* horizontalGroupBox2 = new QGroupBox(tr("Bezier - System - Lights - Soil:"));
+    horizontalGroupBox2->setFixedSize(200,60);
+    layout->addWidget(horizontalGroupBox2);
+    QHBoxLayout *groupBoxLayout2 = new QHBoxLayout;
+    horizontalGroupBox2->setLayout(groupBoxLayout2);
+
+    addGlobalBox(showBezier, groupBoxLayout2);
+    addGlobalBox(showSystem, groupBoxLayout2);
+    addGlobalBox(showLights, groupBoxLayout2);
+    addGlobalBox(showSoil, groupBoxLayout2);
+
+
     // Lights checkboxes
     QGroupBox* horizontalGroupBox = new QGroupBox(tr("Enable/disable the lights:"));
     horizontalGroupBox->setFixedSize(200,60);
@@ -50,20 +63,6 @@ MainWidget::MainWidget(QWidget *parent) :
         groupBoxLayout->addWidget(c);
         this->lightBoxes.append(c);
     }
-
-
-    // Global checkboxes
-    QGroupBox* horizontalGroupBox2 = new QGroupBox(tr("Bezier - System - Lights - Soil:"));
-    horizontalGroupBox2->setFixedSize(200,60);
-    layout->addWidget(horizontalGroupBox2);
-    QHBoxLayout *groupBoxLayout2 = new QHBoxLayout;
-    horizontalGroupBox2->setLayout(groupBoxLayout2);
-
-    addGlobalBox(showBezier, groupBoxLayout2);
-    addGlobalBox(showSystem, groupBoxLayout2);
-    addGlobalBox(showLights, groupBoxLayout2);
-    addGlobalBox(showSoil, groupBoxLayout2);
-
 
 
     this->setLayout(layout);

@@ -13,6 +13,7 @@ extern Parameters parameters;
 extern bool showBezier;
 extern bool showSystem;
 extern bool showSoil;
+extern bool showLights;
 
 extern QVector<bool> lightsEnabled;
 

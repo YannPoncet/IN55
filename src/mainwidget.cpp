@@ -33,6 +33,8 @@ MainWidget::MainWidget(QWidget *parent) :
     QObject::connect(submitButton, SIGNAL(clicked()), this, SLOT(redrawMorel()));
     layout->addWidget(submitButton,0,Qt::AlignTop);
 
+
+    // Lights checkboxes
     QGroupBox* horizontalGroupBox = new QGroupBox(tr("Enable/disable the lights:"));
     horizontalGroupBox->setFixedSize(200,60);
     layout->addWidget(horizontalGroupBox);
@@ -46,18 +48,69 @@ MainWidget::MainWidget(QWidget *parent) :
         QObject::connect(c, SIGNAL(clicked(bool)), this, SLOT(setLight(bool)));
         c->setFixedSize(15,15);
         groupBoxLayout->addWidget(c);
-        this->boxes.append(c);
+        this->lightBoxes.append(c);
     }
+
+
+    // Global checkboxes
+    QGroupBox* horizontalGroupBox2 = new QGroupBox(tr("Bezier - System - Lights - Soil:"));
+    horizontalGroupBox2->setFixedSize(200,60);
+    layout->addWidget(horizontalGroupBox2);
+    QHBoxLayout *groupBoxLayout2 = new QHBoxLayout;
+    horizontalGroupBox2->setLayout(groupBoxLayout2);
+
+    addGlobalBox(showBezier, groupBoxLayout2);
+    addGlobalBox(showSystem, groupBoxLayout2);
+    addGlobalBox(showLights, groupBoxLayout2);
+    addGlobalBox(showSoil, groupBoxLayout2);
+
 
 
     this->setLayout(layout);
     this->withAngularSpeed = false;
 }
 
+void MainWidget::addGlobalBox(bool state, QLayout* layout) {
+    QCheckBox* c = new QCheckBox(this);
+    c->setFixedSize(15,15);
+    if(state) {
+        c->setCheckState(Qt::Checked);
+    }
+    QObject::connect(c, SIGNAL(clicked(bool)), this, SLOT(redrawElements(bool)));
+    this->globalsBoxes.append(c);
+    layout->addWidget(c);
+}
+
+void MainWidget::redrawElements(bool state) {
+    QObject* c = sender();
+    int checkBoxId = -1;
+    for (int i=0; i<this->globalsBoxes.size(); i++) {
+        if(this->globalsBoxes[i] == c) {
+            checkBoxId = i;
+        }
+    }
+    switch (checkBoxId) {
+        case 0:
+            showBezier = state;
+        break;
+        case 1:
+            showSystem = state;
+        break;
+        case 2:
+            showLights = state;
+        break;
+        case 3:
+            showSoil = state;
+        break;
+    }
+    //this->geometries->drawGeometry(&program);
+    update();
+}
+
 void MainWidget::setLight(bool state) {
     QObject* c = sender();
-    for (int i=0; i<this->boxes.size(); i++) {
-        if(this->boxes[i] == c) {
+    for (int i=0; i<this->lightBoxes.size(); i++) {
+        if(this->lightBoxes[i] == c) {
             lightsEnabled[i] = state;
         }
     }

@@ -6,6 +6,7 @@ const int WINDOW_WIDTH = 720;
 bool showBezier = false;
 bool showSystem = false;
 bool showSoil = true;
+bool showLights = false;
 
 QVector<bool> lightsEnabled = {0,0,0,0,1}; //Only light on camera enabled by default
 

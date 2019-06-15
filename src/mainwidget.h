@@ -41,6 +41,7 @@ public:
 public slots:
     void redrawMorel(void);
     void setLight(bool state);
+    void redrawElements(bool state);
 
 protected:
     void mousePressEvent(QMouseEvent *e) override;
@@ -60,6 +61,7 @@ protected:
 
     QSlider* addSlider(double value, double min, double max);
     QLabel* addLabel(QString text);
+    void addGlobalBox(bool state, QLayout* layout);
 
 private:
     QBasicTimer timer;
@@ -76,7 +78,8 @@ private:
 
     float zoomTranslation;
     QVector<SliderParameters> sliders;
-    QVector<QCheckBox*> boxes;
+    QVector<QCheckBox*> lightBoxes;
+    QVector<QCheckBox*> globalsBoxes;
 
     QVector2D previousMousePosition;
     bool withAngularSpeed;

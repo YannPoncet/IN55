@@ -100,6 +100,7 @@ VerticesStructWithoutNormal Morel::getBezierVertices() {
     for(int i=0; i<n; i++) {
         float t = ((i+1)*1.0f)/(n*1.0f);
         QVector3D p = this->bezier.getBezierPoint(t);
+        p.setX(p.x()-1.0); //Small shif on xAxis so the bezier curve is not hidden in the morel
         VertexDataWithoutNormal vData = {p*parameters.globalSizeFactor, QVector3D(1.0f,0.0f,0.3f)};
         newArray[i] = vData;
     }

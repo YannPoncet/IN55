@@ -292,7 +292,6 @@ void GeometryEngine::drawGeometry(QOpenGLShaderProgram *program) {
     for(int i=0; i<nbrLights; i++){
         for(int j=0; j<36; j++){
             lightsIndices[36*i+j] = lightIndices[j] + 8*i;
-            qDebug() << 36*i+j;
         }
     }
 
@@ -328,7 +327,7 @@ void GeometryEngine::drawGeometry(QOpenGLShaderProgram *program) {
 
 void GeometryEngine::computeLightVertices(VertexData *array, int index, QVector3D lightPosition, double size){
     VertexData lightVertices[8]; //Cube representation of light
-    QVector3D lightColor = QVector3D(0.0,0.0,0.0); //white light
+    QVector3D lightColor = QVector3D(0.0,0.0,0.0); //White light
     if(lightsEnabled[index])
         lightColor = QVector3D(1.0,1.0,1.0);
 
@@ -344,29 +343,12 @@ void GeometryEngine::computeLightVertices(VertexData *array, int index, QVector3
     QVector3D tmpPose7 = QVector3D(lightPosition[0] + size, lightPosition[1] + size, lightPosition[2] - size);
     QVector3D tmpPose8 = QVector3D(lightPosition[0] - size, lightPosition[1] + size, lightPosition[2] - size);
 
-//    array[8*index + 0] = {tmpPose1, lightColor, computeNormal(tmpPose1, tmpPose2, tmpPose4, tmpPose5), QVector2D(), 0};
-//    array[8*index + 1] = {tmpPose2, lightColor, computeNormal(tmpPose2, tmpPose1, tmpPose3, tmpPose6), QVector2D(), 0};
-//    array[8*index + 2] = {tmpPose3, lightColor, computeNormal(tmpPose3, tmpPose2, tmpPose4, tmpPose7), QVector2D(), 0};
-//    array[8*index + 4] = {tmpPose5, lightColor, computeNormal(tmpPose4, tmpPose1, tmpPose3, tmpPose8), QVector2D(), 0};
-//    array[8*index + 3] = {tmpPose4, lightColor, computeNormal(tmpPose5, tmpPose1, tmpPose6, tmpPose8), QVector2D(), 0};
-//    array[8*index + 5] = {tmpPose6, lightColor, computeNormal(tmpPose6, tmpPose5, tmpPose7, tmpPose2), QVector2D(), 0};
-//    array[8*index + 6] = {tmpPose7, lightColor, computeNormal(tmpPose7, tmpPose6, tmpPose8, tmpPose3), QVector2D(), 0};
-//    array[8*index + 7] = {tmpPose8, lightColor, computeNormal(tmpPose8, tmpPose7, tmpPose5, tmpPose4), QVector2D(), 0};
-
-    array[8*index + 0] = {tmpPose1, lightColor, -(tmpPose1 - lightPosition), QVector2D(), 0};
-    array[8*index + 1] = {tmpPose2, lightColor, -(tmpPose2 - lightPosition), QVector2D(), 0};
-    array[8*index + 2] = {tmpPose3, lightColor, -(tmpPose3 - lightPosition), QVector2D(), 0};
-    array[8*index + 4] = {tmpPose5, lightColor, -(tmpPose4 - lightPosition), QVector2D(), 0};
-    array[8*index + 3] = {tmpPose4, lightColor, -(tmpPose5 - lightPosition), QVector2D(), 0};
-    array[8*index + 5] = {tmpPose6, lightColor, -(tmpPose6 - lightPosition), QVector2D(), 0};
-    array[8*index + 6] = {tmpPose7, lightColor, -(tmpPose7 - lightPosition), QVector2D(), 0};
-    array[8*index + 7] = {tmpPose8, lightColor, -(tmpPose8 - lightPosition), QVector2D(), 0};
-}
-
-QVector3D GeometryEngine::computeNormal(QVector3D o, QVector3D a, QVector3D b, QVector3D c){
-    QVector3D v1 = a - o;
-    QVector3D v2 = b - o;
-    QVector3D v3 = c - o;
-
-    return QVector3D::crossProduct(v1,v2) + QVector3D::crossProduct(v2,v3) + QVector3D::crossProduct(v1,v3);
+    array[8*index + 0] = {tmpPose1, lightColor, lightPosition - tmpPose1, QVector2D(), 0};
+    array[8*index + 1] = {tmpPose2, lightColor, lightPosition - tmpPose2, QVector2D(), 0};
+    array[8*index + 2] = {tmpPose3, lightColor, lightPosition - tmpPose3, QVector2D(), 0};
+    array[8*index + 3] = {tmpPose4, lightColor, lightPosition - tmpPose4, QVector2D(), 0};
+    array[8*index + 4] = {tmpPose5, lightColor, lightPosition - tmpPose5, QVector2D(), 0};
+    array[8*index + 5] = {tmpPose6, lightColor, lightPosition - tmpPose6, QVector2D(), 0};
+    array[8*index + 6] = {tmpPose7, lightColor, lightPosition - tmpPose7, QVector2D(), 0};
+    array[8*index + 7] = {tmpPose8, lightColor, lightPosition - tmpPose8, QVector2D(), 0};
 }

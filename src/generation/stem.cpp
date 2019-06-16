@@ -1,5 +1,8 @@
 #include "stem.h"
 
+/*
+* Constructors, creates and apply the different transformations on the vertices
+*/
 Stem::Stem(Bezier& b) : MorelPart(b) {
     this->height = parameters.height*parameters.stemHeightPart;
     this->isStem = true;

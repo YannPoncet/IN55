@@ -5,12 +5,17 @@
 GeometryEngine::GeometryEngine() : systemIndexBuf(QOpenGLBuffer::IndexBuffer), soilIndexBuf(QOpenGLBuffer::IndexBuffer), bezierIndexBuf(QOpenGLBuffer::IndexBuffer), indexBuf(QOpenGLBuffer::IndexBuffer), lightsIndexBuf(QOpenGLBuffer::IndexBuffer) {
     initializeOpenGLFunctions();
 
+    // Coordinates system VBOs
     systemArrayBuf.create();
     systemIndexBuf.create();
 
+
+    // Soil VBOs
     soilArrayBuf.create();
     soilIndexBuf.create();
 
+
+    // Bezier curve VBOs
     bezierArrayBuf.create();
     bezierIndexBuf.create();
 
@@ -18,11 +23,12 @@ GeometryEngine::GeometryEngine() : systemIndexBuf(QOpenGLBuffer::IndexBuffer), s
     lightsArrayBuf.create();
     lightsIndexBuf.create();
 
-    // Generate 2 VBOs
+
+    // Main VBOs, morel
     arrayBuf.create();
     indexBuf.create();
 
-    // Initializes cube geometry and transfers it to VBOs
+    // Initializes geometry and transfers it to VBOs
     initGeometry();
 }
 

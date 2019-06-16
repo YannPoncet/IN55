@@ -280,7 +280,7 @@ void MainWidget::initializeGL()
 
     // Enable back face culling
     //glEnable(GL_CULL_FACE);
-    // glCullFace(GL_FRONT);
+    //glCullFace(GL_FRONT);
 
     // Enable point size manipulation
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
@@ -357,11 +357,11 @@ void MainWidget::paintGL() {
     // Use texture unit 0 which contains soil.png
     program.setUniformValue("texture", 0);
 
-    drawCube();
+    drawAll();
 }
 
 
-void MainWidget::drawCube() {
+void MainWidget::drawAll() {
     // Calculate model view transformation
     QMatrix4x4 matrix;
     matrix.translate(0, 0, -10);
@@ -401,6 +401,6 @@ void MainWidget::drawCube() {
     program.setUniformValueArray("LightPositions", LEP, nbLightsEnabled);
 
 
-    // Draw cube geometry
+    // Draw geometry
     geometries->drawGeometry(&program);
 }

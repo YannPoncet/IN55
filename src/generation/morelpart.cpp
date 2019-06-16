@@ -1,8 +1,10 @@
 #include "morelpart.h"
 
-MorelPart::MorelPart(Bezier& bezier) : bezier(bezier) {
-
-}
+/*
+* Constructor, copies the bezier curve received in parameters
+* @param bezier is the bezier curve that we apply on the morel
+*/
+MorelPart::MorelPart(Bezier& bezier) : bezier(bezier) {}
 
 
 /*
@@ -16,6 +18,8 @@ QVector<MeshVertex>* MorelPart::getVertices() {
 
 /*
 * This function apply shape variations using a Perlin noise and spherical coordinates.
+* @param octaves is the octave of the noise that we generate
+* @param factor is the multiplication factor that we apply to the noise to have higher variations
 */
 void MorelPart::applyPerlin(int octaves, double factor) {
     const siv::PerlinNoise perlinNoise(randomGenerator.getGenerator().operator()());
@@ -66,6 +70,8 @@ void MorelPart::applyPerlin(int octaves, double factor) {
 
 /*
 * This function is used to make color variations using a Perlin noise and spherical coordinates.
+* @param octaves is the octave of the noise that we generate
+* @param factor is the multiplication factor that we apply to the noise to have higher variations
 */
 void MorelPart::applyColorVariationWithPerlin(int octaves, double factor) {
     const siv::PerlinNoise perlinNoise(randomGenerator.getGenerator().operator()());

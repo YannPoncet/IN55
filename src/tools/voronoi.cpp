@@ -1,5 +1,15 @@
 #include "voronoi.h"
 
+
+/*
+* Constructor, creates the random points
+* @param xMax the randoms points will vary between xMax and yMax
+* @param yMax the randoms points will vary between xMax and yMax
+* @param maxNbPoints is the maximum number of points that will be generated
+* @param width is the width of the higher portions of the holes
+* @param fMax is the maximal factor that will be returned
+* @param fMin is the minimal factor that will be returned
+*/
 Voronoi::Voronoi(int xMax, int yMax, int maxNbPoints, int width, double fMax, double fMin) {
     this->xMax = xMax;
     this->yMax = yMax;
@@ -16,6 +26,9 @@ Voronoi::Voronoi(int xMax, int yMax, int maxNbPoints, int width, double fMax, do
 }
 
 
+/*
+* Generates maxNbPoints between 0;0 and xMax;yMax separated by minimum separationFactor*width
+*/
 void Voronoi::generatePoints() {
     for(int i=0; i<this->maxNbPoints; i++) {
         int x = this->randgen(this->xMax);
@@ -112,7 +125,6 @@ double Voronoi::getFactorAt(double x, double y) {
     // We compute the distance between P1 and the given point
     double distP1A = dist(x-p1.x(), y-p1.y());
 
-    //qDebug() << distP1A << d2;
     if(d2-distP1A <= this->width/2.0) {
         return this->fMax;
     }
@@ -125,8 +137,17 @@ double Voronoi::getFactorAt(double x, double y) {
 }
 
 
-QVector2D Voronoi::perpendicularLineLineIntersection(QVector2D A, QVector2D B, QVector2D C, QVector2D D, QVector2D Pab, QVector2D Pcd)
-{
+/*
+* Computes the intersection between a perpendicularLine and another line
+* @param A point of the first line used to create a vector director of the line
+* @param B point of the first line used to create a vector director of the line
+* @param C point of the second line used to create a vector director of the line
+* @param D point of the second line used to create a vector director of the line
+* @param Pab point of the first line and of the perpendicular of the first line
+* @param Pcd point of the second line
+* @return QVector2D intersection point between the perpendicular of AB going through Pab and CD going through Pcd
+*/
+QVector2D Voronoi::perpendicularLineLineIntersection(QVector2D A, QVector2D B, QVector2D C, QVector2D D, QVector2D Pab, QVector2D Pcd) {
     double b1 = B.y() - A.y();
     double a1 = B.x() - A.x();
     double c1 = a1*(Pab.x()) + b1*(Pab.y());
@@ -165,11 +186,20 @@ double Voronoi::factorFunction(double x) {
 }
 
 
+/*
+* Uses the randomGenerator to give a random int
+* @param max maximum value that can be returned
+*/
 int Voronoi::randgen(int max) {
     return randomGenerator.getFastRandom(0, max);
 }
 
 
+/*
+* Computes the distance following the metric in attributes
+* @param x
+* @param y
+*/
 double Voronoi::dist(double x, double y) {
     switch (this->distanceType) {
     case 1: return sqrt(qPow(x,2.0)+qPow(y,2.0)); // Euclidian distance
@@ -178,6 +208,3 @@ double Voronoi::dist(double x, double y) {
    }
    return 0;
 }
-
-
-

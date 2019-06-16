@@ -28,12 +28,15 @@ int main(int argc, char *argv[])
     MainWidget widget;
 
     QRect rec = QApplication::desktop()->screenGeometry();
-    int height = rec.height();
-    int width = rec.width();
 
     widget.resize(WINDOW_HEIGHT,WINDOW_WIDTH);
-    //widget.move((width-WINDOW_HEIGHT)/2,(height-WINDOW_WIDTH)/2);
     widget.showMaximized();
+
+    // If not maximized, the code below can be used to put the window at the center of the screen
+    /*int height = rec.height();
+    int width = rec.width();
+    widget.move((width-WINDOW_HEIGHT)/2,(height-WINDOW_WIDTH)/2);*/
+
     widget.show();
 #else
     QLabel note("OpenGL Support required");

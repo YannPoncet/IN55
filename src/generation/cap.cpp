@@ -1,5 +1,8 @@
 #include "cap.h"
 
+/*
+* Constructors, creates and apply the different transformations on the vertices
+*/
 Cap::Cap(Bezier& b) : MorelPart(b) {
     this->height = parameters.height*(1.0f-parameters.stemHeightPart);
     this->isStem = false;

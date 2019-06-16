@@ -59,7 +59,7 @@ protected:
     void initShaders();
     void initTextures();
 
-    void drawCube();
+    void drawAll();
 
     QSlider* addSlider(double value, double min, double max);
     QLabel* addLabel(QString text);

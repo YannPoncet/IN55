@@ -1,5 +1,8 @@
 #include "morel.h"
 
+/*
+* Constructor, instantiates cap and stem and updates its vertex and indice array
+*/
 Morel::Morel() : cap(this->bezier), stem(this->bezier)
 {
     // We copy the vertices array from the stem into the global vertices array

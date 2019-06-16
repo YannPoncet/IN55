@@ -317,9 +317,9 @@ void GeometryEngine::drawGeometry(QOpenGLShaderProgram *program) {
 }
 
 void GeometryEngine::computeLightVertices(VertexData *array, int index, QVector3D lightPosition, double size){
-    QVector3D lightColor = QVector3D(0.0,0.0,0.0); //White light
+    QVector3D cubeColor = QVector3D(0.0,0.0,0.0); //black color
     if(lightsEnabled[index])
-        lightColor = QVector3D(1.0,1.0,1.0);
+        cubeColor = QVector3D(1.0,1.0,1.0); //white if enabled
 
     //Upper face of cube
     QVector3D tmpPose1 = QVector3D(lightPosition[0] - size, lightPosition[1] - size, lightPosition[2] + size);
@@ -333,12 +333,13 @@ void GeometryEngine::computeLightVertices(VertexData *array, int index, QVector3
     QVector3D tmpPose7 = QVector3D(lightPosition[0] + size, lightPosition[1] + size, lightPosition[2] - size);
     QVector3D tmpPose8 = QVector3D(lightPosition[0] - size, lightPosition[1] + size, lightPosition[2] - size);
 
-    array[8*index + 0] = {tmpPose1, lightColor, lightPosition - tmpPose1, QVector2D(), 0};
-    array[8*index + 1] = {tmpPose2, lightColor, lightPosition - tmpPose2, QVector2D(), 0};
-    array[8*index + 2] = {tmpPose3, lightColor, lightPosition - tmpPose3, QVector2D(), 0};
-    array[8*index + 3] = {tmpPose4, lightColor, lightPosition - tmpPose4, QVector2D(), 0};
-    array[8*index + 4] = {tmpPose5, lightColor, lightPosition - tmpPose5, QVector2D(), 0};
-    array[8*index + 5] = {tmpPose6, lightColor, lightPosition - tmpPose6, QVector2D(), 0};
-    array[8*index + 6] = {tmpPose7, lightColor, lightPosition - tmpPose7, QVector2D(), 0};
-    array[8*index + 7] = {tmpPose8, lightColor, lightPosition - tmpPose8, QVector2D(), 0};
+    //Normals are vectors from the vertex to the lightPosition (center of cube)
+    array[8*index + 0] = {tmpPose1, cubeColor, lightPosition - tmpPose1, QVector2D(), 0};
+    array[8*index + 1] = {tmpPose2, cubeColor, lightPosition - tmpPose2, QVector2D(), 0};
+    array[8*index + 2] = {tmpPose3, cubeColor, lightPosition - tmpPose3, QVector2D(), 0};
+    array[8*index + 3] = {tmpPose4, cubeColor, lightPosition - tmpPose4, QVector2D(), 0};
+    array[8*index + 4] = {tmpPose5, cubeColor, lightPosition - tmpPose5, QVector2D(), 0};
+    array[8*index + 5] = {tmpPose6, cubeColor, lightPosition - tmpPose6, QVector2D(), 0};
+    array[8*index + 6] = {tmpPose7, cubeColor, lightPosition - tmpPose7, QVector2D(), 0};
+    array[8*index + 7] = {tmpPose8, cubeColor, lightPosition - tmpPose8, QVector2D(), 0};
 }

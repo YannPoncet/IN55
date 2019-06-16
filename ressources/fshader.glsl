@@ -20,6 +20,7 @@ float sIntensity, cosAngle;
 
 vec3 PhongShading(int i, vec3 color)
 {
+    //White light (no ambient) and material without specular
     vec3 LightPosition = LightPositions[i];
     vec3 MaterialAmbient = color;
     vec3 LightAmbient = vec3(0.0,0.0,0.0);
@@ -33,13 +34,12 @@ vec3 PhongShading(int i, vec3 color)
     normalizeEyeCoord = normalize(fPosition);
     normalizeLightVec = normalize(LightPosition - fPosition);
 
-    // Diffuse Intensity
     cosAngle = max(0.0,
     dot(normalizeNormal,normalizeLightVec));
-    // Specular Intensity
-    V = -normalizeEyeCoord; // Viewer's vector
+    V = -normalizeEyeCoord;
     R = reflect(-normalizeLightVec, normalizeNormal);
     sIntensity = pow(max(0.0,dot(R,V)), MaterialShininess);
+
     ambient = MaterialAmbient * LightAmbient;
     diffuse = MaterialDiffuse * LightDiffuse;
     specular = MaterialSpecular * LightSpecular;
@@ -56,6 +56,7 @@ void main()
 
     vec4 tmpColor = vec4(0.0);
     for(int i=0; i<nbLights; i++)
+        //Compute color for every light source on the vertex
         tmpColor += vec4(PhongShading(i, resultingColor), 1.0 );
     fragColor = tmpColor;
 }

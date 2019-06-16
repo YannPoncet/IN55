@@ -24,6 +24,7 @@ void main()
     // Calculate vertex position in screen space
     gl_Position = mvp * vec4( position, 1.0 );
 
+    //Translate positions in camera space
     fNormal = mat3(nm)*normal;
     fPosition = vec3(mv*vec4(position,1.0));
     fColor = color;

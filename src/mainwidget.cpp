@@ -383,6 +383,7 @@ void MainWidget::drawAll() {
     LightPositions[3] = QVector3D(matrix*QVector4D(-3.0f, -2.0f, 3.0f,1.0f));
     LightPositions[4] = QVector3D(0.0f,0.0f,0.0f); //Camera light
 
+    //Check which light are enabled and store positions
     int nbLightsEnabled = 0;
     int IndexLightsEnabled[nbLights];
     for(int i=0; i<lightsEnabled.size(); i++){
@@ -397,6 +398,7 @@ void MainWidget::drawAll() {
         LEP[i] = LightPositions[IndexLightsEnabled[i]];
     }
 
+    //Store positions of every light enabled as uniform
     program.setUniformValue("nbLights", nbLightsEnabled);
     program.setUniformValueArray("LightPositions", LEP, nbLightsEnabled);
 
